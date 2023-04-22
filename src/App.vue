@@ -1,11 +1,13 @@
-<script setup lang="ts">
-</script>
-
 <template>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+    <router-view></router-view>
 </template>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import { onErrorCaptured } from "vue";
 
-<style scoped>
-</style>
+const router = useRouter();
+onErrorCaptured((err, vm, info) => {
+    console.log(err, vm, info);
+    router.push({ name: "NotFound" });
+});
+</script>
