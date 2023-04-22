@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
-import MainLayout from "../layouts/MainLayout.vue";
 import NotFound from "../pages/NotFound.vue";
+import HomePage from "../pages/HomePage.vue";
+import AdminPage from "../pages/AdminPage.vue";
 
 const routes = [
     {
         path: "/",
         name: "Home",
-        component: MainLayout,
+        component: HomePage,
+    },
+    {
+        path: "/admin",
+        name: "Admin",
+        component: AdminPage,
     },
     {
         path: "/:pathMatch(.*)*",
