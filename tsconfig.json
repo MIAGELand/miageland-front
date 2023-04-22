@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "lib": [ "es2015", "dom"],
+    "moduleResolution": "Node"
   }
 }
