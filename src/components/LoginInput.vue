@@ -3,7 +3,7 @@
   <div class="mt-8">
       <div class="flex justify-center ">
           <div class="flex items-end mr-2">
-              <label for="email" class="block mb-2 text-xl font-medium text-gray-900" >Email</label>
+              <label for="email" class="block mb-2 text-xl font-medium" >Email</label>
           </div>
           <div class="flex justify-center">
               <input v-model="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-72 p-3" placeholder="john.doe@company.com" required>
@@ -28,7 +28,7 @@ const email = ref('');
 const connect = async () => {
     const employee = await getEmployee(email.value);
     if (employee) {
-        await router.push({name: 'Admin'});
+        await router.push({name: 'Employees'});
     } else {
         alert('Email non valide');
     }
