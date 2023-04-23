@@ -63,6 +63,25 @@
                         Dashboard
                     </button>
                 </div>
+
+                <div class="w-full my-2">
+                    <hr class="border-white">
+                </div>
+
+                <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+                     @click="$router.push({ name: 'Generator' })"
+                >
+                    <img
+                        src="../assets/generator.svg"
+                        alt="generator"
+                        class="h-8 w-8 mr-4"
+                    />
+                    <button
+                        class="font-bold"
+                    >
+                        Générateur
+                    </button>
+                </div>
             </div>
             <!-- STICKY ELEMENT BOTTOM NAVBAR -->
             <div class="flex flex-col items-start mt-auto mb-4">

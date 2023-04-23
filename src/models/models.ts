@@ -13,6 +13,14 @@ export interface Ticket {
     ticketState: TicketState;
 }
 
+export interface FormData {
+    name: string;
+    route: string;
+    fields: {
+        [key: string]: string
+    },
+}
+
 export enum TicketState {
     RESERVED = 'RESERVED',
     PAID = 'PAID',

@@ -3,12 +3,12 @@ import axios from 'axios';
 import { BASE_URL } from '../util/constants';
 
 export async function getEmployee(email: String): Promise<Employee> {
-    const response = await axios.get(`${BASE_URL}/api/employees/${email}`);
+    const response = await axios.get(`${BASE_URL}/employees/${email}`);
     return response.data;
 }
 
 export async function getAllEmployees(): Promise<Employee> {
-    const response = await axios.get(`${BASE_URL}/api/employees`);
+    const response = await axios.get(`${BASE_URL}/employees`);
     return response.data;
 }
 

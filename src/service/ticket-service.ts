@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from '../util/constants';
 
 export async function getAllTickets(): Promise<Ticket[]> {
-    const response = await axios.get(`${BASE_URL}/api/tickets`);
+    const response = await axios.get(`${BASE_URL}/tickets`);
     return response.data;
 }
 
