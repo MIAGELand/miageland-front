@@ -5,6 +5,7 @@ import EmployeePage from "../pages/EmployeePage.vue";
 import AttractionsPage from "../pages/AttractionsPage.vue";
 import DashboardPage from "../pages/DashboardPage.vue";
 import TicketPage from "../pages/TicketPage.vue";
+import GeneratorPage from "../pages/GeneratorPage.vue";
 const routes = [
     {
         path: "/",
@@ -30,6 +31,11 @@ const routes = [
         path: "/dashboard",
         name: "Dashboard",
         component: DashboardPage,
+    },
+    {
+        path: "/generator",
+        name: "Generator",
+        component: GeneratorPage,
     },
     {
         path: "/:pathMatch(.*)*",
