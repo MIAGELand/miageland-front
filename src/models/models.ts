@@ -10,14 +10,14 @@ export interface Ticket {
     nbTicket: number;
     date: Date;
     price: number;
-    ticketState: TicketState;
+    state: TicketState;
 }
 
 export interface FormData {
     name: string;
     route: string;
-    fields: {
-        [key: string]: string
+    data: {
+        [key: string]: any;
     },
 }
 
