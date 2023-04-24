@@ -29,7 +29,7 @@ const logoUrl = "src/assets/employees.svg";
 
 const { data, error, isLoading } = useEmployeeList();
 let employeeList = data;
-let rows = ['name', 'surname', 'email'];
+let rows = ['id', 'name', 'surname', 'email', 'role'];
 </script>
 
 <style scoped>

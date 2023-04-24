@@ -36,17 +36,17 @@ let elements = [
     {
         "name": "Employés",
         "route": "employees",
-        "fields": {
+        "data": {
             "name": "string",
             "surname": "string",
-            "email": "string",
+            "email": "email",
             "role": "ADMIN | CLASSIC",
         },
     },
     {
         "name": "Tickets",
         "route": "tickets",
-        "fields": {
+        "data": {
             "name": "string",
             "surname": "string",
             "date": "Date",
@@ -57,7 +57,7 @@ let elements = [
 
 const generateData = async (formData: FormData) => {
     let url = BASE_URL + "/" + formData.route;
-    let data = formData.fields;
+    let data = formData.data;
     await axios.post(url, data);
 }
 </script>
