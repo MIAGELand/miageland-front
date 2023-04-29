@@ -11,6 +11,8 @@ export interface Ticket {
     date: Date;
     price: number;
     state: TicketState;
+    nameVisitor: string;
+    idVisitor: number;
 }
 
 export interface FormData {
