@@ -7,6 +7,12 @@ export async function getAllTickets(): Promise<Ticket[]> {
     return response.data;
 }
 
+export async function validateTicket(id: number): Promise<Ticket> {
+    const response = await axios.patch(`${BASE_URL}/tickets/${id}`);
+    return response.data;
+}
+
 export const ticketService = {
     getAllTickets,
+    validateTicket
 };
