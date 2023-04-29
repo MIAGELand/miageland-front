@@ -12,7 +12,7 @@
             <div class="m-8">
                 <span v-if="isLoading">Loading...</span>
                 <div v-else class="rounded-lg">
-                    <data-table :data="employeeList" :rows="rows"></data-table>
+                    <data-table :data="employeeList" :rows="rows" :action-list="actionList" :entity="route" @refresh="refresh"></data-table>
                 </div>
             </div>
         </div>
@@ -21,15 +21,40 @@
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {useEmployeeList} from "../queries/employee.query";
+import {employeesKeys, useEmployeeList} from "../queries/employee.query";
 import DataTable from "../components/DataTable.vue";
+import {useQueryClient} from "@tanstack/vue-query";
 
 const title = "Employés";
 const logoUrl = "src/assets/employees.svg";
+const route = "employees";
+const queryClient = useQueryClient();
+const { data: employeeList, error, isLoading } = useEmployeeList();
+let rows = {
+    'id': 'ID',
+    'email': 'Email',
+    'role': 'Role',
+    'name': 'Prénom',
+    'surname': 'Nom'
+}
+let actionList = {
+    'upgrade': {
+        'icon': '🔼',
+        'color': 'bg-green-500 text-white enabled:hover:bg-green-600'
+    },
+    'downgrade': {
+        'icon': '🔽',
+        'color': 'bg-orange-400 text-white enabled:hover:bg-orange-500'
+    },
+    'remove': {
+        'icon': '❌',
+        'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
+    },
+}
 
-const { data, error, isLoading } = useEmployeeList();
-let employeeList = data;
-let rows = ['id', 'name', 'surname', 'email', 'role'];
+const refresh = async () => {
+    await queryClient.refetchQueries(employeesKeys.employeeList);
+};
 </script>
 
 <style scoped>

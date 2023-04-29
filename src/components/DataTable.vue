@@ -9,7 +9,7 @@
                 <button
                         @click="currentPage = currentPage - 1"
                         :disabled="currentPage === 1"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-gray-800 text-sm font-medium rounded w-10 h-10"
+                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-gray-800 text-sm font-medium rounded w-10 h-10 disabled:opacity-50"
                 >
                     ⬅️
                 </button>
@@ -21,7 +21,7 @@
                           'bg-gray-800': 1 === currentPage,
                           'bg-white text-gray-500': 1 !== currentPage
                         }"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-sm font-medium rounded w-10 h-10"
+                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 text-sm font-medium rounded w-10 h-10"
                 >
                     1
                 </button>
@@ -47,7 +47,7 @@
                           'bg-gray-800': totalPages === currentPage,
                           'bg-white text-gray-500': totalPages !== currentPage
                         }"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-sm font-medium rounded w-10 h-10"
+                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 text-sm font-medium rounded w-10 h-10"
                 >
                     {{ totalPages }}
                 </button>
@@ -55,7 +55,7 @@
                 <button
                         @click="currentPage = currentPage + 1"
                         :disabled="currentPage === totalPages"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-sm font-medium rounded w-10 h-10"
+                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-sm font-medium rounded w-10 h-10 disabled:opacity-50"
                 >
                     ➡️
                 </button>
@@ -68,20 +68,30 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th v-for="row in props.rows" scope="col" class="px-6 py-3 text-left text-gray-500 uppercase tracking-wider cursor-pointer">
+                            <th class="px-6 py-3 text-left text-gray-500 uppercase tracking-wider cursor-pointer">
+                                Actions
+                            </th>
+                            <th v-for="row in rows" scope="col" class="px-6 py-3 text-left text-gray-500 uppercase tracking-wider cursor-pointer">
                                 {{ row }}
                             </th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="d in filteredData" :key="d.id">
-                            <td v-for="col in rows" class="px-6 py-4 whitespace-nowrap text-gray-900">{{ d[col] }}</td>
+                        <tr v-for="data in filteredData">
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-900">
+                                <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50" :class="val.color"
+                                :disabled="checkDisabledRole(action, data['role']) || checkDisabledTicket(action, data['state']) "
+                                @click="check(action, data)">
+                                    {{ val.icon }}
+                                </button>
+                            </td>
+                            <td v-for="(key, col) in rows" class="px-6 py-4 whitespace-nowrap text-gray-900">{{ data[col] }}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="flex justify-between items-center px-4 py-2 bg-gray-100 rounded-xl">
+            <div class="flex w-72 justify-center px-4 py-2 bg-gray-100 rounded-xl">
                 <div>
                     <span class="text-sm font-medium text-gray-700 rounded-xl">{{ paginationInfo }}</span>
                 </div>
@@ -91,7 +101,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import {ref, computed, watch, toRef} from 'vue';
+import {validateTicket} from "../service/ticket-service";
+import {removeEmployee} from "../service/employee-service";
 
 const props = defineProps ({
     data: {
@@ -99,7 +111,14 @@ const props = defineProps ({
         required: true
     },
     rows: {
-        type: Array,
+        type: Object,
+        required: true
+    },
+    actionList: {
+        type: Object,
+    },
+    entity: {
+        type: String,
         required: true
     }
 });
@@ -107,6 +126,14 @@ const props = defineProps ({
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchText = ref('');
+const checkDisabledRole = (action: string, role: string) => {
+    return action === 'upgrade' && role === 'ADMIN'
+        || action === 'downgrade' && role === 'CLASSIC';
+};
+
+const checkDisabledTicket = (action: string, state: string) => {
+    return action === 'validate' && state === 'USED';
+};
 
 // Compute total number of pages
 const totalPages = computed(() => {
@@ -145,6 +172,30 @@ const pages = computed(() => {
     }
     return pages;
 });
+
+const emit = defineEmits(['refresh']);
+const check = (action: string, data: any) => {
+    // Call api with action and string entity as route
+    switch (action) {
+        case 'upgrade':
+            console.log('upgrade');
+            break;
+        case 'downgrade':
+            console.log('downgrade');
+            break;
+        case 'validate':
+            validateTicket(data['nbTicket'])
+            break;
+        case 'remove':
+            removeEmployee(data['email'])
+            console.log('delete');
+            break;
+        default:
+            console.log('default');
+    }
+    // Emit event to refresh tanstack table
+    emit('refresh');
+};
 
 // Watch for changes in current page
 watch(currentPage, (newPage) => {

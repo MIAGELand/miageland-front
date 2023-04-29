@@ -12,7 +12,12 @@
             <div class="m-8">
                 <span v-if="isLoading">Loading...</span>
                 <div v-else class="rounded-lg">
-                    <data-table :data="ticketList" :rows="rows"></data-table>
+                    <data-table :data="ticketList"
+                                :rows="rows"
+                                :action-list="actionList"
+                                :entity="route"
+                                @refresh="refresh"
+                    ></data-table>
                 </div>
             </div>
         </div>
@@ -21,15 +26,39 @@
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {useTicketList} from "../queries/ticket.query";
-import TicketsCard from "../components/TicketsCard.vue";
+import {ticketKeys, useTicketList} from "../queries/ticket.query";
 import DataTable from "../components/DataTable.vue";
+import {useMutation, useQueryClient} from "@tanstack/vue-query";
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";
+const route = "tickets";
+const queryClient = useQueryClient();
 
-const { data, error, isLoading } = useTicketList();
-let ticketList = data;
-let rows = ['nbTicket', 'price', 'state', 'date'];
+
+const { data: ticketList, isLoading } = useTicketList();
+let rows = {
+    'nbTicket': 'ID_t',
+    'idVisitor': 'ID_v',
+    'nameVisitor': 'Visiteur',
+    'price': 'Prix',
+    'state': 'Etat',
+    'date': 'Date'
+}
+let actionList = {
+    'validate': {
+        'icon': '✅',
+        'color': 'bg-green-500 text-white enabled:hover:bg-green-600'
+    },
+    'remove': {
+        'icon': '❌',
+        'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
+    },
+}
+
+const refresh = async () => {
+    console.log("refresh")
+    await queryClient.refetchQueries(ticketKeys.ticketList.queryKey);
+};
 </script>
 
 <style scoped>
