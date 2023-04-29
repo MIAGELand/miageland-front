@@ -12,7 +12,12 @@ export async function getAllEmployees(): Promise<Employee> {
     return response.data;
 }
 
+export async function removeEmployee(email: String): Promise<void> {
+    const response = await axios.delete(`${BASE_URL}/employees/${email}`);
+    return response.data;
+}
 export const employeeService = {
     getEmployee,
     getAllEmployees,
+    deleteEmployee: removeEmployee,
 };
