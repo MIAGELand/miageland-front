@@ -1,4 +1,5 @@
 <template>
+    <Toaster position="top-right" richColors/>
     <form>
         <h1 class="text-2xl font-bold mb-4">{{ props.formData.name }}</h1>
         <div class="grid grid-cols-2">
@@ -35,6 +36,7 @@
 import {PropType, reactive, ref} from "vue";
 import {FormData} from "../models/models";
 import { faker } from '@faker-js/faker';
+import { Toaster, toast } from 'vue-sonner';
 
 let nbData = ref(0)
 
@@ -69,6 +71,8 @@ const generateData = () => {
         }
     }
     if (error) {
+        toast.error('Remplissez les champs !')
+
         return
     }
     // Add the element name to the form data

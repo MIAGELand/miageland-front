@@ -28,6 +28,7 @@ import GeneratorForm from "../components/GeneratorForm.vue";
 import {BASE_URL} from "../util/constants";
 import axios from "axios";
 import {FormData} from "../models/models";
+import {toast} from "vue-sonner";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";
@@ -58,7 +59,11 @@ let elements = [
 const generateData = async (formData: FormData) => {
     let url = BASE_URL + "/" + formData.route;
     let data = formData.data;
-    await axios.post(url, data);
+    await axios.post(url, data).then(() => {
+        toast.success(Object.keys(data).length + ' ligne(s) `' + formData.name + '` générée(s) avec succès !')
+    }).catch((error) => {
+        toast.error('Erreur lors de la génération des données')
+    });
 }
 </script>
 
