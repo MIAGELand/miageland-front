@@ -45,6 +45,14 @@ let elements = [
         },
     },
     {
+        "name": "Attractions",
+        "route": "attractions",
+        "data": {
+            "name": "string",
+            "opened": "boolean",
+        }
+    },
+    {
         "name": "Tickets",
         "route": "tickets",
         "data": {

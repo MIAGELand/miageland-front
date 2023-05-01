@@ -15,6 +15,9 @@
                     <template v-else-if="type === 'Date'">
                         <input type="datetime-local" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                     </template>
+                    <template v-else-if="type === 'boolean'">
+                        <input type="checkbox" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                    </template>
                     <template v-else-if="type.includes('|')">
                         <select v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option v-for="option in type.split('|').map(opt => opt.trim())" :key="option">{{ option }}</option>
@@ -72,17 +75,33 @@ const generateData = () => {
     }
     if (error) {
         toast.error('Remplissez les champs !')
-
         return
     }
-    // Add the element name to the form data
-    formData['name'] = props.formData.name
-    emit('generate-data', formData)
+
+    // Generate the data object from user input values
+    const { name, route } = props.formData;
+    const data = [];
+    const fields = {}
+    for (const [key, value] of Object.entries(props.formData.data)) {
+        if (value === 'string' || value === 'email' || value === 'Date' || value.includes('|')) {
+            fields[key] = formData.data[key] || '';
+        } else if (value === 'number') {
+            fields[key] = parseFloat(formData.data[key]) || 0;
+        } else if (value === 'boolean') {
+            fields[key] = formData.data[key] === 'true' || false;
+        }
+    }
+    data.push(fields)
+
+    emit('generate-data', { name, route, data: Object.assign({}, data) });
+
     // Clear form
     for (const [key, value] of Object.entries(formData.data)) {
         formData.data[key] = ''
     }
 }
+
+
 const generateRandomData = () => {
     const route = props.formData.route;
     const name = props.formData.name;
@@ -101,6 +120,8 @@ const generateRandomData = () => {
                 fields[key] = options[Math.floor(Math.random() * options.length)];
             } else if (value === 'number') {
                 fields[key] = parseFloat(faker.finance.amount());
+            } else if (value === 'boolean') {
+                fields[key] = faker.datatype.boolean();
             }
         }
         data.push(fields);
