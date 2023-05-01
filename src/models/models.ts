@@ -15,6 +15,12 @@ export interface Ticket {
     idVisitor: number;
 }
 
+export interface Attraction {
+    id: number;
+    name: string;
+    opened: boolean;
+}
+
 export interface FormData {
     name: string;
     route: string;
