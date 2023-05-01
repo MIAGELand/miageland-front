@@ -1,4 +1,5 @@
 <template>
+    <Toaster position="top-right" richColors/>
     <div class="flex flex-col">
         <div class="flex justify-between items-center mb-4">
             <div>
@@ -80,7 +81,9 @@
                         <tr v-for="data in filteredData">
                             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
                                 <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50" :class="val.color"
-                                :disabled="checkDisabledRole(action, data['role']) || checkDisabledTicket(action, data['state']) "
+                                :disabled="checkDisabledRole(action, data['role'])
+                                || checkDisabledTicket(action, data['state'])
+                                || checkDisabledAttraction(action, data['opened'])"
                                 @click="check(action, data)">
                                     {{ val.icon }}
                                 </button>
@@ -104,6 +107,7 @@
 import {ref, computed, watch, toRef} from 'vue';
 import {validateTicket} from "../service/ticket-service";
 import {removeEmployee} from "../service/employee-service";
+import {toast, Toaster} from "vue-sonner";
 
 const props = defineProps ({
     data: {
@@ -133,6 +137,11 @@ const checkDisabledRole = (action: string, role: string) => {
 
 const checkDisabledTicket = (action: string, state: string) => {
     return action === 'validate' && state === 'USED';
+};
+
+const checkDisabledAttraction = (action: string, opened: boolean) => {
+    return action === 'close' && !opened
+        || action === 'open' && opened;
 };
 
 // Compute total number of pages
@@ -184,17 +193,25 @@ const check = (action: string, data: any) => {
             console.log('downgrade');
             break;
         case 'validate':
-            validateTicket(data['nbTicket'])
+            validateTicket(data['nbTicket']).then(() => {
+                toast.success('Ticket validé avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la validation du ticket.');
+            });
             break;
         case 'remove':
-            removeEmployee(data['email'])
+            removeEmployee(data['email']).then(() => {
+                toast.success('Employé supprimé avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la suppression de l\'employé.');
+            })
             console.log('delete');
             break;
         default:
             console.log('default');
     }
-    // Emit event to refresh tanstack table
-    emit('refresh');
 };
 
 // Watch for changes in current page
