@@ -83,8 +83,10 @@ const generateData = () => {
     const data = [];
     const fields = {}
     for (const [key, value] of Object.entries(props.formData.data)) {
-        if (value === 'string' || value === 'email' || value === 'Date' || value.includes('|')) {
+        if (value === 'string' || value === 'email' || value.includes('|')) {
             fields[key] = formData.data[key] || '';
+        } else if (value === 'Date') {
+            fields[key] = new Date(formData.data[key]).toISOString() || '';
         } else if (value === 'number') {
             fields[key] = parseFloat(formData.data[key]) || 0;
         } else if (value === 'boolean') {

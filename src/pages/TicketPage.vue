@@ -36,7 +36,7 @@ const queryClient = useQueryClient();
 
 const { data: ticketList, isLoading } = useTicketList();
 let rows = {
-    'nbTicket': 'ID_t',
+    'id': 'ID_t',
     'idVisitor': 'ID_v',
     'nameVisitor': 'Visiteur',
     'price': 'Prix',

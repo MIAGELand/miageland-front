@@ -15,6 +15,7 @@ import {
     Legend
 } from 'chart.js'
 import { ref } from 'vue'
+import { getRandomColor} from "../../util/colors";
 
 const props = defineProps({
     data: Array,
@@ -32,8 +33,9 @@ const chartData = ref({
             label: props.lineLabel,
             data: props.data,
             borderWidth: 4,
-            pointRadius: 12,
-            borderColor: 'rgb(75, 192, 192)',
+            pointRadius: 8,
+            backgroundColor: getRandomColor(),
+            borderColor: getRandomColor(),
             fill: false,
             tension: 0.1
         }
@@ -41,6 +43,8 @@ const chartData = ref({
 })
 
 const chartOptions = ref({
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             display: true,

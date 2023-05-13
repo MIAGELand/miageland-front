@@ -8,17 +8,7 @@ const props = defineProps({
     size: String as PropType<size>,
 });
 
-const numberSizeClass = computed(() => {
-    if (props.size === 'sm') {
-        return 'text-md';
-    } else if (props.size === 'md') {
-        return 'text-xl';
-    } else if (props.size === 'lg') {
-        return 'text-3xl';
-    }
-});
-
-const titleSizeClass = computed(() => {
+const size = computed(() => {
     if (props.size === 'sm') {
         return 'text-sm';
     } else if (props.size === 'md') {
@@ -30,11 +20,9 @@ const titleSizeClass = computed(() => {
 </script>
 
 <template>
-    <div :class=numberSizeClass class="font-extrabold">
+    <div :class="size">
+        {{ title }} :
         {{ data.length }}
-    </div>
-    <div :class="titleSizeClass">
-        {{ title }}
     </div>
 </template>
 

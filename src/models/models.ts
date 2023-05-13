@@ -7,7 +7,7 @@ export interface Employee {
 }
 
 export interface Ticket {
-    nbTicket: number;
+    id: number;
     date: Date;
     price: number;
     state: TicketState;

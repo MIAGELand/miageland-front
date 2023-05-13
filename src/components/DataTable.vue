@@ -222,7 +222,7 @@ const check = (action: string, data: any) => {
             })
             break;
         case 'validate':
-            validateTicket(data['nbTicket']).then(() => {
+            validateTicket(data['id']).then(() => {
                 toast.success('Ticket validé avec succès.');
                 emit('refresh')
             }).catch(() => {
@@ -230,7 +230,7 @@ const check = (action: string, data: any) => {
             });
             break;
         case 'cancel':
-            cancelTicket(data['nbTicket']).then((data) => {
+            cancelTicket(data['id']).then((data) => {
                 toast.success('Ticket annulé avec succès. ' +
                     'Remboursement de ' + data['price'] + '€.');
                 emit('refresh')
