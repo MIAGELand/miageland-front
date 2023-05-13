@@ -80,7 +80,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="data in filteredData">
                             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-                                <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50" :class="val.color"
+                                <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50 transition" :class="val.color"
                                 :disabled="checkDisabledRole(<string> action, data['role'])
                                 || checkDisabledTicket(<string>  action, data['state'], data['date'])
                                 || checkDisabledAttraction(<string> action, data['opened'])"
@@ -108,6 +108,7 @@ import {ref, computed, watch, toRef} from 'vue';
 import {cancelTicket, validateTicket} from "../service/ticket-service";
 import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
+import {closeAttraction, openAttraction, removeAttraction} from "../service/attraction-service";
 
 const props = defineProps ({
     data: {
@@ -234,6 +235,30 @@ const check = (action: string, data: any) => {
                 emit('refresh')
             }).catch(() => {
                 toast.error('Erreur lors de l\'annulation du ticket.');
+            });
+            break;
+        case 'removeAttraction':
+            removeAttraction(data['id']).then(() => {
+                toast.success('Attraction supprimée avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la suppression de l\'attraction.');
+            });
+            break;
+        case 'close':
+            closeAttraction(data['id']).then(() => {
+                toast.success('Attraction fermée avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la fermeture de l\'attraction.');
+            });
+            break;
+        case 'open':
+            openAttraction(data['id']).then(() => {
+                toast.success('Attraction ouverte avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de l\'ouverture de l\'attraction.');
             });
             break;
         default:

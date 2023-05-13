@@ -87,8 +87,7 @@
             <div class="flex flex-col items-start mt-auto mb-4">
                 <div class="flex py-2">
                     <img src="../assets/vue.svg" alt="profile" class="h-8 w-8 mr-4" />
-                    <!-- TODO : Handle long names -->
-                    <div class="mt-1">Name Name</div>
+                    <div class="mt-1">Admin</div>
                 </div>
             </div>
         </nav>

@@ -44,7 +44,7 @@ let actionList = {
         'icon': '🔒',
         'color': 'bg-orange-300 text-white enabled:hover:bg-orange-400'
     },
-    'remove': {
+    'removeAttraction': {
         'icon': '❌',
         'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
     },
