@@ -49,7 +49,7 @@ let actionList = {
         'icon': '✅',
         'color': 'bg-green-500 text-white enabled:hover:bg-green-600'
     },
-    'remove': {
+    'cancel': {
         'icon': '❌',
         'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
     },

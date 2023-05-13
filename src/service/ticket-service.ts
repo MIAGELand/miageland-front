@@ -8,11 +8,17 @@ export async function getAllTickets(): Promise<Ticket[]> {
 }
 
 export async function validateTicket(id: number): Promise<Ticket> {
-    const response = await axios.patch(`${BASE_URL}/tickets/${id}`);
+    const response = await axios.patch(`${BASE_URL}/tickets/${id}`, {'state': 'USED'});
+    return response.data;
+}
+
+export async function cancelTicket(id: number): Promise<Ticket> {
+    const response = await axios.patch(`${BASE_URL}/tickets/${id}`, {'state': 'CANCELLED'});
     return response.data;
 }
 
 export const ticketService = {
     getAllTickets,
-    validateTicket
+    validateTicket,
+    cancelTicket,
 };

@@ -81,10 +81,10 @@
                         <tr v-for="data in filteredData">
                             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
                                 <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50" :class="val.color"
-                                :disabled="checkDisabledRole(action, data['role'])
-                                || checkDisabledTicket(action, data['state'])
-                                || checkDisabledAttraction(action, data['opened'])"
-                                @click="check(action, data)">
+                                :disabled="checkDisabledRole(<string> action, data['role'])
+                                || checkDisabledTicket(<string>  action, data['state'])
+                                || checkDisabledAttraction(<string> action, data['opened'])"
+                                @click="check(<string> action, data)">
                                     {{ val.icon }}
                                 </button>
                             </td>
@@ -105,7 +105,7 @@
 </template>
 <script setup lang="ts">
 import {ref, computed, watch, toRef} from 'vue';
-import {validateTicket} from "../service/ticket-service";
+import {cancelTicket, validateTicket} from "../service/ticket-service";
 import {removeEmployee} from "../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
 
@@ -136,7 +136,9 @@ const checkDisabledRole = (action: string, role: string) => {
 };
 
 const checkDisabledTicket = (action: string, state: string) => {
-    return action === 'validate' && state === 'USED';
+    return action === 'validate' && state === 'USED'
+        || action === 'cancel' && state === 'USED'
+        || state === 'CANCELLED';
 };
 
 const checkDisabledAttraction = (action: string, opened: boolean) => {
@@ -198,6 +200,14 @@ const check = (action: string, data: any) => {
                 emit('refresh')
             }).catch(() => {
                 toast.error('Erreur lors de la validation du ticket.');
+            });
+            break;
+        case 'cancel':
+            cancelTicket(data['nbTicket']).then(() => {
+                toast.success('Ticket annulé avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de l\'annulation du ticket.');
             });
             break;
         case 'remove':
