@@ -13,38 +13,58 @@
                 <span v-if="isLoading">
                     Loading...
                 </span>
-                <div v-else class="flex gap-4 flex-wrap rounded-xl">
-                    <card-container emoji="👨‍🔧" title="Employés" class="flex flex-col gap-2 bg-blue-900">
-                        <div class="flex items-baseline gap-2">
-                            <NumberElement :data="employeeList" title="total" size="lg"/>
-                        </div>
-                        <hr>
-                        <div class="flex gap-2 items-end">
-                            <NumberElement :data="employeeListAdmin" title="Admins" size="md"/>
-                            <NumberElement :data="employeeListClassic" title="Classiques" size="md"/>
-                        </div>
-                    </card-container>
-                    <card-container emoji="🎢" title="Attractions" class="flex flex-col gap-2 bg-pink-950">
-                        <div class="flex items-baseline gap-2">
-                            <NumberElement :data="attractionList" title="total" size="lg"/>
-                        </div>
-                        <hr>
-                        <div class="flex gap-2 items-end">
-                            <NumberElement :data="attractionListOpened" title="Ouvertes" size="md"/>
-                            <NumberElement :data="attractionListClosed" title="Fermées" size="md"/>
-                        </div>
-                    </card-container>
-                    <card-container emoji="🎟️" title="Billets" class="flex flex-col gap-2">
-                        <div class="flex items-baseline gap-2">
-                            <NumberElement :data="ticketList" title="total" size="lg"/>
-                        </div>
-                        <hr>
-                        <div class="flex gap-2 items-end">
-                            <NumberElement :data="ticketListPaid" title="Payés" size="md"/>
-                            <NumberElement :data="ticketListUsed" title="Utilisés" size="md"/>
-                            <NumberElement :data="ticketListCancelled" title="Annulés" size="md"/>
-                        </div>
-                    </card-container>
+                <div v-else class="flex flex-col gap-4 w-full">
+                    <div class="flex flex-wrap gap-4">
+                        <card-container emoji="👨‍🔧" title="Employés" class="flex flex-col gap-2 grow">
+                            <div class="flex items-baseline gap-2">
+                                <NumberElement :data="employeeList" title="total" size="lg"/>
+                            </div>
+                            <hr>
+                            <div class="flex gap-2 items-end">
+                                <NumberElement :data="employeeListAdmin" title="Admins" size="md"/>
+                                <NumberElement :data="employeeListClassic" title="Classiques" size="md"/>
+                            </div>
+                        </card-container>
+                        <card-container emoji="🎢" title="Attractions" class="flex flex-col gap-2 grow">
+                            <div class="flex items-baseline gap-2">
+                                <NumberElement :data="attractionList" title="total" size="lg"/>
+                            </div>
+                            <hr>
+                            <div class="flex gap-2 items-end">
+                                <NumberElement :data="attractionListOpened" title="Ouvertes" size="md"/>
+                                <NumberElement :data="attractionListClosed" title="Fermées" size="md"/>
+                            </div>
+                        </card-container>
+                        <card-container emoji="🎟️" title="Billets" class="flex flex-col gap-2 grow">
+                            <div class="flex items-baseline gap-2">
+                                <NumberElement :data="ticketList" title="total" size="lg"/>
+                            </div>
+                            <hr>
+                            <div class="flex gap-2 items-end">
+                                <NumberElement :data="ticketListPaid" title="Payés" size="md"/>
+                                <NumberElement :data="ticketListUsed" title="Utilisés" size="md"/>
+                                <NumberElement :data="ticketListCancelled" title="Annulés" size="md"/>
+                            </div>
+                        </card-container>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 w-full">
+                        <card-container emoji="📊" title="Répartition des employés" class="flex flex-col gap-2">
+                            <PieChart :data="employeeNumberList" :labels="employeeNameList"/>
+                        </card-container>
+                        <card-container emoji="📊" title="Répartition des attractions" class="flex flex-col gap-2">
+                            <PieChart :data="attractionNumberList" :labels="attractionNameList"/>
+                        </card-container>
+                        <card-container emoji="📊" title="Répartition des billets" class="flex flex-col gap-2">
+                            <PieChart :data="ticketNumberList" :labels="ticketNameList"/>
+                        </card-container>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 w-full">
+                        <card-container emoji="📊" title="Nb tickets" class="flex flex-col gap-2">
+                            <LineChart :data="ticketNumberList" :labels="ticketNameList"/>
+                        </card-container>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,6 +79,8 @@ import {useAttractionList} from "../queries/attraction.query";
 import {computed, Ref} from "vue";
 import {useTicketList} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
+import PieChart from "../components/dashboard/PieChart.vue";
+import LineChart from "../components/dashboard/LineChart.vue";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
@@ -72,7 +94,6 @@ const isLoading = computed(() => {
 });
 
 const filter = (table: Ref, column: string, value: string | boolean) => {
-    console.log(table.value)
     return table.value?.filter((item: any) => item[column] === value);
 }
 
@@ -103,6 +124,30 @@ const ticketListUsed = computed(() => {
 
 const ticketListCancelled = computed(() => {
     return filter(ticketList, 'state', 'CANCELLED');
+});
+
+const employeeNumberList = computed(() => {
+    return [employeeListAdmin.value.length, employeeListClassic.value.length];
+});
+
+const employeeNameList = computed(() => {
+    return ['Admins', 'Classiques'];
+});
+
+const attractionNumberList = computed(() => {
+    return [attractionListOpened.value.length, attractionListClosed.value.length];
+});
+
+const attractionNameList = computed(() => {
+    return ['Ouvertes', 'Fermées'];
+});
+
+const ticketNumberList = computed(() => {
+    return [ticketListPaid.value.length, ticketListUsed.value.length, ticketListCancelled.value.length];
+});
+
+const ticketNameList = computed(() => {
+    return ['Payés', 'Utilisés', 'Annulés'];
 });
 </script>
 

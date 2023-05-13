@@ -5,7 +5,7 @@ import {size} from "../../models/models";
 const props = defineProps({
     data: Array,
     title: String,
-    size: Object as PropType<size>,
+    size: String as PropType<size>,
 });
 
 const numberSizeClass = computed(() => {
