@@ -82,7 +82,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
                                 <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50" :class="val.color"
                                 :disabled="checkDisabledRole(<string> action, data['role'])
-                                || checkDisabledTicket(<string>  action, data['state'])
+                                || checkDisabledTicket(<string>  action, data['state'], data['date'])
                                 || checkDisabledAttraction(<string> action, data['opened'])"
                                 @click="check(<string> action, data)">
                                     {{ val.icon }}
@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import {ref, computed, watch, toRef} from 'vue';
 import {cancelTicket, validateTicket} from "../service/ticket-service";
-import {removeEmployee} from "../service/employee-service";
+import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
 
 const props = defineProps ({
@@ -135,10 +135,17 @@ const checkDisabledRole = (action: string, role: string) => {
         || action === 'downgrade' && role === 'CLASSIC';
 };
 
-const checkDisabledTicket = (action: string, state: string) => {
+const checkDisabledTicket = (action: string, state: string, date: string) => {
+    const today = new Date();
+    // transform date string to date object
+    const dateObject = new Date(date);
+    // check if date is 7 days after today date
+    const isDateCorrect = dateObject.getTime() > today.getTime() + 7 * 24 * 60 * 60 * 1000;
+
     return action === 'validate' && state === 'USED'
         || action === 'cancel' && state === 'USED'
-        || state === 'CANCELLED';
+        || state === 'CANCELLED'
+        || action === 'cancel' && !isDateCorrect;
 };
 
 const checkDisabledAttraction = (action: string, opened: boolean) => {
@@ -189,10 +196,28 @@ const check = (action: string, data: any) => {
     // Call api with action and string entity as route
     switch (action) {
         case 'upgrade':
-            console.log('upgrade');
+            upgradeEmployee(data['id']).then(() => {
+                toast.success('Employé upgrade en ' + data['role'] + ' à jour avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la mise à jour de l\'employé.');
+            });
             break;
         case 'downgrade':
-            console.log('downgrade');
+            downgradeEmployee(data['id']).then(() => {
+                toast.success('Employé downgrade en ' + data['role'] + ' à jour avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la mise à jour de l\'employé.');
+            });
+            break;
+        case 'remove':
+            removeEmployee(data['id']).then(() => {
+                toast.success('Employé supprimé avec succès.');
+                emit('refresh')
+            }).catch(() => {
+                toast.error('Erreur lors de la suppression de l\'employé.');
+            })
             break;
         case 'validate':
             validateTicket(data['nbTicket']).then(() => {
@@ -203,21 +228,13 @@ const check = (action: string, data: any) => {
             });
             break;
         case 'cancel':
-            cancelTicket(data['nbTicket']).then(() => {
-                toast.success('Ticket annulé avec succès.');
+            cancelTicket(data['nbTicket']).then((data) => {
+                toast.success('Ticket annulé avec succès. ' +
+                    'Remboursement de ' + data['price'] + '€.');
                 emit('refresh')
             }).catch(() => {
                 toast.error('Erreur lors de l\'annulation du ticket.');
             });
-            break;
-        case 'remove':
-            removeEmployee(data['email']).then(() => {
-                toast.success('Employé supprimé avec succès.');
-                emit('refresh')
-            }).catch(() => {
-                toast.error('Erreur lors de la suppression de l\'employé.');
-            })
-            console.log('delete');
             break;
         default:
             console.log('default');

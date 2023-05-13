@@ -12,12 +12,24 @@ export async function getAllEmployees(): Promise<Employee> {
     return response.data;
 }
 
-export async function removeEmployee(email: String): Promise<void> {
-    const response = await axios.delete(`${BASE_URL}/employees/${email}`);
+export async function removeEmployee(id: number): Promise<void> {
+    const response = await axios.delete(`${BASE_URL}/employees/${id}`);
+    return response.data;
+}
+
+export async function upgradeEmployee(id: number): Promise<void> {
+    const response = await axios.patch(`${BASE_URL}/employees/${id}`, {'role': 'ADMIN'});
+    return response.data;
+}
+
+export async function downgradeEmployee(id: number): Promise<void> {
+    const response = await axios.patch(`${BASE_URL}/employees/${id}`, {'role': 'CLASSIC'});
     return response.data;
 }
 export const employeeService = {
     getEmployee,
     getAllEmployees,
-    deleteEmployee: removeEmployee,
+    removeEmployee,
+    upgradeEmployee,
+    downgradeEmployee,
 };
