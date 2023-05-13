@@ -1,3 +1,5 @@
+import { RGB_COLORS } from './constants';
+
 export function generatePastelRGB() {
     let r = Math.floor(Math.random() * 256);
     let g = Math.floor(Math.random() * 256);
@@ -10,4 +12,8 @@ export function generatePastelRGB() {
     b = (b + mix) / 2;
 
     return "rgb(" + r + ", " + g + ", " + b + ")";
+}
+
+export function getRandomColor() {
+    return RGB_COLORS[Math.floor(Math.random() * RGB_COLORS.length)];
 }
