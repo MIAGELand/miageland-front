@@ -48,7 +48,7 @@
                         </card-container>
                     </div>
 
-                    <div class="flex flex-wrap gap-4 w-full">
+                    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3">
                         <card-container emoji="📊" title="Répartition des employés" class="flex flex-col gap-2">
                             <PieChart :data="employeeNumberList" :labels="employeeNameList"/>
                         </card-container>
@@ -61,8 +61,8 @@
                     </div>
 
                     <div class="flex flex-wrap gap-4 w-full">
-                        <card-container emoji="📊" title="Nb tickets" class="flex flex-col gap-2">
-                            <LineChart :data="ticketNumberList" :labels="ticketNameList"/>
+                        <card-container emoji="📊" title="Nb tickets / mois" class="flex flex-col gap-2 w-full">
+                            <LineChart :data="ticketNumberByMonthAndYear" :labels="ticketDateLabels" lineLabel="Nb tickets / mois"/>
                         </card-container>
                     </div>
                 </div>
@@ -81,6 +81,7 @@ import {useTicketList} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
+import {getChartLabels} from "../util/date";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
@@ -148,6 +149,36 @@ const ticketNumberList = computed(() => {
 
 const ticketNameList = computed(() => {
     return ['Payés', 'Utilisés', 'Annulés'];
+});
+
+const firstTicketDate = computed(() => {
+    const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
+    return new Date(Math.min.apply(null, dates));
+});
+
+const lastTicketDate = computed(() => {
+    const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
+    return new Date(Math.max.apply(null, dates));
+});
+
+const ticketDateLabels = computed(() => {
+    return getChartLabels(firstTicketDate.value, lastTicketDate.value);
+});
+
+const ticketNumberByMonthAndYear = computed(() => {
+    const ticketNumberByMonthAndYear = [];
+    for (let i = 0; i < ticketDateLabels.value.length; i++) {
+        ticketNumberByMonthAndYear.push(0);
+    }
+    ticketList.value.forEach((ticket: any) => {
+        const ticketDate = new Date(ticket.date);
+        const month = ticketDate.getMonth() + 1;
+        const ticketMonth = month < 10 ? `0${month}` : month;
+        const ticketYear = ticketDate.getFullYear().toString().substring(2);
+        const ticketIndex = ticketDateLabels.value.findIndex((label: string) => label === `${ticketMonth}/${ticketYear}`);
+        ticketNumberByMonthAndYear[ticketIndex]++;
+    });
+    return ticketNumberByMonthAndYear;
 });
 </script>
 
