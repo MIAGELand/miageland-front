@@ -40,3 +40,5 @@ export enum EmployeeRole {
     ADMIN = 'ADMIN',
     CLASSIC = 'CLASSIC',
 }
+
+export type size = 'sm' | 'md' | 'lg';

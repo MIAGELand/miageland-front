@@ -28,12 +28,11 @@
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {ticketKeys, useTicketList} from "../queries/ticket.query";
 import DataTable from "../components/DataTable.vue";
-import {useMutation, useQueryClient} from "@tanstack/vue-query";
+import {useQueryClient} from "@tanstack/vue-query";
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";
 const route = "tickets";
 const queryClient = useQueryClient();
-
 
 const { data: ticketList, isLoading } = useTicketList();
 let rows = {

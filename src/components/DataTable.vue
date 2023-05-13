@@ -34,7 +34,7 @@
                     {{ currentPage }}
                 </button>
                 <button
-                        v-else
+                        v-else-if="totalPages > 2"
                         :key="currentPage"
                         @click="currentPage = Math.ceil(totalPages / 2)"
                         class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-gray-800 text-sm font-medium rounded w-10 h-10"
@@ -42,6 +42,7 @@
                     ...
                 </button>
                 <button
+                        v-if="totalPages > 1"
                         :key="totalPages"
                         @click="currentPage = totalPages"
                         :class="{
@@ -104,7 +105,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import {ref, computed, watch, toRef} from 'vue';
+import {ref, computed, watch } from 'vue';
 import {cancelTicket, validateTicket} from "../service/ticket-service";
 import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
