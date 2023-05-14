@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {ticketKeys, useTicketList} from "../queries/ticket.query";
-import DataTable from "../components/DataTable.vue";
+import DataTable from "../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";

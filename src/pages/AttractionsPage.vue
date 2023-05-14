@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import DataTable from "../components/DataTable.vue";
+import DataTable from "../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
 import {attractionsKeys, useAttractionList} from "../queries/attraction.query";
 
