@@ -132,6 +132,7 @@ const props = defineProps ({
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchText = ref('');
+const dataFiltered = ref(props.data);
 const checkDisabledRole = (action: string, role: string) => {
     return action === 'upgrade' && role === 'ADMIN'
         || action === 'downgrade' && role === 'CLASSIC';
@@ -157,14 +158,19 @@ const checkDisabledAttraction = (action: string, opened: boolean) => {
 
 // Compute total number of pages
 const totalPages = computed(() => {
-    return Math.ceil(props.data.length / itemsPerPage)
+    // Check if filtered data is empty
+    if (searchText.value === '') {
+        return Math.ceil(props.data.length / itemsPerPage)
+    } else {
+        return Math.ceil(dataFiltered.value.length / itemsPerPage)
+    }
 });
 
 // Compute filtered data based on search text and current page
 const filteredData = computed(() => {
-    let data = props.data;
+    dataFiltered.value = props.data;
     if (searchText.value) {
-        data = data.filter((item) => {
+        dataFiltered.value = props.data.filter((item) => {
             return Object.values(item).some((value) => {
                 return value.toString().toLowerCase().includes(searchText.value.toLowerCase());
             });
@@ -172,7 +178,7 @@ const filteredData = computed(() => {
     }
     const startIndex = (currentPage.value - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
+    return dataFiltered.value.slice(startIndex, endIndex);
 });
 
 const rows = props.rows;
@@ -181,7 +187,7 @@ const rows = props.rows;
 const paginationInfo = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage + 1;
     const endIndex = startIndex + filteredData.value.length - 1;
-    return `Affichage de ${startIndex} à ${endIndex} sur ${props.data.length} lignes`;
+    return `Affichage de ${startIndex} à ${endIndex} sur ${dataFiltered.value.length} lignes`;
 });
 
 // Compute pages
