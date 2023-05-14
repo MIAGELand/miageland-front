@@ -4,63 +4,27 @@
         <div class="flex justify-between items-center mb-4">
             <InputSearch @update="updateSearchText" :searchText="searchText" />
             <div class="justify-end">
-                <!-- Previous button -->
-                <button
-                        @click="currentPage = currentPage - 1"
-                        :disabled="currentPage === 1"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-gray-800 text-sm font-medium rounded w-10 h-10 disabled:opacity-50"
-                >
-                    ⬅️
-                </button>
-
-                <button
-                        :key="1"
-                        @click="currentPage = 1"
-                        :class="{
-                          'bg-gray-800': 1 === currentPage,
-                          'bg-white text-gray-500': 1 !== currentPage
-                        }"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 text-sm font-medium rounded w-10 h-10"
-                >
-                    1
-                </button>
-                <button
-                        v-if="currentPage !== 1 && currentPage !== totalPages"
-                        :key="currentPage"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-gray-800 text-white text-sm font-medium rounded w-10 h-10"
-                >
-                    {{ currentPage }}
-                </button>
-                <button
-                        v-else-if="totalPages > 2"
-                        :key="currentPage"
-                        @click="currentPage = Math.ceil(totalPages / 2)"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-gray-800 text-sm font-medium rounded w-10 h-10"
-                >
-                    ...
-                </button>
-                <button
-                        v-if="totalPages > 1"
-                        :key="totalPages"
-                        @click="currentPage = totalPages"
-                        :class="{
-                          'bg-gray-800': totalPages === currentPage,
-                          'bg-white text-gray-500': totalPages !== currentPage
-                        }"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 text-sm font-medium rounded w-10 h-10"
-                >
-                    {{ totalPages }}
-                </button>
-                <!-- Next button -->
-                <button
-                        @click="currentPage = currentPage + 1"
-                        :disabled="currentPage === totalPages"
-                        class="relative inline-flex items-center justify-center py-2 border border-gray-300 bg-white text-sm font-medium rounded w-10 h-10 disabled:opacity-50"
-                >
+                <NavigationButton :currentPage="currentPage" :totalPages="totalPages" @update="updateCurrentPage" action="previous">
+                        ⬅️
+                </NavigationButton>
+                <FirstButton :currentPage="currentPage" @update="updateCurrentPage"/>
+                <CurrentPageButton
+                    v-if="currentPage !== 1 && currentPage !== totalPages"
+                    :totalPages="totalPages" :currentPage="currentPage"
+                />
+                <MiddleDotsButton
+                    v-else-if="totalPages > 2"
+                    @update="updateCurrentPage"
+                    :currentPage="currentPage" :totalPages="totalPages"
+                />
+                <LastButton
+                    v-if="totalPages > 1"
+                    :totalPages="totalPages" :currentPage="currentPage" @update="updateCurrentPage"
+                />
+                <NavigationButton :currentPage="currentPage" :totalPages="totalPages" @update="updateCurrentPage" action="next">
                     ➡️
-                </button>
+                </NavigationButton>
             </div>
-
         </div>
         <div class="-my-2 overflow-x-auto">
             <TableContainer>
@@ -86,6 +50,7 @@
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
 import {ref, computed, watch } from 'vue';
 import {cancelTicket, validateTicket} from "../../service/ticket-service";
@@ -96,6 +61,11 @@ import TableHeader from "./TableHeader.vue";
 import PaginationInfo from "./PaginationInfo.vue";
 import TableContainer from "./TableContainer.vue";
 import InputSearch from "./InputSearch.vue";
+import FirstButton from "./pagination/FirstButton.vue";
+import CurrentPageButton from "./pagination/CurrentPageButton.vue";
+import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
+import NavigationButton from "./pagination/NavigationButton.vue";
+import LastButton from "./pagination/LastButton.vue";
 
 const props = defineProps ({
     data: {
@@ -252,6 +222,10 @@ const check = (action: string, data: any) => {
 
 const updateSearchText = (input: string) => {
     searchText.value = input;
+};
+
+const updateCurrentPage = (page: number) => {
+    currentPage.value = page;
 };
 
 // Watch for changes in current page
