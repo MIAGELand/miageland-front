@@ -106,7 +106,7 @@ import {useTicketList} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
-import {getChartLabels} from "../util/date";
+import {getChartLabelsMonthAndYear} from "../util/date";
 import {aggregateDataByMonthAndYear} from "../util/dashboard";
 import BarChart from "../components/dashboard/BarChart.vue";
 
@@ -121,8 +121,12 @@ const isLoading = computed(() => {
     return employeeLoading.value || attractionLoading.value || ticketLoading.value;
 });
 
-const filter = (table: Ref, column: string, value: string | boolean) => {
-    return table.value?.filter((item: any) => item[column] === value);
+const filter = (table: Ref, column: string, value: string | boolean, equals: boolean = true) => {
+    if (equals) {
+        return table.value?.filter((item: any) => item[column] === value);
+    } else {
+        return table.value?.filter((item: any) => item[column] !== value);
+    }
 }
 
 // when loaded, filter the data to get the number of employees, attractions and tickets
@@ -189,7 +193,7 @@ const lastTicketDate = computed(() => {
 });
 
 const ticketDateLabels = computed(() => {
-    return getChartLabels(firstTicketDate.value, lastTicketDate.value);
+    return getChartLabelsMonthAndYear(firstTicketDate.value, lastTicketDate.value);
 });
 
 const ticketNumberByMonthAndYear = computed(() => {
@@ -214,7 +218,7 @@ const ticketNumberByMonthAndYear = computed(() => {
 });
 
 const benefitsByMonthAndYear = computed(() => {
-    const ticketListWithoutCancelled = ticketList.value.filter((ticket: any) => ticket.state !== 'CANCELLED');
+    const ticketListWithoutCancelled = filter(ticketList, 'state', 'CANCELLED', false)
     return aggregateDataByMonthAndYear(ticketDateLabels, ticketListWithoutCancelled, (ticket: any) => ticket.price);
 });
 

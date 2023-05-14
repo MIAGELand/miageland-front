@@ -49,6 +49,22 @@
                         Tickets
                     </button>
                 </div>
+
+                <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+                     @click="$router.push({ name: 'Park' })"
+                >
+                    <img
+                        src="../assets/park.svg"
+                        alt="park"
+                        class="h-8 w-8 mr-4"
+                    />
+                    <button
+                        class="font-bold"
+                    >
+                        Parc
+                    </button>
+                </div>
+
                 <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
                      @click="$router.push({ name: 'Dashboard' })"
                 >

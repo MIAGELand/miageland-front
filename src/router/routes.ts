@@ -6,6 +6,7 @@ import AttractionsPage from "../pages/AttractionsPage.vue";
 import DashboardPage from "../pages/DashboardPage.vue";
 import TicketPage from "../pages/TicketPage.vue";
 import GeneratorPage from "../pages/GeneratorPage.vue";
+import ParkPage from "../pages/ParkPage.vue";
 const routes = [
     {
         path: "/",
@@ -31,6 +32,11 @@ const routes = [
         path: "/dashboard",
         name: "Dashboard",
         component: DashboardPage,
+    },
+    {
+        path: "/park",
+        name: "Park",
+        component: ParkPage,
     },
     {
         path: "/generator",

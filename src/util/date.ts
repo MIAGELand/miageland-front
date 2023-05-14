@@ -1,4 +1,4 @@
-export function getChartLabels(minDate, maxDate) {
+export function getChartLabelsMonthAndYear(minDate, maxDate) {
     let labels = [];
     let currentDate = new Date(minDate);
     maxDate = new Date(maxDate);
@@ -8,6 +8,21 @@ export function getChartLabels(minDate, maxDate) {
         const year = currentDate.getFullYear().toString().slice(2);
         labels.push(`${month}/${year}`);
         currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+    return labels;
+}
+
+export function getAllDays(minDate, maxDate) {
+    let labels = [];
+    let currentDate = new Date(minDate);
+    maxDate = new Date(maxDate);
+    maxDate.setDate(maxDate.getDate() + 1);
+    while (currentDate < maxDate) {
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = currentDate.getFullYear().toString().slice(2);
+        labels.push(`${day}/${month}/${year}`);
+        currentDate.setDate(currentDate.getDate() + 1);
     }
     return labels;
 }
