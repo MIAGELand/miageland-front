@@ -10,7 +10,7 @@
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 import {ref} from "vue";
-import {generatePastelRGB} from "../../util/colors";
+import {generatePastelRGB, getDifferentColors} from "../../util/colors";
 
 const props = defineProps({
     data: Array,
@@ -32,9 +32,7 @@ const chartData = ref({
     datasets: [{
         data: props.data,
         borderWidth: 1,
-        backgroundColor: [
-            ...nbRandomColors(props.data.length),
-        ],
+        backgroundColor: getDifferentColors(props.data.length),
     }]
 })
 

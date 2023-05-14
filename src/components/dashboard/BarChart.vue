@@ -1,21 +1,20 @@
 <template>
-    <Line :options="chartOptions" :data="chartData" />
+    <Bar :options="chartOptions" :data="chartData" />
 </template>
 
 <script setup lang="ts">
-import { Line } from 'vue-chartjs'
+import { Bar } from 'vue-chartjs'
 import {
     Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale
 } from 'chart.js'
 import { ref } from 'vue'
-import {generatePastelRGB, getDifferentColors, getRandomColor} from "../../util/colors";
+import {getDifferentColors, getRandomColor} from "../../util/colors";
 
 const props = defineProps({
     data: Array,
@@ -24,22 +23,20 @@ const props = defineProps({
     type: String
 })
 
-ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+const colors = getDifferentColors(props.data.length)
 const chartData = ref({
     labels: props.labels,
-    datasets: [
-        {
-            label: props.lineLabel,
-            data: props.data,
-            borderWidth: 2,
-            pointRadius: 8,
-            backgroundColor: generatePastelRGB(),
-            borderColor: 'white',
-            fill: false,
-            tension: 0.1
-        }
-    ]
-})
+    datasets: props.data.map((data: any) => {
+            return {
+                label: data.label,
+                data: data.data,
+                backgroundColor: colors.pop(),
+                borderWidth: 2,
+                borderColor: 'white',
+            }
+        })
+    })
 
 const chartOptions = ref({
     responsive: true,
@@ -56,8 +53,12 @@ const chartOptions = ref({
             }
         }
     },
+    interaction: {
+        intersect: false,
+    },
     scales: {
         x: {
+            stacked: true,
             grid: {
                 color: 'rgba(255,255,255,0.1)',
                 borderColor: 'white'
@@ -71,6 +72,7 @@ const chartOptions = ref({
             }
         },
         y: {
+            stacked: true,
             grid: {
                 color: 'rgba(255,255,255,0.1)',
                 borderColor: 'white'

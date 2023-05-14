@@ -17,3 +17,12 @@ export function generatePastelRGB() {
 export function getRandomColor() {
     return RGB_COLORS[Math.floor(Math.random() * RGB_COLORS.length)];
 }
+
+export function getDifferentColors(count: number) {
+    // Generate count nb of different colors from RGB_COLORS
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+        colors.push(RGB_COLORS[i % RGB_COLORS.length]);
+    }
+    return colors;
+}

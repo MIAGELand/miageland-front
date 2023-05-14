@@ -55,7 +55,6 @@ let actionList = {
 }
 
 const refresh = async () => {
-    console.log("refresh")
     await queryClient.refetchQueries(ticketKeys.ticketList.queryKey);
 };
 </script>

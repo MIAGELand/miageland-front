@@ -78,7 +78,7 @@
 
                         <div class="w-full">
                             <card-container emoji="📊" title="Nb tickets / mois" class="flex flex-col gap-2 w-full">
-                                <LineChart :data="ticketNumberByMonthAndYear" :labels="ticketDateLabels" lineLabel="Nb tickets / mois"/>
+                                <BarChart :data="ticketNumberByMonthAndYear" :labels="ticketDateLabels" lineLabel="Nb tickets / mois"/>
                             </card-container>
                         </div>
 
@@ -108,6 +108,7 @@ import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
 import {getChartLabels} from "../util/date";
 import {aggregateDataByMonthAndYear} from "../util/dashboard";
+import BarChart from "../components/dashboard/BarChart.vue";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
@@ -192,11 +193,29 @@ const ticketDateLabels = computed(() => {
 });
 
 const ticketNumberByMonthAndYear = computed(() => {
-    return aggregateDataByMonthAndYear(ticketDateLabels, ticketList.value, () => 1);
+    const ticketListPaidByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListPaid.value, (ticket: any) => 1);
+    const ticketListUsedByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListUsed.value, (ticket: any) => 1);
+    const ticketListCancelledByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListCancelled.value, (ticket: any) => 1);
+
+    return [
+        {
+            label: 'Payés',
+            data: ticketListPaidByMonthAndYear,
+        },
+        {
+            label: 'Utilisés',
+            data: ticketListUsedByMonthAndYear,
+        },
+        {
+            label: 'Annulés',
+            data: ticketListCancelledByMonthAndYear,
+        }
+    ];
 });
 
 const benefitsByMonthAndYear = computed(() => {
-    return aggregateDataByMonthAndYear(ticketDateLabels, ticketList.value, (ticket: any) => ticket.price);
+    const ticketListWithoutCancelled = ticketList.value.filter((ticket: any) => ticket.state !== 'CANCELLED');
+    return aggregateDataByMonthAndYear(ticketDateLabels, ticketListWithoutCancelled, (ticket: any) => ticket.price);
 });
 
 </script>
