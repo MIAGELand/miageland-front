@@ -26,14 +26,14 @@
                 </NavigationButton>
             </div>
         </div>
-        <div class="-my-2 overflow-x-auto">
+        <div class="-mt-2 overflow-x-auto">
             <TableContainer>
-                <table class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full divide-y divide-gray-400">
                     <TableHeader :rows="rows"/>
                     <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="data in filteredData">
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-                            <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-50 transition" :class="val.color"
+                    <tr v-for="data in filteredData" class="hover:bg-gray-100">
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-900">
+                            <button v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-30 transition" :class="val.color"
                                     :disabled="checkDisabledRole(<string> action, data['role'])
                                     || checkDisabledTicket(<string>  action, data['state'], data['date'])
                                     || checkDisabledAttraction(<string> action, data['opened'])"
@@ -41,7 +41,7 @@
                                 {{ val.icon }}
                             </button>
                         </td>
-                        <td v-for="(key, col) in rows" class="px-6 py-4 whitespace-nowrap text-gray-900">{{ data[col] }}</td>
+                        <td v-for="(key, col) in rows" class="px-4 py-2 whitespace-nowrap text-gray-900">{{ data[col] }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -152,7 +152,7 @@ const check = (action: string, data: any) => {
     switch (action) {
         case 'upgrade':
             upgradeEmployee(data['id']).then(() => {
-                toast.success('Employé upgrade en ' + data['role'] + ' à jour avec succès.');
+                toast.success('Employé upgrade en ADMIN à jour avec succès.');
                 emit('refresh')
             }).catch(() => {
                 toast.error('Erreur lors de la mise à jour de l\'employé.');
@@ -160,7 +160,7 @@ const check = (action: string, data: any) => {
             break;
         case 'downgrade':
             downgradeEmployee(data['id']).then(() => {
-                toast.success('Employé downgrade en ' + data['role'] + ' à jour avec succès.');
+                toast.success('Employé downgrade en CLASSIC à jour avec succès.');
                 emit('refresh')
             }).catch(() => {
                 toast.error('Erreur lors de la mise à jour de l\'employé.');

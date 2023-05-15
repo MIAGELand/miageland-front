@@ -12,12 +12,12 @@ defineProps({
 </script>
 
 <template>
-    <thead class="bg-gray-50">
+    <thead class="bg-gray-100">
     <tr>
-        <th class="px-6 py-3 text-left text-gray-500 uppercase tracking-wider cursor-pointer">
+        <th class="px-6 py-3 text-left text-gray-700 uppercase tracking-wider cursor-pointer">
             Actions
         </th>
-        <th v-for="row in rows" scope="col" class="px-6 py-3 text-left text-gray-500 uppercase tracking-wider cursor-pointer">
+        <th v-for="row in rows" scope="col" class="px-6 py-3 text-left text-gray-700 uppercase tracking-wider cursor-pointer">
             {{ row }}
         </th>
     </tr>
