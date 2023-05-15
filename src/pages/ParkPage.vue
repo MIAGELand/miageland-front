@@ -1,4 +1,5 @@
 <template>
+    <Toaster position="top-right" richColors closeButton :expand="false"/>
     <div class="flex">
         <vertical-navbar :title="title" :logoUrl="logoUrl"/>
         <div class="flex flex-col h-screen w-screen md:overflow-auto">
@@ -13,16 +14,31 @@
                 <span v-if="isLoading">
                     Loading...
                 </span>
-                <div v-else class="flex flex-col gap-12 w-full">
-                    <div class="flex flex-col gap-4">
+                <div v-else class="flex flex-col gap-12">
+                    <div class="flex flex-col gap-4 w-full">
                         <div class="text-2xl">
                             ✋ Jauge
                         </div>
-                        <div class="w-full">
-                            Nb tickets max : {{jauge}}
-                            <input class="w-full" type="range" v-model="jauge" :min="nbMaxTicketsSoldByDay" max="1500">
-                            <button class="bg-blue-700 enabled:hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mt-2 disabled:opacity-50">Valider</button>
+                        <div class="flex gap-8 justify-center">
+                            <div class="flex flex-col text-lg bg-gray-700 p-4 rounded-lg">
+                                <div class="flex flex-col justify-between">
+                                    <span>Tickets max actuel :</span>
+                                    <span>{{ currentGauge }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col text-lg bg-gray-700 p-4 rounded-lg">
+                                <div class="flex flex-col justify-between">
+                                    <span>Modifié le :</span>
+                                    <span>{{ lastModifiedGauge }}</span>
+                                </div>
+                            </div>
                         </div>
+                        <div class="text-center flex flex-col">
+                            <span>Nb tickets max : {{gauge}}</span>
+                            <input type="range" v-model="gauge" :min="nbMaxTicketsSoldByDay" max="1500">
+                        </div>
+
+                        <button class="bg-blue-700 enabled:hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mt-2 disabled:opacity-50" @click="setNewGauge(gauge)">Valider</button>
                     </div>
                 </div>
             </div>
@@ -34,19 +50,35 @@
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {aggregateData} from "../util/dashboard";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {getAllDays} from "../util/date";
-import {useTicketList} from "../queries/ticket.query";
+import {ticketKeys, useTicketList} from "../queries/ticket.query";
+import {setGauge} from "../service/park-service";
+import { Toaster, toast } from 'vue-sonner';
+import {parkKeys, useParkInfo} from "../queries/park.query";
+import moment from 'moment';
+import {useQueryClient} from "@tanstack/vue-query";
+const queryClient = useQueryClient();
 
 const title = "Parc";
 const logoUrl = "src/assets/park.svg";
-const jauge = ref(0); // TODO : get from API
 
+const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
 const { data: ticketList, isLoading: ticketLoading } = useTicketList();
 
 const isLoading = computed(() => {
-    return ticketLoading.value;
+    return ticketLoading.value || parkInfoLoading.value;
 });
+
+const currentGauge = computed(() => {
+    return parkInfo.value?.gauge;
+});
+
+const lastModifiedGauge = computed(() => {
+    return moment(parkInfo.value?.modifiedAt).format("DD/MM/YYYY à HH:mm");
+});
+
+const gauge = ref(0)
 
 const lastTicketDate = computed(() => {
     const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
@@ -63,8 +95,26 @@ const nbTicketsSoldByDay = computed(() => {
 
 const nbMaxTicketsSoldByDay = computed(() => {
     const max = Math.max(...nbTicketsSoldByDay.value);
-    jauge.value = max;
+    gauge.value = max;
     return max;
+});
+
+const setNewGauge = (gauge: number) => {
+    toast.message("Mise à jour de la jauge...");
+    setGauge(gauge).then((data) => {
+        toast.success("Jauge mise à jour à " + data.gauge);
+        refresh()
+    }).catch(() => {
+        toast.error("Erreur lors de la mise à jour de la jauge");
+    });
+};
+
+const refresh = async () => {
+    await queryClient.refetchQueries(parkKeys.getParkInfo.queryKey);
+};
+
+watch(parkInfoLoading, () => {
+    gauge.value = parkInfo.value.gauge;
 });
 </script>
 <style scoped>

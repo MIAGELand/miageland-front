@@ -1,3 +1,9 @@
+export interface Park {
+    id: number;
+    gauge: number;
+    modifiedAt: Date;
+}
+
 export interface Employee {
     id: number;
     name: string;
