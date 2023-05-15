@@ -1,24 +1,24 @@
 <template>
-    <Toaster position="top-right" richColors/>
+    <Toaster position="top-right" richColors closeButton :expand="false"/>
     <form>
         <h1 class="text-2xl font-bold mb-4">{{ props.formData.name }}</h1>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <div v-for="(type, field) in props.formData.data" :key="field" class="flex">
                 <div>
-                    <label class="block font-medium mb-2 capitalize ">{{ field }}</label>
+                    <label class="block font-medium mb-2 uppercase text-lg">{{ field }}</label>
                     <template v-if="type === 'string'">
                         <input type="text" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                     </template>
                     <template v-if="type === 'email'">
                         <input type="email" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                     </template>
-                    <template v-else-if="type === 'Date'">
+                    <template v-if="type === 'Date'">
                         <input type="datetime-local" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                     </template>
-                    <template v-else-if="type === 'boolean'">
-                        <input type="checkbox" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                    <template v-if="type === 'boolean'">
+                        <input type="checkbox" v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border h-6 w-6 border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                     </template>
-                    <template v-else-if="type.includes('|')">
+                    <template v-if="type.includes('|')">
                         <select v-model="formData['data'][field]" :class="{ 'border-red-500 border-2': errors[field] }" class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option v-for="option in type.split('|').map(opt => opt.trim())" :key="option">{{ option }}</option>
                         </select>
@@ -29,15 +29,17 @@
                 </div>
             </div>
         </div>
-        <button @click.prevent="generateData" class="bg-blue-500 enabled:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Générer</button>
-        <input type="number" min="1" v-model="nbData" class="border border-gray-400 text-gray-800 rounded py-2 px-2 mb-3 ml-4 leading-tight w-24 focus:outline-none focus:bg-white focus:border-gray-500" />
-        <button @click.prevent="generateRandomData" class="bg-teal-700 enabled:hover:bg-teal-900 text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50" :disabled="nbData === 0">Générer random</button>
+        <div>
+            <button @click.prevent="generateData" class="bg-blue-500 enabled:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Générer</button>
+            <input type="number" min="1" v-model="nbData" class="border border-gray-400 text-gray-800 rounded py-2 px-2 mb-3 ml-4 mr-1 leading-tight w-24 focus:outline-none focus:bg-white focus:border-gray-500" />
+            <button @click.prevent="generateRandomData" class="bg-teal-700 enabled:hover:bg-teal-900 text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50" :disabled="nbData === 0">Générer random</button>
+        </div>
     </form>
 </template>
 
 <script setup lang="ts">
 import {PropType, reactive, ref} from "vue";
-import {FormData} from "../models/models";
+import {FormData} from "../../models/models";
 import { faker } from '@faker-js/faker';
 import { Toaster, toast } from 'vue-sonner';
 
@@ -74,7 +76,7 @@ const generateData = () => {
         }
     }
     if (error) {
-        toast.error('Remplissez les champs !')
+        toast.error('Remplissez les champs manquants.')
         return
     }
 

@@ -9,12 +9,9 @@
             </div>
 
             <!-- GENERATORS -->
-            <div class="m-8">
-                <div v-for="element in elements" class="mb-8">
+            <div class="m-8 flex flex-col gap-4">
+                <div v-for="element in elements" class="bg-slate-600 p-4 rounded-lg shadow-xl hover:bg-gray-700 transition">
                     <generator-form :formData="element" @generateData="generateData"></generator-form>
-                    <div class="w-full my-8">
-                        <hr class="border-white">
-                    </div>
                 </div>
             </div>
         </div>
@@ -24,7 +21,7 @@
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import GeneratorForm from "../components/GeneratorForm.vue";
+import GeneratorForm from "../components/generator/GeneratorForm.vue";
 import {BASE_URL} from "../util/constants";
 import axios from "axios";
 import {FormData} from "../models/models";
@@ -35,7 +32,7 @@ const logoUrl = "src/assets/generator.svg";
 
 let elements = [
     {
-        "name": "Employés",
+        "name": "👨‍🔧 Employés",
         "route": "employees",
         "data": {
             "name": "string",
@@ -45,7 +42,7 @@ let elements = [
         },
     },
     {
-        "name": "Attractions",
+        "name": "🎢 Attractions",
         "route": "attractions",
         "data": {
             "name": "string",
@@ -53,7 +50,7 @@ let elements = [
         }
     },
     {
-        "name": "Tickets",
+        "name": "🎟️ Tickets",
         "route": "tickets",
         "data": {
             "name": "string",
@@ -67,6 +64,7 @@ let elements = [
 const generateData = async (formData: FormData) => {
     let url = BASE_URL + "/" + formData.route;
     let data = formData.data;
+    toast.message('Génération des données en cours...')
     await axios.post(url, data).then(() => {
         toast.success(Object.keys(data).length + ' ligne(s) `' + formData.name + '` générée(s) avec succès !')
     }).catch((error) => {
