@@ -40,15 +40,15 @@ let rows = {
 let actionList = {
     'upgrade': {
         'icon': '🔼',
-        'color': 'bg-green-500 text-white enabled:hover:bg-green-600'
+        'color': 'bg-green-300 text-white enabled:hover:bg-green-400'
     },
     'downgrade': {
         'icon': '🔽',
-        'color': 'bg-orange-400 text-white enabled:hover:bg-orange-500'
+        'color': 'bg-orange-300 text-white enabled:hover:bg-orange-400'
     },
     'remove': {
         'icon': '❌',
-        'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
+        'color': 'bg-gray-300 text-white enabled:hover:bg-gray-400'
     },
 }
 

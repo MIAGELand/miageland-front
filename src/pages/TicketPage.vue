@@ -46,11 +46,11 @@ let rows = {
 let actionList = {
     'validate': {
         'icon': '✅',
-        'color': 'bg-green-500 text-white enabled:hover:bg-green-600'
+        'color': 'bg-green-300 text-white enabled:hover:bg-green-400'
     },
     'cancel': {
         'icon': '❌',
-        'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
+        'color': 'bg-gray-300 text-white enabled:hover:bg-gray-400'
     },
 }
 

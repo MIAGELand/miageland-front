@@ -38,7 +38,7 @@ let rows = {
 let actionList = {
     'open': {
         'icon': '🔓',
-        'color': 'bg-green-400 text-white enabled:hover:bg-green-500'
+        'color': 'bg-green-300 text-white enabled:hover:bg-green-400'
     },
     'close': {
         'icon': '🔒',
@@ -46,7 +46,7 @@ let actionList = {
     },
     'removeAttraction': {
         'icon': '❌',
-        'color': 'bg-gray-400 text-white enabled:hover:bg-gray-500'
+        'color': 'bg-gray-300 text-white enabled:hover:bg-gray-400'
     },
 }
 
