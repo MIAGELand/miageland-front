@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, watch } from 'vue';
+import {ref, computed, watch, PropType} from 'vue';
 import {cancelTicket, validateTicket} from "../../service/ticket-service";
 import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
@@ -73,7 +73,7 @@ const props = defineProps ({
         required: true
     },
     rows: {
-        type: Object,
+        type:  Object as PropType<string[]>,
         required: true
     },
     actionList: {
