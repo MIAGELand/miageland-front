@@ -24,6 +24,9 @@ import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import DataTable from "../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
 import {attractionsKeys, useAttractionList} from "../queries/attraction.query";
+import { useRouter } from 'vue-router';
+
+
 
 const title = "Attractions";
 const logoUrl = "src/assets/attractions.svg";
@@ -53,6 +56,8 @@ let actionList = {
 const refresh = async () => {
     await queryClient.refetchQueries(attractionsKeys.attractionList);
 };
+
+
 </script>
 
 <style scoped>

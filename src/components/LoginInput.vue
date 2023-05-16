@@ -6,12 +6,13 @@
               <label for="email" class="block mb-2 text-xl font-medium" >Email</label>
           </div>
           <div class="flex justify-center">
-              <input v-model="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-72 p-3" placeholder="john.doe@company.com" required>
+              <input v-model="email" v-on:keydown.enter="connect" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-72 p-3" placeholder="john.doe@company.com" required>
           </div>
       </div>
       <div>
-          <button class="bg-teal-600 text-xl text-white font-bold py-2 px-4 rounded-xl mt-4 hover:bg-teal-700 disabled:bg-gray-400" @click="connect"
-          :disabled="email === ''">
+          <button class="bg-teal-600 text-xl text-white font-bold py-2 px-4 rounded-xl mt-4 hover:bg-teal-700 disabled:bg-gray-400"
+                  @click="connect"
+                  :disabled="email === ''">
               Se connecter
           </button>
       </div>
@@ -28,6 +29,7 @@ const email = ref('');
 const connect = async () => {
     const employee = await getEmployee(email.value);
     if (employee) {
+        document.cookie = "email=" + employee.email + ";";
         await router.push({name: 'Employees'});
     } else {
         alert('Email non valide');
