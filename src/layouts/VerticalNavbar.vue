@@ -103,7 +103,11 @@
             <div class="flex flex-col items-start mt-auto mb-4">
                 <div class="flex py-2">
                     <img src="../assets/vue.svg" alt="profile" class="h-8 w-8 mr-4" />
-                    <div class="mt-1">Admin</div>
+                    <div class="flex flex-col">
+                        <div class="mt-1">{{employeeName}}</div>
+                        <div class="mt-1">Role : {{employeeRole}}</div>
+                    </div>
+
                 </div>
             </div>
         </nav>
@@ -111,11 +115,39 @@
 </template>
 
 <script setup lang="ts">
+import {useEmployeeList} from "../queries/employee.query";
+import {computed} from "vue";
+import {getCookie} from "../util/cookie";
+
+const { data: employeeList } = useEmployeeList();
+const emailFromCookie = computed(() => {
+    return getCookie("email")
+});
+const employeeName = computed(() => {
+    if (employeeList.value) {
+        const employee = employeeList.value?.find((employee) => employee.email === emailFromCookie.value);
+        if (employee) {
+            return employee.name + " " + employee.surname;
+        }
+    }
+    return ""
+});
+
+const employeeRole = computed(() => {
+    if (employeeList.value) {
+        const employee = employeeList.value?.find((employee) => employee.email === emailFromCookie.value);
+        if (employee) {
+            return employee.role;
+        }
+    }
+    return ""
+});
 defineProps({
     title: String,
     logoUrl: String,
 })
 </script>
+
 
 <style scoped>
 #navbar {

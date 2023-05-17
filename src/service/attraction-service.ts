@@ -1,24 +1,34 @@
 import { Attraction } from '../models/models';
 import axios from 'axios';
 import { BASE_URL } from '../util/constants';
+import {getCookie} from "../util/cookie";
 
+const email = getCookie('email');
 export async function getAllAttractions(): Promise<Attraction> {
-    const response = await axios.get(`${BASE_URL}/attractions`);
+    const response = await axios.get(`${BASE_URL}/attractions`, { headers: {
+            Authorization: `email=${email}`,
+        }, });
     return response.data;
 }
 
 export async function openAttraction(id: number): Promise<Attraction> {
-    const response = await axios.patch(`${BASE_URL}/attractions/${id}`, {'opened': true});
+    const response = await axios.patch(`${BASE_URL}/attractions/${id}`, {'opened': true}, { headers: {
+            Authorization: `email=${email}`,
+        }, });
     return response.data;
 }
 
 export async function closeAttraction(id: number): Promise<Attraction> {
-    const response = await axios.patch(`${BASE_URL}/attractions/${id}`, {'opened': false});
+    const response = await axios.patch(`${BASE_URL}/attractions/${id}`, {'opened': false}, { headers: {
+            Authorization: `email=${email}`,
+        }, });
     return response.data;
 }
 
 export async function removeAttraction(id: number): Promise<Attraction> {
-    const response = await axios.delete(`${BASE_URL}/attractions/${id}`);
+    const response = await axios.delete(`${BASE_URL}/attractions/${id}`, { headers: {
+            Authorization: `email=${email}`,
+        }, } );
     return response.data;
 }
 export const attractionService = {

@@ -1,8 +1,7 @@
 export function checkCookieAndRedirect(router) {
     return {
         beforeEach(to, from, next) {
-            const hasCookie =  false; // Replace with your actual cookie check
-            console.log(hasCookie)
+            const hasCookie =  getCookie('email')
             if (!hasCookie) {
                 router.push({ name: 'Home' });
             } else {
@@ -10,4 +9,12 @@ export function checkCookieAndRedirect(router) {
             }
         },
     };
+}
+
+export function getCookie(cookieKey: string): string | undefined {
+    const cookie = document.cookie.split(';').find((item) => item.trim().startsWith(cookieKey));
+    if (!cookie) {
+        return undefined;
+    }
+    return cookie.split('=')[1];
 }
