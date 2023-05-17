@@ -101,11 +101,11 @@
             </div>
             <!-- STICKY ELEMENT BOTTOM NAVBAR -->
             <div class="flex flex-col items-start mt-auto mb-4">
-                <div class="flex py-2">
-                    <img src="../assets/vue.svg" alt="profile" class="h-8 w-8 mr-4" />
-                    <div class="flex flex-col">
-                        <div class="mt-1">{{employeeName}}</div>
-                        <div class="mt-1">Role : {{employeeRole}}</div>
+                <div class="flex py-2 items-center gap-4">
+                    <img src="../assets/vue.svg" alt="profile" class="h-8 w-8" />
+                    <div class="flex flex-col gap-0.5">
+                        <div >{{employeeName}}</div>
+                        <div>{{employeeRole}}</div>
                     </div>
 
                 </div>

@@ -3,8 +3,6 @@ export function getCookie(cookieKey: string): string | undefined {
     if (!cookie) {
         return undefined;
     }
-    console.log(cookie)
-    console.log(cookie.split('=')[1])
     return cookie.split('=')[1];
 }
 
