@@ -32,8 +32,8 @@
                     <TableHeader :rows="rows"/>
                     <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="data in filteredData" class="hover:bg-gray-100">
-                        <td v-for="(key, col) in rows" class="px-4 py-2 whitespace-nowrap text-gray-900">{{ data[col] }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-gray-900">
+                        <td v-for="(key, col) in rows" class="px-4 py-2 whitespace-nowrap text-gray-900 text-center">{{ data[col] }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-900 text-center">
                             <button :title="action" v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-30 transition" :class="val.color"
                                     :disabled="checkDisabledRole(<string> action, data['role'])
                                     || checkDisabledTicket(<string>  action, data['state'], data['date'])
