@@ -23,9 +23,10 @@
 import { ref } from 'vue';
 import { getEmployee} from "../service/employee-service";
 import { useRouter} from "vue-router";
+import {deleteCookie} from "../util/cookie";
 const router = useRouter();
 const email = ref('');
-
+deleteCookie("email");
 const connect = async () => {
     const employee = await getEmployee(email.value);
     if (employee) {
