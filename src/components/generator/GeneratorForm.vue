@@ -87,7 +87,6 @@ const generateData = () => {
         } else if (value === "number") {
           acc[key] = parseFloat(formData.data[key]);
         } else if (value === "boolean") {
-          console.log(formData.data[key], key)
           acc[key] = formData.data[key];
         } else if (value.includes("|")) {
           const options = value.split("|").map((opt) => opt.trim());
