@@ -253,7 +253,7 @@ const ticketListCancelled = computed(() => {
 });
 
 const ticketNumberByMonthAndYear = computed(() => {
-    const ticketListPaidByMonthAndYear =
+    const ticketListPaidByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListPaid.value, (ticket: any) => 1);
     const ticketListUsedByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListUsed.value, (ticket: any) => 1);
     const ticketListCancelledByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListCancelled.value, (ticket: any) => 1);
 
