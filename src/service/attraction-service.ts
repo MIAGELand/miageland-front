@@ -2,6 +2,7 @@ import { Attraction } from '../models/models';
 import axios from 'axios';
 import { BASE_URL } from '../util/constants';
 import {getCookie} from "../util/cookie";
+import {AttractionStats} from "../models/stats";
 
 export async function getAllAttractions(): Promise<Attraction> {
     const email = getCookie('email');
@@ -34,9 +35,18 @@ export async function removeAttraction(id: number): Promise<Attraction> {
         }, } );
     return response.data;
 }
+
+export async function getAttractionStats(): Promise<AttractionStats> {
+    const email = getCookie('email');
+    const response = await axios.get(`${BASE_URL}/attractions/stats`, { headers: {
+            Authorization: `email=${email}`,
+        }, });
+    return response.data;
+}
 export const attractionService = {
     getAllAttractions,
     openAttraction,
     closeAttraction,
     removeAttraction,
+    getAttractionStats,
 };

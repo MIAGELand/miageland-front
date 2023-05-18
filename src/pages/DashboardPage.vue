@@ -21,33 +21,33 @@
                         <div class="flex flex-wrap gap-4">
                             <card-container emoji="👨‍🔧" title="Employés" class="flex flex-col gap-2 grow">
                                 <div class="flex items-baseline gap-2 justify-center">
-                                    <NumberElement :data="employeeList" title="Total" size="lg"/>
+                                    <NumberElement :data="nbEmployeeTotal" title="Total" size="lg"/>
                                 </div>
                                 <hr>
                                 <div class="flex gap-2 items-end justify-between">
-                                    <NumberElement :data="employeeListAdmin" title="Admins" size="md"/>
-                                    <NumberElement :data="employeeListClassic" title="Classiques" size="md"/>
+                                    <NumberElement :data="nbEmployeeAdmin" title="Admins" size="md"/>
+                                    <NumberElement :data="nbEmployeeClassic" title="Classiques" size="md"/>
                                 </div>
                             </card-container>
                             <card-container emoji="🎢" title="Attractions" class="flex flex-col gap-2 grow">
                                 <div class="flex items-baseline gap-2 justify-center">
-                                    <NumberElement :data="attractionList" title="Total" size="lg"/>
+                                    <NumberElement :data="nbAttractionTotal" title="Total" size="lg"/>
                                 </div>
                                 <hr>
                                 <div class="flex gap-2 items-end justify-between">
-                                    <NumberElement :data="attractionListOpened" title="Ouvertes" size="md"/>
-                                    <NumberElement :data="attractionListClosed" title="Fermées" size="md"/>
+                                    <NumberElement :data="nbAttractionOpened" title="Ouvertes" size="md"/>
+                                    <NumberElement :data="nbAttractionClosed" title="Fermées" size="md"/>
                                 </div>
                             </card-container>
                             <card-container emoji="🎟️" title="Billets" class="flex flex-col gap-2 grow">
                                 <div class="flex items-baseline gap-2 justify-center">
-                                    <NumberElement :data="ticketList" title="Total" size="lg"/>
+                                    <NumberElement :data="nbTicketTotal" title="Total" size="lg"/>
                                 </div>
                                 <hr>
                                 <div class="flex gap-2 items-end justify-between">
-                                    <NumberElement :data="ticketListPaid" title="Payés" size="md"/>
-                                    <NumberElement :data="ticketListUsed" title="Utilisés" size="md"/>
-                                    <NumberElement :data="ticketListCancelled" title="Annulés" size="md"/>
+                                    <NumberElement :data="nbTicketPaid" title="Payés" size="md"/>
+                                    <NumberElement :data="nbTicketUsed" title="Utilisés" size="md"/>
+                                    <NumberElement :data="nbTicketCancelled" title="Annulés" size="md"/>
                                 </div>
                             </card-container>
 
@@ -98,11 +98,11 @@
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {useEmployeeList} from "../queries/employee.query";
+import {useEmployeeList, useEmployeeStats} from "../queries/employee.query";
 import CardContainer from "../components/dashboard/CardContainer.vue";
-import {useAttractionList} from "../queries/attraction.query";
+import {useAttractionList, useAttractionStats} from "../queries/attraction.query";
 import {computed, Ref} from "vue";
-import {useTicketList} from "../queries/ticket.query";
+import {useTicketList, useTicketStats} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
@@ -113,12 +113,17 @@ import BarChart from "../components/dashboard/BarChart.vue";
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
 
+const { data: attractionStats, isLoading: attractionStatsLoading } = useAttractionStats();
+const { data: employeeStats, isLoading: employeeStatsLoading } = useEmployeeStats();
+const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
+
 const { data: employeeList, isLoading: employeeLoading } = useEmployeeList();
 const { data: attractionList, isLoading: attractionLoading } = useAttractionList();
 const { data: ticketList, isLoading: ticketLoading } = useTicketList();
 
 const isLoading = computed(() => {
-    return employeeLoading.value || attractionLoading.value || ticketLoading.value;
+    return employeeLoading.value || attractionLoading.value || ticketLoading.value
+        || attractionStatsLoading.value || employeeStatsLoading.value || ticketStatsLoading.value;
 });
 
 const filter = (table: Ref, column: string, value: string | boolean, equals: boolean = true) => {
@@ -130,36 +135,48 @@ const filter = (table: Ref, column: string, value: string | boolean, equals: boo
 }
 
 // when loaded, filter the data to get the number of employees, attractions and tickets
-const employeeListAdmin = computed(() => {
-    return filter(employeeList, 'role', 'ADMIN');
+const nbEmployeeTotal = computed(() => {
+    return employeeStats.value?.nbTotal;
 });
 
-const employeeListClassic = computed(() => {
-    return filter(employeeList, 'role', 'CLASSIC');
+const nbEmployeeAdmin = computed(() => {
+    return employeeStats.value?.nbAdmin;
 });
 
-const attractionListOpened = computed(() => {
-    return filter(attractionList, 'opened', true);
+const nbEmployeeClassic = computed(() => {
+    return employeeStats.value?.nbClassic;
 });
 
-const attractionListClosed = computed(() => {
-    return filter(attractionList, 'opened', false);
+const nbAttractionTotal = computed(() => {
+  return attractionStats.value?.nbTotal;
 });
 
-const ticketListPaid = computed(() => {
-    return filter(ticketList, 'state', 'PAID');
+const nbAttractionOpened = computed(() => {
+  return attractionStats.value?.nbOpened;
 });
 
-const ticketListUsed = computed(() => {
-    return filter(ticketList, 'state', 'USED');
+const nbAttractionClosed = computed(() => {
+  return attractionStats.value?.nbClosed;
 });
 
-const ticketListCancelled = computed(() => {
-    return filter(ticketList, 'state', 'CANCELLED');
+const nbTicketTotal = computed(() => {
+  return ticketStats.value?.nbTotal;
+});
+
+const nbTicketPaid = computed(() => {
+  return ticketStats.value?.nbPaid;
+});
+
+const nbTicketUsed = computed(() => {
+  return ticketStats.value?.nbUsed;
+});
+
+const nbTicketCancelled = computed(() => {
+  return ticketStats.value?.nbCancelled;
 });
 
 const employeeNumberList = computed(() => {
-    return [employeeListAdmin.value.length, employeeListClassic.value.length];
+    return [nbEmployeeAdmin, nbEmployeeClassic];
 });
 
 const employeeNameList = computed(() => {
@@ -167,7 +184,7 @@ const employeeNameList = computed(() => {
 });
 
 const attractionNumberList = computed(() => {
-    return [attractionListOpened.value.length, attractionListClosed.value.length];
+    return [nbAttractionOpened, nbAttractionClosed];
 });
 
 const attractionNameList = computed(() => {
@@ -175,7 +192,7 @@ const attractionNameList = computed(() => {
 });
 
 const ticketNumberList = computed(() => {
-    return [ticketListPaid.value.length, ticketListUsed.value.length, ticketListCancelled.value.length];
+    return [nbTicketPaid, nbTicketUsed, nbTicketCancelled];
 });
 
 const ticketNameList = computed(() => {
@@ -194,6 +211,18 @@ const lastTicketDate = computed(() => {
 
 const ticketDateLabels = computed(() => {
     return getChartLabelsMonthAndYear(firstTicketDate.value, lastTicketDate.value);
+});
+
+const ticketListPaid = computed(() => {
+    return filter(ticketList, 'state', 'PAID');
+});
+
+const ticketListUsed = computed(() => {
+    return filter(ticketList, 'state', 'USED');
+});
+
+const ticketListCancelled = computed(() => {
+    return filter(ticketList, 'state', 'CANCELLED');
 });
 
 const ticketNumberByMonthAndYear = computed(() => {

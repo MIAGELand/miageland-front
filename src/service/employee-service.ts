@@ -2,6 +2,7 @@ import { Employee } from '../models/models';
 import axios from 'axios';
 import { BASE_URL } from '../util/constants';
 import {getCookie} from "../util/cookie";
+import {EmployeeStats} from "../models/stats";
 
 export async function getEmployee(email: String): Promise<Employee> {
     const response = await axios.get(`${BASE_URL}/employees/${email}`);
@@ -39,10 +40,16 @@ export async function downgradeEmployee(id: number): Promise<void> {
         }, });
     return response.data;
 }
+
+export async function getEmployeeStats(): Promise<EmployeeStats> {
+    const response = await axios.get(`${BASE_URL}/employees/stats`);
+    return response.data;
+}
 export const employeeService = {
     getEmployee,
     getAllEmployees,
     removeEmployee,
     upgradeEmployee,
     downgradeEmployee,
+    getEmployeeStats,
 };

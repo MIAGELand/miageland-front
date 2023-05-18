@@ -3,7 +3,7 @@ import {computed, PropType} from "vue";
 import {size} from "../../models/models";
 
 const props = defineProps({
-    data: Array,
+    data: Number,
     title: String,
     size: String as PropType<size>,
 });
@@ -22,7 +22,7 @@ const size = computed(() => {
 <template>
     <div :class="size">
         {{ title }} :
-        {{ data.length }}
+        {{ data }}
     </div>
 </template>
 
