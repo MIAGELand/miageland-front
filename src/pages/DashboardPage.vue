@@ -106,7 +106,7 @@ import {useTicketList, useTicketStats} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
-import {createDateFromMMYY, findMinMaxDates, getChartLabelsMonthAndYear} from "../util/date";
+import {createDateFromMMYY, getChartLabelsMonthAndYear} from "../util/date";
 import {aggregateDataByMonthAndYear} from "../util/dashboard";
 import BarChart from "../components/dashboard/BarChart.vue";
 
