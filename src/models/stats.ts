@@ -10,9 +10,19 @@ export interface EmployeeStats {
     nbClassic: number
 }
 
-export interface TicketStats {
+export interface NumberStatsTicket {
     nbTotal: number
     nbPaid: number
     nbUsed: number
     nbCancelled: number
+}
+
+export interface MonthlyTicketInfos {
+    monthYear: string,
+    numberStatsTicket: NumberStatsTicket
+}
+
+export interface TicketStats {
+    numberStatsTicket: NumberStatsTicket
+    monthlyTicketInfos: MonthlyTicketInfos[]
 }

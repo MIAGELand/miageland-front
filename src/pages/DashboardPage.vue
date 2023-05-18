@@ -106,7 +106,7 @@ import {useTicketList, useTicketStats} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
-import {getChartLabelsMonthAndYear} from "../util/date";
+import {createDateFromMMYY, findMinMaxDates, getChartLabelsMonthAndYear} from "../util/date";
 import {aggregateDataByMonthAndYear} from "../util/dashboard";
 import BarChart from "../components/dashboard/BarChart.vue";
 
@@ -159,20 +159,28 @@ const nbAttractionClosed = computed(() => {
   return attractionStats.value?.nbClosed;
 });
 
+const numberStatsTicket = computed(() => {
+  return ticketStats.value?.numberStatsTicket;
+});
+
+const monthlyTicketInfos = computed(() => {
+  return ticketStats.value?.monthlyTicketInfos;
+});
+
 const nbTicketTotal = computed(() => {
-  return ticketStats.value?.nbTotal;
+  return numberStatsTicket.value.nbTotal;
 });
 
 const nbTicketPaid = computed(() => {
-  return ticketStats.value?.nbPaid;
+  return numberStatsTicket.value.nbPaid;
 });
 
 const nbTicketUsed = computed(() => {
-  return ticketStats.value?.nbUsed;
+  return numberStatsTicket.value.nbUsed;
 });
 
 const nbTicketCancelled = computed(() => {
-  return ticketStats.value?.nbCancelled;
+  return numberStatsTicket.value.nbCancelled;
 });
 
 const employeeNumberList = computed(() => {
@@ -200,14 +208,33 @@ const ticketNameList = computed(() => {
 });
 
 const firstTicketDate = computed(() => {
-    const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
-    return new Date(Math.min.apply(null, dates));
+  if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
+    const minDate = monthlyTicketInfos.value.reduce((min, p) => {
+      const currentDate = createDateFromMMYY(p.monthYear);
+      return currentDate < min ? currentDate : min;
+    }, createDateFromMMYY(monthlyTicketInfos.value[0].monthYear));
+
+    // Format minDate as "MM/YY"
+    return new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  }
+
+  return null;
 });
 
 const lastTicketDate = computed(() => {
-    const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
-    return new Date(Math.max.apply(null, dates));
+  if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
+    const maxDate = monthlyTicketInfos.value.reduce((max, p) => {
+      const currentDate = createDateFromMMYY(p.monthYear);
+      return currentDate > max ? currentDate : max;
+    }, createDateFromMMYY(monthlyTicketInfos.value[0].monthYear));
+
+    // Format maxDate as "MM/YY"
+    return new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+  }
+
+  return null;
 });
+
 
 const ticketDateLabels = computed(() => {
     return getChartLabelsMonthAndYear(firstTicketDate.value, lastTicketDate.value);
@@ -226,7 +253,7 @@ const ticketListCancelled = computed(() => {
 });
 
 const ticketNumberByMonthAndYear = computed(() => {
-    const ticketListPaidByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListPaid.value, (ticket: any) => 1);
+    const ticketListPaidByMonthAndYear =
     const ticketListUsedByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListUsed.value, (ticket: any) => 1);
     const ticketListCancelledByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListCancelled.value, (ticket: any) => 1);
 
