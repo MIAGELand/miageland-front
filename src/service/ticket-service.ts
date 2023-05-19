@@ -6,12 +6,12 @@ import {getCookie} from "../util/cookie";
 import {Ref} from "vue";
 
 export async function getAllTickets(): Promise<Ticket[]> {
-    const response = await axios.get(`${BASE_URL}/tickets`);
+    const response = await axios.get(`${BASE_URL}/tickets/all`);
     return response.data;
 }
 
 export async function getTicketsByPage(page: Ref<number>): Promise<Ticket[]> {
-    const response = await axios.get(`${BASE_URL}/tickets/pages?page=${page.value}`);
+    const response = await axios.get(`${BASE_URL}/tickets?page=${page.value}`);
     return response.data;
 }
 
