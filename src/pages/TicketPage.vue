@@ -18,8 +18,12 @@
                                 :entity="route"
                                 @refresh="refresh"
                     ></data-table>
+                  <button class="font-bold py-2 px-4 bg-red-700 rounded mx-0.5 disabled:opacity-30 transition"
+                  @click="deleteAll">
+                    Delete all
+                  </button>
                 </div>
-            </div>
+              </div>
         </div>
     </div>
 </template>
@@ -29,6 +33,7 @@ import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {ticketKeys, useTicketList} from "../queries/ticket.query";
 import DataTable from "../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
+import {deleteAllTickets} from "../service/ticket-service";
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";
 const route = "tickets";
@@ -52,6 +57,11 @@ let actionList = {
         'icon': '❌',
         'color': 'bg-gray-300 text-white enabled:hover:bg-gray-400'
     },
+}
+
+const deleteAll = async () => {
+  await deleteAllTickets();
+  await refresh()
 }
 
 const refresh = async () => {
