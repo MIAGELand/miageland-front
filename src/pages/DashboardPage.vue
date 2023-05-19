@@ -117,22 +117,9 @@ const { data: attractionStats, isLoading: attractionStatsLoading } = useAttracti
 const { data: employeeStats, isLoading: employeeStatsLoading } = useEmployeeStats();
 const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
 
-const { data: employeeList, isLoading: employeeLoading } = useEmployeeList();
-const { data: attractionList, isLoading: attractionLoading } = useAttractionList();
-const { data: ticketList, isLoading: ticketLoading } = useTicketList();
-
 const isLoading = computed(() => {
-    return employeeLoading.value || attractionLoading.value || ticketLoading.value
-        || attractionStatsLoading.value || employeeStatsLoading.value || ticketStatsLoading.value;
+  return attractionStatsLoading.value || employeeStatsLoading.value || ticketStatsLoading.value;
 });
-
-const filter = (table: Ref, column: string, value: string | boolean, equals: boolean = true) => {
-    if (equals) {
-        return table.value?.filter((item: any) => item[column] === value);
-    } else {
-        return table.value?.filter((item: any) => item[column] !== value);
-    }
-}
 
 // when loaded, filter the data to get the number of employees, attractions and tickets
 const nbEmployeeTotal = computed(() => {
@@ -235,27 +222,40 @@ const lastTicketDate = computed(() => {
   return null;
 });
 
-
-const ticketDateLabels = computed(() => {
-    return getChartLabelsMonthAndYear(firstTicketDate.value, lastTicketDate.value);
+// This function iterates on monthly tickets infos and for each value it inserts the date with MM/YY format
+// return an array of labels with the monthYear format "MM/YY"
+const ticketDateLabels = computed<string[]>(() => {
+  if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
+    const sortedTickets = [...monthlyTicketInfos.value].sort((a, b) => {
+      // Assuming monthYear is in the format "MM/YY"
+      const [aMonth, aYear] = a.monthYear.split('/');
+      const [bMonth, bYear] = b.monthYear.split('/');
+      const aDate = new Date(Number(`20${aYear}`), parseInt(aMonth) - 1);
+      const bDate = new Date(Number(`20${bYear}`), parseInt(bMonth) - 1);
+      return aDate.getTime() - bDate.getTime();
+    });
+    return sortedTickets.map((ticketInfo) => ticketInfo.monthYear);
+  }
+  return [];
 });
 
-const ticketListPaid = computed(() => {
-    return filter(ticketList, 'state', 'PAID');
-});
 
-const ticketListUsed = computed(() => {
-    return filter(ticketList, 'state', 'USED');
-});
-
-const ticketListCancelled = computed(() => {
-    return filter(ticketList, 'state', 'CANCELLED');
-});
 
 const ticketNumberByMonthAndYear = computed(() => {
-    const ticketListPaidByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListPaid.value, (ticket: any) => 1);
-    const ticketListUsedByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListUsed.value, (ticket: any) => 1);
-    const ticketListCancelledByMonthAndYear = aggregateDataByMonthAndYear(ticketDateLabels, ticketListCancelled.value, (ticket: any) => 1);
+    const ticketListPaidByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
+      const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+      return ticketInfo ? ticketInfo.numberStatsTicket.nbPaid : 0;
+    });
+
+    const ticketListUsedByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
+      const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+      return ticketInfo ? ticketInfo.numberStatsTicket.nbUsed : 0;
+    });
+
+    const ticketListCancelledByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
+      const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+      return ticketInfo ? ticketInfo.numberStatsTicket.nbCancelled : 0;
+    });
 
     return [
         {
@@ -274,8 +274,10 @@ const ticketNumberByMonthAndYear = computed(() => {
 });
 
 const benefitsByMonthAndYear = computed(() => {
-    const ticketListWithoutCancelled = filter(ticketList, 'state', 'CANCELLED', false)
-    return aggregateDataByMonthAndYear(ticketDateLabels, ticketListWithoutCancelled, (ticket: any) => ticket.price);
+  return ticketDateLabels.value.map((monthYear) => {
+    const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+    return ticketInfo ? ticketInfo.benefits : 0;
+  });
 });
 
 </script>

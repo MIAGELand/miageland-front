@@ -19,7 +19,9 @@ export interface NumberStatsTicket {
 
 export interface MonthlyTicketInfos {
     monthYear: string,
-    numberStatsTicket: NumberStatsTicket
+    numberStatsTicket: NumberStatsTicket,
+    totalAmount: number,
+    benefits: number
 }
 
 export interface TicketStats {
