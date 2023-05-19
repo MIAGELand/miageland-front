@@ -3,9 +3,15 @@ import axios from 'axios';
 import { BASE_URL } from '../util/constants';
 import {TicketStats} from "../models/stats";
 import {getCookie} from "../util/cookie";
+import {Ref} from "vue";
 
 export async function getAllTickets(): Promise<Ticket[]> {
     const response = await axios.get(`${BASE_URL}/tickets`);
+    return response.data;
+}
+
+export async function getTicketsByPage(page: Ref<number>): Promise<Ticket[]> {
+    const response = await axios.get(`${BASE_URL}/tickets/pages?page=${page.value}`);
     return response.data;
 }
 
@@ -37,4 +43,5 @@ export const ticketService = {
     cancelTicket,
     getTicketStats,
     deleteAllTickets,
+    getTicketsByPage
 };

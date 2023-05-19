@@ -1,6 +1,7 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { useQuery } from '@tanstack/vue-query';
-import {getAllTickets, getTicketStats} from '../service/ticket-service';
+import {getAllTickets, getTicketsByPage, getTicketStats} from '../service/ticket-service';
+import {Ref} from "vue";
 export const ticketKeys = createQueryKeys('Ticket', {
     ticketList: {
         queryKey: null,

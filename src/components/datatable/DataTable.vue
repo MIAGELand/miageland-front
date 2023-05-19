@@ -31,7 +31,7 @@
                 <table class="min-w-full divide-y divide-gray-400">
                     <TableHeader :rows="rows"/>
                     <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="data in filteredData" class="hover:bg-gray-100">
+                    <tr v-for="data in props.data" class="hover:bg-gray-100">
                         <td v-for="(key, col) in rows" class="px-4 py-2 whitespace-nowrap text-gray-900 text-center">{{ data[col] }}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-gray-900 text-center">
                             <button :title="action" v-for="(val, action) in actionList" class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-30 transition" :class="val.color"
@@ -46,7 +46,6 @@
                     </tbody>
                 </table>
             </TableContainer>
-            <PaginationInfo :content="paginationInfo"/>
         </div>
     </div>
 </template>
@@ -82,13 +81,18 @@ const props = defineProps ({
     entity: {
         type: String,
         required: true
+    },
+    totalData: {
+        type: Number,
+        required: false
     }
 });
 
 const currentPage = ref(1);
-const itemsPerPage = 10;
+const itemsPerPage = 100; // needs to be sync with backend pagination size
 const searchText = ref('');
-const dataFiltered = ref(props.data);
+const rows = props.rows;
+
 const checkDisabledRole = (action: string, role: string) => {
     return action === 'upgrade' && role === 'ADMIN'
         || action === 'downgrade' && role === 'CLASSIC';
@@ -114,16 +118,18 @@ const checkDisabledAttraction = (action: string, opened: boolean) => {
 
 // Compute total number of pages
 const totalPages = computed(() => {
-    // Check if filtered data is empty
-    if (searchText.value === '') {
+    if (props.totalData) {
+        return Math.ceil(props.totalData / itemsPerPage)
+    } else if (props.data.length > 0) {
         return Math.ceil(props.data.length / itemsPerPage)
     } else {
-        return Math.ceil(dataFiltered.value.length / itemsPerPage)
+        return 1;
     }
 });
 
 // Compute filtered data based on search text and current page
-const filteredData = computed(() => {
+// TODO : modify with SEARCH button to avoid too many requests
+/*const filteredData = computed(() => {
     dataFiltered.value = props.data;
     if (searchText.value) {
         dataFiltered.value = props.data.filter((item) => {
@@ -135,18 +141,9 @@ const filteredData = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return dataFiltered.value.slice(startIndex, endIndex);
-});
+});*/
 
-const rows = props.rows;
-
-// Compute pagination info
-const paginationInfo = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage + 1;
-    const endIndex = startIndex + filteredData.value.length - 1;
-    return `Affichage de ${startIndex} à ${endIndex} sur ${dataFiltered.value.length} lignes`;
-});
-
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(['refresh', 'update']);
 const check = (action: string, data: any) => {
     // Call api with action and string entity as route
     switch (action) {
@@ -226,6 +223,7 @@ const updateSearchText = (input: string) => {
 
 const updateCurrentPage = (page: number) => {
     currentPage.value = page;
+    emit('update', page);
 };
 
 // Watch for changes in current page
