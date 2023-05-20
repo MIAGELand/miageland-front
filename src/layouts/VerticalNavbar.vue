@@ -4,7 +4,7 @@
                 class="h-screen flex flex-col bg-zinc-900 px-4 pt-8 text-white"
                 id="navbar"
         >
-            <div class="flex cursor-pointer items-center" @click="$router.push('/')">
+            <div class="flex cursor-pointer pl-2 items-center" @click="$router.push('/')">
                 <img src="../assets/ppl.svg" alt="miageland" class="h-8 w-8" />
                 <span class="ml-4 text-xl font-bold">MIAGELand</span>
             </div>
