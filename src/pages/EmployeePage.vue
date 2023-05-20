@@ -9,12 +9,13 @@
             </div>
 
             <!-- EMPLOYEES -->
-            <div class="m-8">
+            <div class="m-8" v-if="isManager">
                 <span v-if="isLoading">Loading...</span>
                 <div v-else class="rounded-lg">
                     <data-table :data="employeeList" :rows="rows" :action-list="actionList" :entity="route" @refresh="refresh"></data-table>
                 </div>
             </div>
+            <unauthorized-info v-else />
         </div>
     </div>
 </template>
@@ -24,12 +25,22 @@ import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {employeesKeys, useEmployeeList} from "../queries/employee.query";
 import DataTable from "../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
+import {computed} from "vue";
+import {getCookie} from "../util/cookie";
+import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
 
 const title = "Employés";
 const logoUrl = "src/assets/employees.svg";
 const route = "employees";
 const queryClient = useQueryClient();
 const { data: employeeList, error, isLoading } = useEmployeeList();
+
+// Check if employee is manager
+const isManager = computed(() => {
+  const employeeMail = getCookie("email")
+  return employeeList.value?.find((employee) => employee.email === employeeMail)?.role === "MANAGER";
+});
+
 let rows = {
     'id': 'ID',
     'email': 'Email',

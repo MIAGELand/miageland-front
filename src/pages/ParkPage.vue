@@ -10,7 +10,7 @@
             </div>
 
             <!-- GENERATORS -->
-            <div class="m-8">
+            <div class="m-8" v-if="isManager">
                 <span v-if="isLoading">
                     Loading...
                 </span>
@@ -42,28 +42,36 @@
                     </div>
                 </div>
             </div>
+            <unauthorized-info v-else/>
         </div>
-
     </div>
 </template>
 
 <script setup lang="ts">
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {aggregateData} from "../util/dashboard";
 import {computed, ref, watch} from "vue";
-import {getAllDays} from "../util/date";
-import {ticketKeys, useTicketList} from "../queries/ticket.query";
 import {setGauge} from "../service/park-service";
 import { Toaster, toast } from 'vue-sonner';
 import {parkKeys, useParkInfo} from "../queries/park.query";
 import moment from 'moment';
 import {useQueryClient} from "@tanstack/vue-query";
+import {useEmployeeList} from "../queries/employee.query";
+import {getCookie} from "../util/cookie";
+import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
 const queryClient = useQueryClient();
 
 const title = "Parc";
 const logoUrl = "src/assets/park.svg";
 
 const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
+const { data: employeeList } = useEmployeeList();
+
+// Check if employee is manager
+const isManager = computed(() => {
+  const employeeMail = getCookie("email")
+  return employeeList.value?.find((employee) => employee.email === employeeMail)?.role === "MANAGER";
+});
+
 
 const isLoading = computed(() => {
     return parkInfoLoading.value;

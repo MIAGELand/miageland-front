@@ -14,7 +14,6 @@ export async function getAllEmployees(): Promise<Employee[]> {
 
 export async function removeEmployee(id: number): Promise<void> {
     const email = getCookie('email');
-
     const response = await api.delete(`/employees/${id}`, { headers: {
             Authorization: `email=${email}`,
         }, });
@@ -23,7 +22,6 @@ export async function removeEmployee(id: number): Promise<void> {
 
 export async function upgradeEmployee(id: number): Promise<void> {
     const email = getCookie('email');
-
     const response = await api.patch(`/employees/${id}`, {'role': 'ADMIN'}, { headers: {
             Authorization: `email=${email}`,
         }, });
@@ -32,7 +30,6 @@ export async function upgradeEmployee(id: number): Promise<void> {
 
 export async function downgradeEmployee(id: number): Promise<void> {
     const email = getCookie('email');
-
     const response = await api.patch(`/employees/${id}`, {'role': 'CLASSIC'}, { headers: {
             Authorization: `email=${email}`,
         }, });

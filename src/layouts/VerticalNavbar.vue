@@ -104,7 +104,7 @@
                 <div class="flex py-2 items-center gap-4">
                     <img src="../assets/vue.svg" alt="profile" class="h-8 w-8" />
                     <div class="flex flex-col gap-0.5">
-                        <div >{{employeeName}}</div>
+                        <div>{{employeeName}}</div>
                         <div>{{employeeRole}}</div>
                     </div>
 

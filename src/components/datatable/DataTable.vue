@@ -57,7 +57,6 @@ import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../../service/
 import {toast, Toaster} from "vue-sonner";
 import {closeAttraction, openAttraction, removeAttraction} from "../../service/attraction-service";
 import TableHeader from "./TableHeader.vue";
-import PaginationInfo from "./PaginationInfo.vue";
 import TableContainer from "./TableContainer.vue";
 import InputSearch from "./InputSearch.vue";
 import FirstButton from "./pagination/FirstButton.vue";
@@ -95,7 +94,8 @@ const rows = props.rows;
 
 const checkDisabledRole = (action: string, role: string) => {
     return action === 'upgrade' && role === 'ADMIN'
-        || action === 'downgrade' && role === 'CLASSIC';
+        || action === 'downgrade' && role === 'CLASSIC'
+        || role === "MANAGER";
 };
 
 const checkDisabledTicket = (action: string, state: string, date: string) => {

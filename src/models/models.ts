@@ -46,6 +46,7 @@ export enum TicketState {
 export enum EmployeeRole {
     ADMIN = 'ADMIN',
     CLASSIC = 'CLASSIC',
+    MANAGER = 'MANAGER'
 }
 
 export type size = 'sm' | 'md' | 'lg';

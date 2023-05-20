@@ -26,6 +26,7 @@ import {BASE_URL} from "../util/constants";
 import {FormData} from "../models/models";
 import {toast} from "vue-sonner";
 import {api} from "../main";
+import {getCookie} from "../util/cookie";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";
@@ -64,8 +65,13 @@ let elements = [
 const generateData = async (formData: FormData) => {
     let url = BASE_URL + "/" + formData.route;
     let data = formData.data;
+    const email = getCookie("email")
     toast.message('Génération des données en cours...')
-    await api.post(url, data).then(() => {
+    await api.post(url, data, {
+      headers: {
+        Authorization: `email=${email}`,
+      }
+    }).then(() => {
         toast.success(Object.keys(data).length + ' ligne(s) `' + formData.name + '` générée(s) avec succès !')
     }).catch((error) => {
         toast.error('Erreur lors de la génération des données')

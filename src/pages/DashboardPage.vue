@@ -9,7 +9,7 @@
             </div>
 
             <!-- EMPLOYEES -->
-            <div class="m-8 flex">
+            <div class="m-8 flex" v-if="isManager">
                 <span v-if="isLoading">
                     Loading...
                 </span>
@@ -88,10 +88,9 @@
                             </card-container>
                         </div>
                     </div>
-
-
                 </div>
             </div>
+            <unauthorized-info v-else/>
         </div>
     </div>
 </template>
@@ -100,15 +99,16 @@
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import {useEmployeeList, useEmployeeStats} from "../queries/employee.query";
 import CardContainer from "../components/dashboard/CardContainer.vue";
-import {useAttractionList, useAttractionStats} from "../queries/attraction.query";
-import {computed, Ref} from "vue";
-import {useTicketList, useTicketStats} from "../queries/ticket.query";
+import {useAttractionStats} from "../queries/attraction.query";
+import {computed} from "vue";
+import {useTicketStats} from "../queries/ticket.query";
 import NumberElement from "../components/dashboard/NumberElement.vue";
 import PieChart from "../components/dashboard/PieChart.vue";
 import LineChart from "../components/dashboard/LineChart.vue";
-import {createDateFromMMYY, getChartLabelsMonthAndYear} from "../util/date";
-import {aggregateDataByMonthAndYear} from "../util/dashboard";
+import {createDateFromMMYY, } from "../util/date";
 import BarChart from "../components/dashboard/BarChart.vue";
+import {getCookie} from "../util/cookie";
+import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
@@ -116,6 +116,13 @@ const logoUrl = "src/assets/dashboard.svg";
 const { data: attractionStats, isLoading: attractionStatsLoading } = useAttractionStats();
 const { data: employeeStats, isLoading: employeeStatsLoading } = useEmployeeStats();
 const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
+const { data: employeeList } = useEmployeeList();
+
+// Check if employee is manager
+const isManager = computed(() => {
+  const employeeMail = getCookie("email")
+  return employeeList.value?.find((employee) => employee.email === employeeMail)?.role === "MANAGER";
+});
 
 const isLoading = computed(() => {
   return attractionStatsLoading.value || employeeStatsLoading.value || ticketStatsLoading.value;
