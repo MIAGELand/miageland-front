@@ -96,19 +96,19 @@
 </template>
 
 <script setup lang="ts">
-import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {useEmployeeList, useEmployeeStats} from "../queries/employee.query";
-import CardContainer from "../components/dashboard/CardContainer.vue";
-import {useAttractionStats} from "../queries/attraction.query";
+import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
+import {useEmployeeList, useEmployeeStats} from "../../queries/employee.query";
+import CardContainer from "../../components/dashboard/CardContainer.vue";
+import {useAttractionStats} from "../../queries/attraction.query";
 import {computed} from "vue";
-import {useTicketStats} from "../queries/ticket.query";
-import NumberElement from "../components/dashboard/NumberElement.vue";
-import PieChart from "../components/dashboard/PieChart.vue";
-import LineChart from "../components/dashboard/LineChart.vue";
-import {createDateFromMMYY, } from "../util/date";
-import BarChart from "../components/dashboard/BarChart.vue";
-import {getCookie} from "../util/cookie";
-import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
+import {useTicketStats} from "../../queries/ticket.query";
+import NumberElement from "../../components/dashboard/NumberElement.vue";
+import PieChart from "../../components/dashboard/PieChart.vue";
+import LineChart from "../../components/dashboard/LineChart.vue";
+import {createDateFromMMYY, } from "../../util/date";
+import BarChart from "../../components/dashboard/BarChart.vue";
+import {getCookie} from "../../util/cookie";
+import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";

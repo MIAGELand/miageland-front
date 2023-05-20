@@ -31,13 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {ticketKeys} from "../queries/ticket.query";
-import DataTable from "../components/datatable/DataTable.vue";
+import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
+import DataTable from "../../components/datatable/DataTable.vue";
 import {useQuery, useQueryClient} from "@tanstack/vue-query";
-import {deleteAllTickets, getTicketsByPage} from "../service/ticket-service";
+import {deleteAllTickets, getTicketsByPage} from "../../service/ticket-service";
 import {computed, ref} from "vue";
-import {useTicketStats} from "../queries/ticket.query";
+import {useTicketStats} from "../../queries/ticket.query";
 
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";

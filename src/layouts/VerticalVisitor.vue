@@ -1,0 +1,74 @@
+<template>
+  <div id="container" class="hidden md:block">
+    <nav
+        class="h-screen flex flex-col bg-zinc-900 px-4 pt-8 text-white"
+        id="navbar"
+    >
+      <div class="flex cursor-pointer items-center" @click="$router.push('/')">
+        <img src="../assets/ppl.svg" alt="miageland" class="h-8 w-8" />
+        <span class="ml-4 text-xl font-bold">MIAGELand</span>
+      </div>
+
+      <!-- NAV BAR-->
+      <div class="flex flex-col items-start mt-8 ">
+        <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+             @click="$router.push({ name: 'ParkAccess' })"
+        >
+          <img src="../assets/attractions.svg" alt="attractions" class="h-8 w-8 mr-4" />
+          <button
+              class="font-bold"
+          >
+            Accéder au park
+          </button>
+        </div>
+        <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+             @click="$router.push({ name: 'Reservations' })"
+        >
+          <img src="../assets/tickets.svg" alt="tickets" class="h-8 w-8 mr-4" />
+          <button
+              class="font-bold"
+          >
+            Mes réservations
+          </button>
+        </div>
+        <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+             @click="$router.push({ name: 'Profile' })"
+        >
+          <img src="../assets/visitors.svg" alt="visitor" class="h-8 w-8 mr-4" />
+          <button
+              class="font-bold"
+          >
+            Mon profil
+          </button>
+        </div>
+      </div>
+      <!-- STICKY ELEMENT BOTTOM NAVBAR -->
+      <div class="flex flex-col items-start mt-auto mb-4">
+        <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+             @click="$router.push({ name: 'Home' })"
+        >
+          <img src="../assets/logout.svg" alt="logout" class="h-8 w-8 mr-4" />
+          <button
+              class="font-bold"
+          >
+            Se déconnecter
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineProps({
+  title: String,
+  logoUrl: String,
+})
+</script>
+
+
+<style scoped>
+#navbar {
+  width: 250px;
+}
+</style>

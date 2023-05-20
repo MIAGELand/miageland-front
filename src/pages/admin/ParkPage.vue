@@ -48,16 +48,16 @@
 </template>
 
 <script setup lang="ts">
-import VerticalNavbar from "../layouts/VerticalNavbar.vue";
+import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
 import {computed, ref, watch} from "vue";
-import {setGauge} from "../service/park-service";
+import {setGauge} from "../../service/park-service";
 import { Toaster, toast } from 'vue-sonner';
-import {parkKeys, useParkInfo} from "../queries/park.query";
+import {parkKeys, useParkInfo} from "../../queries/park.query";
 import moment from 'moment';
 import {useQueryClient} from "@tanstack/vue-query";
-import {useEmployeeList} from "../queries/employee.query";
-import {getCookie} from "../util/cookie";
-import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
+import {useEmployeeList} from "../../queries/employee.query";
+import {getCookie} from "../../util/cookie";
+import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 const queryClient = useQueryClient();
 
 const title = "Parc";

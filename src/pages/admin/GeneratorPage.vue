@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import GeneratorForm from "../components/generator/GeneratorForm.vue";
-import {BASE_URL} from "../util/constants";
-import {FormData} from "../models/models";
+import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
+import GeneratorForm from "../../components/generator/GeneratorForm.vue";
+import {BASE_URL} from "../../util/constants";
+import {FormData} from "../../models/models";
 import {toast} from "vue-sonner";
-import {api} from "../main";
-import {getCookie} from "../util/cookie";
+import {api} from "../../main";
+import {getCookie} from "../../util/cookie";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";

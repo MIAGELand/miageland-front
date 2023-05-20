@@ -9,10 +9,10 @@
             </div>
 
             <!-- EMPLOYEES -->
-            <div class="m-8" v-if="isManager">
+            <div class="m-8" v-if="!isClassic">
                 <span v-if="isLoading">Loading...</span>
                 <div v-else class="rounded-lg">
-                    <data-table :data="employeeList" :rows="rows" :action-list="actionList" :entity="route" @refresh="refresh"></data-table>
+                    <data-table :data="attractionList" :rows="rows" :action-list="actionList" :entity="route" @refresh="refresh"></data-table>
                 </div>
             </div>
             <unauthorized-info v-else />
@@ -21,52 +21,55 @@
 </template>
 
 <script setup lang="ts">
-import VerticalNavbar from "../layouts/VerticalNavbar.vue";
-import {employeesKeys, useEmployeeList} from "../queries/employee.query";
-import DataTable from "../components/datatable/DataTable.vue";
+import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
+import DataTable from "../../components/datatable/DataTable.vue";
 import {useQueryClient} from "@tanstack/vue-query";
+import {attractionsKeys, useAttractionList} from "../../queries/attraction.query";
+import {useEmployeeList} from "../../queries/employee.query";
 import {computed} from "vue";
-import {getCookie} from "../util/cookie";
-import UnauthorizedInfo from "../components/UnauthorizedInfo.vue";
+import {getCookie} from "../../util/cookie";
+import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 
-const title = "Employés";
-const logoUrl = "src/assets/employees.svg";
-const route = "employees";
+const title = "Attractions";
+const logoUrl = "src/assets/attractions.svg";
+const route = "attractions";
 const queryClient = useQueryClient();
-const { data: employeeList, error, isLoading } = useEmployeeList();
+const { data: attractionList, error, isLoading } = useAttractionList();
+const { data: employeeList } = useEmployeeList();
 
-// Check if employee is manager
-const isManager = computed(() => {
+// Check if employee is not classic
+const isClassic = computed(() => {
   const employeeMail = getCookie("email")
-  return employeeList.value?.find((employee) => employee.email === employeeMail)?.role === "MANAGER";
+  return employeeList.value?.find((employee) => employee.email === employeeMail)?.role === "CLASSIC";
 });
 
 let rows = {
     'id': 'ID',
-    'email': 'Email',
-    'role': 'Role',
-    'name': 'Prénom',
-    'surname': 'Nom'
+    'name': 'Nom',
+    'opened': 'Ouverte',
 }
 let actionList = {
-    'upgrade': {
-        'icon': '🔼',
+    'open': {
+        'icon': '🔓',
         'color': 'bg-green-300 text-white enabled:hover:bg-green-400'
     },
-    'downgrade': {
-        'icon': '🔽',
+    'close': {
+        'icon': '🔒',
         'color': 'bg-orange-300 text-white enabled:hover:bg-orange-400'
     },
-    'remove': {
+    'removeAttraction': {
         'icon': '❌',
         'color': 'bg-gray-300 text-white enabled:hover:bg-gray-400'
     },
 }
 
 const refresh = async () => {
-    await queryClient.refetchQueries(employeesKeys.employeeList);
+    await queryClient.refetchQueries(attractionsKeys.attractionList);
 };
+
+
 </script>
 
 <style scoped>
 </style>
+

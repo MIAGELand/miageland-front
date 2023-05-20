@@ -1,14 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 import NotFound from "../pages/NotFound.vue";
 import HomePage from "../pages/HomePage.vue";
-import EmployeePage from "../pages/EmployeePage.vue";
-import AttractionsPage from "../pages/AttractionsPage.vue";
-import DashboardPage from "../pages/DashboardPage.vue";
-import TicketPage from "../pages/TicketPage.vue";
-import GeneratorPage from "../pages/GeneratorPage.vue";
-import ParkPage from "../pages/ParkPage.vue";
+import EmployeePage from "../pages/admin/EmployeePage.vue";
+import AttractionsPage from "../pages/admin/AttractionsPage.vue";
+import DashboardPage from "../pages/admin/DashboardPage.vue";
+import TicketPage from "../pages/admin/TicketPage.vue";
+import GeneratorPage from "../pages/admin/GeneratorPage.vue";
+import ParkPage from "../pages/admin/ParkPage.vue";
 import {getCookie} from "../util/cookie";
 import {useRouter} from "vue-router";
+import VisitorAccess from "../pages/visitor/VisitorAccess.vue";
+import VisitorReservation from "../pages/visitor/VisitorReservation.vue";
+import VisitorProfile from "../pages/visitor/VisitorProfile.vue";
 const routerCheck = useRouter();
 
 const routes = [
@@ -48,6 +51,21 @@ const routes = [
         component: GeneratorPage,
     },
     {
+        path: "/access",
+        name: "ParkAccess",
+        component: VisitorAccess,
+    },
+    {
+        path: "/reservations",
+        name: "Reservations",
+        component: VisitorReservation,
+    },
+    {
+        path: "/profile",
+        name: "Profile",
+        component: VisitorProfile,
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "NotFound",
         component: NotFound,
@@ -60,8 +78,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const hasCookie = getCookie('email');
-
+    const hasCookie = getCookie('email') || getCookie('id');
     if (to.name !== 'Home' && !hasCookie) {
         next({ name: 'Home' });
     } else {
