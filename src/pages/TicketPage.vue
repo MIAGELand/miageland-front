@@ -85,7 +85,7 @@ const deleteAll = async () => {
 }
 
 const refresh = async () => {
-    await queryClient.refetchQueries(ticketKeys.ticketList.queryKey);
+    await queryClient.refetchQueries(['Tickets', 'ticketsListByPage', page]);
 };
 </script>
 
