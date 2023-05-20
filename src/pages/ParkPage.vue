@@ -35,7 +35,7 @@
                         </div>
                         <div class="text-center flex flex-col">
                             <span>Nb tickets max : {{gauge}}</span>
-                            <input type="range" v-model="gauge" :min="nbMaxTicketsSoldByDay" max="1500">
+                            <input type="range" v-model="gauge" :min=minTicketGauge :max="minTicketGauge * 10">
                         </div>
 
                         <button class="bg-blue-700 enabled:hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mt-2 disabled:opacity-50" @click="setNewGauge(gauge)">Valider</button>
@@ -64,10 +64,9 @@ const title = "Parc";
 const logoUrl = "src/assets/park.svg";
 
 const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
-const { data: ticketList, isLoading: ticketLoading } = useTicketList();
 
 const isLoading = computed(() => {
-    return ticketLoading.value || parkInfoLoading.value;
+    return parkInfoLoading.value;
 });
 
 const currentGauge = computed(() => {
@@ -80,23 +79,8 @@ const lastModifiedGauge = computed(() => {
 
 const gauge = ref(0)
 
-const lastTicketDate = computed(() => {
-    const dates = ticketList.value.map((ticket: any) => new Date(ticket.date));
-    return new Date(Math.max.apply(null, dates));
-});
-
-const dayDateLabels = computed(() => {
-    return getAllDays(Date.now(), lastTicketDate.value);
-});
-
-const nbTicketsSoldByDay = computed(() => {
-    return aggregateData(dayDateLabels, ticketList.value, "day", (ticket: any) => 1);
-});
-
-const nbMaxTicketsSoldByDay = computed(() => {
-    const max = Math.max(...nbTicketsSoldByDay.value);
-    gauge.value = max;
-    return max;
+const minTicketGauge = computed(() => {
+    return parkInfo.value?.minTicketGauge;
 });
 
 const setNewGauge = (gauge: number) => {

@@ -1,5 +1,6 @@
 export interface Park {
     id: number;
+    minTicketGauge: number;
     gauge: number;
     modifiedAt: Date;
 }
