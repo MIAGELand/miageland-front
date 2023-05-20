@@ -1,10 +1,13 @@
 <template>
     <div id="container">
         <div class="text-center font-bold flex flex-col gap-4">
-            <h1 class="text-4xl">MIAGELand</h1>
-            <login-input-employee />
+            <h1 class="text-4xl">🎢 MIAGELand</h1>
+            <div>
+              <p class="text-xl">👮 Admin</p>
+              <login-input-employee />
+            </div>
             <span><hr></span>
-            <div class="flex justify-center gap-4">
+           <div class="flex justify-center gap-4">
               <div>
                 <p class="text-xl">Connexion</p>
                 <login-input-visitor />

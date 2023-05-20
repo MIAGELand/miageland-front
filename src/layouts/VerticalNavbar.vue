@@ -105,10 +105,19 @@
                     <img src="../assets/vue.svg" alt="profile" class="h-8 w-8" />
                     <div class="flex flex-col gap-0.5">
                         <div>{{employeeName}}</div>
-                        <div>{{employeeRole}}</div>
+                        <div class="text-gray-400">{{employeeRole}}</div>
                     </div>
-
                 </div>
+              <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+                   @click="$router.push({ name: 'Home' })"
+              >
+                <img src="../assets/logout.svg" alt="logout" class="h-8 w-8 mr-2" />
+                <button
+                    class="font-bold"
+                >
+                  Se déconnecter
+                </button>
+              </div>
             </div>
         </nav>
     </div>
@@ -127,7 +136,7 @@ const employeeName = computed(() => {
     if (employeeList.value) {
         const employee = employeeList.value?.find((employee) => employee.email === emailFromCookie.value);
         if (employee) {
-            return employee.name + " " + employee.surname;
+            return employee.name;
         }
     }
     return ""
@@ -151,6 +160,6 @@ defineProps({
 
 <style scoped>
 #navbar {
-    width: 200px;
+    width: 225px;
 }
 </style>

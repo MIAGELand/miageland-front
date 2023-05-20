@@ -18,7 +18,7 @@
           <button
               class="font-bold"
           >
-            Accéder au park
+            Acheter billets
           </button>
         </div>
         <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
@@ -28,7 +28,7 @@
           <button
               class="font-bold"
           >
-            Mes réservations
+            Réservations
           </button>
         </div>
         <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
@@ -38,7 +38,7 @@
           <button
               class="font-bold"
           >
-            Mon profil
+            Profil
           </button>
         </div>
       </div>
@@ -47,7 +47,7 @@
         <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
              @click="$router.push({ name: 'Home' })"
         >
-          <img src="../assets/logout.svg" alt="logout" class="h-8 w-8 mr-4" />
+          <img src="../assets/logout.svg" alt="logout" class="h-8 w-8 mr-2" />
           <button
               class="font-bold"
           >
@@ -69,6 +69,6 @@ defineProps({
 
 <style scoped>
 #navbar {
-  width: 250px;
+  width: 225px;
 }
 </style>
