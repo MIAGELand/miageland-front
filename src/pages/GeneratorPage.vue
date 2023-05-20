@@ -23,9 +23,9 @@
 import VerticalNavbar from "../layouts/VerticalNavbar.vue";
 import GeneratorForm from "../components/generator/GeneratorForm.vue";
 import {BASE_URL} from "../util/constants";
-import axios from "axios";
 import {FormData} from "../models/models";
 import {toast} from "vue-sonner";
+import {api} from "../main";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";
@@ -65,7 +65,7 @@ const generateData = async (formData: FormData) => {
     let url = BASE_URL + "/" + formData.route;
     let data = formData.data;
     toast.message('Génération des données en cours...')
-    await axios.post(url, data).then(() => {
+    await api.post(url, data).then(() => {
         toast.success(Object.keys(data).length + ' ligne(s) `' + formData.name + '` générée(s) avec succès !')
     }).catch((error) => {
         toast.error('Erreur lors de la génération des données')
