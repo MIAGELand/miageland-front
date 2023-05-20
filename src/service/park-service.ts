@@ -1,13 +1,12 @@
-import axios from 'axios';
-import { BASE_URL } from '../util/constants';
 import {Park} from "../models/models";
+import {api} from "../main";
 
 export async function getParkInfo(): Promise<Park> {
-    const response = await axios.get(`${BASE_URL}/park`);
+    const response = await api.get(`/park`);
     return response.data;
 }
 export async function setGauge(gauge: number): Promise<Park> {
-    const response = await axios.patch(`${BASE_URL}/park/gauge`, {"gauge": gauge});
+    const response = await api.patch(`/park/gauge`, {"gauge": gauge});
     return response.data;
 }
 

@@ -1,38 +1,37 @@
 import { Ticket } from '../models/models';
-import axios from 'axios';
-import { BASE_URL } from '../util/constants';
 import {TicketStats} from "../models/stats";
 import {getCookie} from "../util/cookie";
 import {Ref} from "vue";
+import {api} from "../main";
 
 export async function getAllTickets(): Promise<Ticket[]> {
-    const response = await axios.get(`${BASE_URL}/tickets/all`);
+    const response = await api.get(`/tickets/all`);
     return response.data;
 }
 
 export async function getTicketsByPage(page: Ref<number>): Promise<Ticket[]> {
-    const response = await axios.get(`${BASE_URL}/tickets?page=${page.value}`);
+    const response = await api.get(`/tickets?page=${page.value}`);
     return response.data;
 }
 
 export async function validateTicket(id: number): Promise<Ticket> {
-    const response = await axios.patch(`${BASE_URL}/tickets/${id}`, {'state': 'USED'});
+    const response = await api.patch(`/tickets/${id}`, {'state': 'USED'});
     return response.data;
 }
 
 export async function cancelTicket(id: number): Promise<Ticket> {
-    const response = await axios.patch(`${BASE_URL}/tickets/${id}`, {'state': 'CANCELLED'});
+    const response = await api.patch(`/tickets/${id}`, {'state': 'CANCELLED'});
     return response.data;
 }
 
 export async function getTicketStats(): Promise<TicketStats> {
-    const response = await axios.get(`${BASE_URL}/tickets/stats`);
+    const response = await api.get(`/tickets/stats`);
     return response.data;
 }
 
 export async function deleteAllTickets(): Promise<void> {
     const email = getCookie('email');
-    await axios.delete(`${BASE_URL}/tickets`, { headers: {
+    await api.delete(`/tickets`, { headers: {
             Authorization: `email=${email}`,
         }
     });
