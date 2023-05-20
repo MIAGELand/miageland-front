@@ -20,7 +20,7 @@
 
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
 
-const title = "Mon profil";
+const title = "Profil";
 const logoUrl = "src/assets/visitors.svg";
 </script>
 

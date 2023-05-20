@@ -20,7 +20,7 @@
 
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
 
-const title = "Accéder au park";
+const title = "Acheter billets";
 const logoUrl = "src/assets/attractions.svg";
 </script>
 

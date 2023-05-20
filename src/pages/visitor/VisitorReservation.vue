@@ -20,7 +20,7 @@
 
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
 
-const title = "Mes réservations";
+const title = "Réservations";
 const logoUrl = "src/assets/tickets.svg";
 </script>
 
