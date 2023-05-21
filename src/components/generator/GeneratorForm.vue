@@ -102,7 +102,8 @@ const generateData = () => {
       (acc, [key, value]) => {
         switch (value) {
           case "Date":
-            acc[key] = new Date(formData.data[key]).toISOString();
+            // Format to be yyyy-MM-dd
+            acc[key] = new Date(formData.data[key]).toISOString().split("T")[0];
             break;
           case "number":
             acc[key] = parseFloat(formData.data[key]);
@@ -144,7 +145,8 @@ const generateRandomData = (nbData: number) => {
       } else if (value === "email") {
         acc[key] = faker.internet.email();
       } else if (value === "Date") {
-        acc[key] = faker.date.future();
+        // Get only yyyy-MM-dd format
+        acc[key] = faker.date.past().toISOString().split("T")[0];
       } else if (value.includes("|")) {
         const options = value.split("|").map((opt) => opt.trim());
         acc[key] = options[Math.floor(Math.random() * options.length)];
