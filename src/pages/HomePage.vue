@@ -1,35 +1,48 @@
 <template>
-    <div id="container">
-        <div class="text-center font-bold flex flex-col gap-4">
-            <h1 class="text-4xl">🎢 MIAGELand</h1>
-            <div>
-              <p class="text-xl">👮 Admin</p>
-              <login-input-employee />
-            </div>
-            <span><hr></span>
-           <div class="flex justify-center gap-4">
-              <div>
-                <p class="text-xl">Connexion</p>
-                <login-input-visitor />
-              </div>
-              <div>
-                <p class="text-xl">Inscription</p>
-                <sign-up-input />
-              </div>
-            </div>
+  <div id="container">
+    <h1 class="text-4xl">🎢 MIAGELand</h1>
+    <div class="text-center font-bold flex flex-col items-center gap-8">
+      <navigation-bar :active="active" @nav="updateNav"/>
+      <div v-show="showAdmin">
+        <p class="text-xl">Connexion</p>
+        <login-input-employee/>
+      </div>
+      <div class="flex justify-evenly gap-4" v-show="!showAdmin">
+        <div>
+          <p class="text-xl">Connexion</p>
+          <login-input-visitor/>
         </div>
+        <div>
+          <p class="text-xl">Inscription</p>
+          <sign-up-input/>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import LoginInput from "../components/connexion/LoginInputEmployee.vue";
 import SignUpInput from "../components/connexion/SignUpInput.vue";
 import LoginInputEmployee from "../components/connexion/LoginInputEmployee.vue";
 import LoginInputVisitor from "../components/connexion/LoginInputVisitor.vue";
+import NavigationBar from "../components/connexion/NavigationBar.vue";
+import {ref} from "vue";
+
+const showAdmin = ref(false);
+const active = ref('visiteur');
+const updateNav = (nav: string) => {
+  if (nav === 'visiteur') {
+    active.value = 'visiteur';
+    showAdmin.value = false;
+  } else if (nav === 'admin') {
+    active.value = 'admin';
+    showAdmin.value = true;
+  }
+}
 </script>
 
 <style scoped>
 #container {
-    margin: 4vh 10vw 4vh 10vw;
+  margin: 4vh 10vw 4vh 10vw;
 }
 </style>
