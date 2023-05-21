@@ -12,8 +12,12 @@
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
         <div v-if="!isLoading" class="flex flex-col gap-4">
-          <visitor-reservation-card  v-for="ticket in tickets" :ticket="ticket" :key="ticket.id"
-          @cancelTicket="cancel"/>
+          <visitor-reservation-card
+              v-for="ticket in sortedTickets"
+              :ticket="ticket"
+              :key="ticket.id"
+              @cancelTicket="cancel"
+          />
         </div>
       </div>
     </div>
@@ -36,6 +40,15 @@ const logoUrl = "src/assets/calendar.svg";
 
 const id = computed(() => getCookie("id"))
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
+
+const sortedTickets = computed(() => {
+  if (tickets) {
+    const ticketList = [...tickets.value];
+    return ticketList.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  }
+});
 
 const cancel = (ticketId: number) => {
   cancelTicket(ticketId).then((data) => {

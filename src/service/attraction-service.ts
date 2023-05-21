@@ -3,7 +3,7 @@ import {getCookie} from "../util/cookie";
 import {AttractionStats} from "../models/stats";
 import {api} from "../main";
 
-export async function getAllAttractions(): Promise<Attraction> {
+export async function getAllAttractions(): Promise<Attraction[]> {
     const email = getCookie('email');
     const response = await api.get(`/attractions`, { headers: {
             Authorization: `email=${email}`,
