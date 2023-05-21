@@ -10,20 +10,27 @@
 
             <!-- EMPLOYEES -->
             <div class="m-8">
-                <span v-if="isLoading">Loading...</span>
-                <div v-else class="rounded-lg">
-                    <data-table :data="ticketList"
-                                :rows="rows"
-                                :action-list="actionList"
-                                :entity="route"
-                                :total-data="totalTickets"
-                                @refresh="refresh"
-                                @update="updateCurrentPage"
-                    ></data-table>
-                  <button class="font-bold py-2 px-4 bg-red-700 rounded mx-0.5 disabled:opacity-30 transition"
-                  @click="deleteAll">
-                    Delete all
-                  </button>
+                <div class="rounded-lg">
+                  <data-table v-if="isLoading"
+                              :data="[]"
+                              :rows="rows"
+                              :action-list="actionList"
+                              :entity="route"
+                              :current-page="page + 1"
+                              :total-data="totalTickets"
+                              @refresh="refresh"
+                              @update="updateCurrentPage"
+                  />
+                  <data-table v-else
+                              :data="ticketList"
+                              :rows="rows"
+                              :action-list="actionList"
+                              :entity="route"
+                              :total-data="totalTickets"
+                              :current-page="page + 1"
+                              @refresh="refresh"
+                              @update="updateCurrentPage"
+                  />
                 </div>
               </div>
         </div>
@@ -36,7 +43,7 @@ import DataTable from "../../components/datatable/DataTable.vue";
 import {useQuery, useQueryClient} from "@tanstack/vue-query";
 import {deleteAllTickets, getTicketsByPage} from "../../service/ticket-service";
 import {computed, ref} from "vue";
-import {useTicketStats} from "../../queries/ticket.query";
+import {ticketKeys, useTicketListByPage, useTicketStats} from "../../queries/ticket.query";
 
 const title = "Tickets";
 const logoUrl = "src/assets/tickets.svg";
@@ -44,17 +51,9 @@ const route = "tickets";
 
 const queryClient = useQueryClient();
 const page = ref(0);
-const { isLoading, data: ticketList } = useQuery({
-    queryKey: ['Tickets', 'ticketsListByPage', page],
-    queryFn: () => getTicketsByPage(page),
-    keepPreviousData: true,
-})
-
+const { isLoading, data: ticketList } = useTicketListByPage(page)
 const { data: ticketStats } = useTicketStats();
-
-const totalTickets = computed(() => {
-    return ticketStats?.value.numberStatsTicket.nbTotal;
-})
+const totalTickets = computed(() => ticketStats.value?.numberStatsTicket.nbTotal);
 
 let rows = {
     'id': 'ID_t',
@@ -78,13 +77,11 @@ let actionList = {
 const updateCurrentPage = (newPage: number) => {
     page.value = newPage - 1;
 }
-const deleteAll = async () => {
-  await deleteAllTickets();
-  await refresh()
-}
 
 const refresh = async () => {
-    await queryClient.refetchQueries(['Tickets', 'ticketsListByPage', page]);
+    await queryClient.refetchQueries({
+      ...ticketKeys.ticketListByPage(page),
+    });
 };
 </script>
 

@@ -71,11 +71,12 @@ const props = defineProps ({
         required: true
     },
     rows: {
-        type:  Object as PropType<string[]>,
+        type: Object as PropType<{ [key: string]: string }>,
         required: true
     },
     actionList: {
         type: Object,
+        required: true
     },
     entity: {
         type: String,
@@ -84,10 +85,14 @@ const props = defineProps ({
     totalData: {
         type: Number,
         required: false
+    },
+    currentPage: {
+        type: Number,
+        required: false
     }
 });
 
-const currentPage = ref(1);
+const currentPage = ref(props.currentPage || 1);
 const itemsPerPage = 100; // needs to be sync with backend pagination size
 const searchText = ref('');
 const rows = props.rows;
