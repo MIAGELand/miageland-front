@@ -1,13 +1,13 @@
 <template>
   <div id="container">
-    <h1 class="text-4xl">🎢 MIAGELand</h1>
+    <h1 class="text-center text-4xl mb-8 md:text-left">🎢 MIAGELand</h1>
     <div class="text-center font-bold flex flex-col items-center gap-8">
       <navigation-bar :active="active" @nav="updateNav"/>
       <div v-show="showAdmin">
         <p class="text-xl">Connexion</p>
         <login-input-employee/>
       </div>
-      <div class="flex justify-evenly gap-4" v-show="!showAdmin">
+      <div class="flex flex-col gap-4 md:flex-row justify-evenly " v-show="!showAdmin">
         <div>
           <p class="text-xl">Connexion</p>
           <login-input-visitor/>
