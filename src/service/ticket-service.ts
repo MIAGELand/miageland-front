@@ -14,6 +14,11 @@ export async function getTicketsByPage(page: Ref<number>): Promise<Ticket[]> {
     return response.data;
 }
 
+export async function payTicket(id: number): Promise<Ticket> {
+    const response = await api.patch(`/tickets/${id}`, {'state': 'PAID'});
+    return response.data;
+}
+
 export async function validateTicket(id: number): Promise<Ticket> {
     const response = await api.patch(`/tickets/${id}`, {'state': 'USED'});
     return response.data;
@@ -38,6 +43,7 @@ export async function deleteAllTickets(): Promise<void> {
 }
 export const ticketService = {
     getAllTickets,
+    payTicket,
     validateTicket,
     cancelTicket,
     getTicketStats,

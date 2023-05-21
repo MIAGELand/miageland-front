@@ -66,6 +66,10 @@ let rows = {
     'date': 'Date'
 }
 let actionList = {
+    'pay': {
+      'icon': '💶',
+      'color': 'bg-blue-400 text-white enabled:hover:bg-blue-500'
+    },
     'validate': {
         'icon': '✅',
         'color': 'bg-green-300 text-white enabled:hover:bg-green-400'

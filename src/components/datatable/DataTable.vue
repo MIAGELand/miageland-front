@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import {ref, computed, watch, PropType} from 'vue';
-import {cancelTicket, validateTicket} from "../../service/ticket-service";
+import {cancelTicket, payTicket, validateTicket} from "../../service/ticket-service";
 import {downgradeEmployee, removeEmployee, upgradeEmployee} from "../../service/employee-service";
 import {toast, Toaster} from "vue-sonner";
 import {closeAttraction, openAttraction, removeAttraction} from "../../service/attraction-service";
@@ -64,6 +64,7 @@ import CurrentPageButton from "./pagination/CurrentPageButton.vue";
 import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
 import NavigationButton from "./pagination/NavigationButton.vue";
 import LastButton from "./pagination/LastButton.vue";
+import moment from "moment";
 
 const props = defineProps ({
     data: {
@@ -104,16 +105,16 @@ const checkDisabledRole = (action: string, role: string) => {
 };
 
 const checkDisabledTicket = (action: string, state: string, date: string) => {
-    const today = new Date();
-    // transform date string to date object
-    const dateObject = new Date(date);
-    // check if date is 7 days after today date
-    const isDateCorrect = dateObject.getTime() > today.getTime() + 7 * 24 * 60 * 60 * 1000;
-
-    return action === 'validate' && state === 'USED'
-        || action === 'cancel' && state === 'USED'
-        || state === 'CANCELLED'
-        || action === 'cancel' && !isDateCorrect;
+    // Check with moment if date is before today
+    const today = moment();
+    const ticketDate = moment(date);
+    const isToday = ticketDate.isSame(today, 'day');
+    const isBeforeToday = ticketDate.isBefore(today, 'day');
+    const isLessThan7Days = ticketDate.diff(today, 'days') < 7;
+    return (action === 'pay' && (state !== 'RESERVED' || isBeforeToday))
+        || (action === 'validate' && (state !== 'PAID' || !isToday))
+        || (action === 'cancel' && (state === 'USED' || isLessThan7Days))
+        || (state === 'CANCELLED');
 };
 
 const checkDisabledAttraction = (action: string, opened: boolean) => {
@@ -176,6 +177,15 @@ const check = (action: string, data: any) => {
                 toast.error('Erreur lors de la suppression de l\'employé.');
             })
             break;
+        case 'pay':
+          payTicket(data['id']).then((data) => {
+            toast.success('Ticket payé avec succès. ' +
+                'Paiement de ' + data['price'] + '€.');
+            emit('refresh')
+          }).catch(() => {
+            toast.error('Erreur lors de l\'achat du ticket.');
+          });
+          break;
         case 'validate':
             validateTicket(data['id']).then(() => {
                 toast.success('Ticket validé avec succès.');
