@@ -28,6 +28,13 @@ export interface Attraction {
     opened: boolean;
 }
 
+export interface Visitor {
+    id: number;
+    name: string;
+    surname: string;
+    ticketList: Ticket[];
+}
+
 export interface FormData {
     name: string;
     route: string;

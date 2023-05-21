@@ -11,6 +11,7 @@
             <!-- EMPLOYEES -->
             <div class="m-8">
                 <div class="rounded-lg">
+                  <!-- LOADING W/ EMPTY DATATABLE -->
                   <data-table v-if="isLoading"
                               :data="[]"
                               :rows="rows"
@@ -21,6 +22,7 @@
                               @refresh="refresh"
                               @update="updateCurrentPage"
                   />
+                  <!-- DATATABLE WITH REAL DATA LOADED -->
                   <data-table v-else
                               :data="ticketList"
                               :rows="rows"

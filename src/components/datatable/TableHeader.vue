@@ -4,7 +4,7 @@ import {PropType} from "vue";
 
 defineProps({
     rows: {
-        type: Object as PropType<string[]>,
+        type: Object as PropType<{ [key: string]: string }>,
         required: true
     }
 })

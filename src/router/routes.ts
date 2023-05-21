@@ -78,7 +78,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const hasCookie = getCookie('email') || getCookie('id');
+    const hasCookie = getCookie('email')
+        || getCookie('id')
+        || getCookie('name') && getCookie('surname');
     if (to.name !== 'Home' && !hasCookie) {
         next({ name: 'Home' });
     } else {
