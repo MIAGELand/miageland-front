@@ -12,9 +12,10 @@
       <!-- VISITOR ACCESS -->
       <div class="m-8 flex flex-col gap-4">
         <div class="w-fit text-gray-800">
-          <input type="date" v-model="date" class="bg-white rounded-lg p-2 shadow-xl" />
+          <input type="date" v-model="date" class="bg-white rounded-lg p-2 shadow-xl"
+          :onchange="generateRandomPrice"/>
         </div>
-        <div>
+        <div v-if="price !== 0">
           Prix : {{ price }}€
         </div>
         <button
@@ -37,12 +38,18 @@ import {toast, Toaster} from "vue-sonner";
 import {getCookie} from "../../util/cookie";
 
 const title = "Acheter billets";
-const logoUrl = "src/assets/attractions.svg";
+const logoUrl = "src/assets/tickets.svg";
 
 const date = ref(null);
-const price = ref(150);
+const price = ref(0);
 const name = getCookie("name")
 const surname = getCookie("surname")
+
+const generateRandomPrice = () => {
+  // Price must be between 50 and 1000
+    price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
+}
+
 const buy = () => {
   const data = {
       date: date.value,

@@ -14,7 +14,7 @@
         <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
              @click="$router.push({ name: 'ParkAccess' })"
         >
-          <img src="../assets/attractions.svg" alt="attractions" class="h-8 w-8 mr-4" />
+          <img src="../assets/tickets.svg" alt="attractions" class="h-8 w-8 mr-4" />
           <button
               class="font-bold"
           >
@@ -22,9 +22,19 @@
           </button>
         </div>
         <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+             @click="$router.push({ name: 'VisitorAttraction' })"
+        >
+          <img src="../assets/attractions.svg" alt="attractions" class="h-8 w-8 mr-4" />
+          <button
+              class="font-bold"
+          >
+            Attractions
+          </button>
+        </div>
+        <div class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
              @click="$router.push({ name: 'Reservations' })"
         >
-          <img src="../assets/tickets.svg" alt="tickets" class="h-8 w-8 mr-4" />
+          <img src="../assets/calendar.svg" alt="tickets" class="h-8 w-8 mr-4" />
           <button
               class="font-bold"
           >

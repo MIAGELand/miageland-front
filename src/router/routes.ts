@@ -12,6 +12,7 @@ import {useRouter} from "vue-router";
 import VisitorAccess from "../pages/visitor/VisitorAccess.vue";
 import VisitorReservation from "../pages/visitor/VisitorReservation.vue";
 import VisitorProfile from "../pages/visitor/VisitorProfile.vue";
+import VisitorAttraction from "../pages/visitor/VisitorAttraction.vue";
 const routerCheck = useRouter();
 
 const routes = [
@@ -54,6 +55,11 @@ const routes = [
         path: "/access",
         name: "ParkAccess",
         component: VisitorAccess,
+    },
+    {
+        path: "/visitorattraction",
+        name: "VisitorAttraction",
+        component: VisitorAttraction,
     },
     {
         path: "/reservations",

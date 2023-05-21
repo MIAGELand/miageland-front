@@ -32,7 +32,7 @@ import {useQueryClient} from "@tanstack/vue-query";
 let queryClient = useQueryClient();
 
 const title = "Réservations";
-const logoUrl = "src/assets/tickets.svg";
+const logoUrl = "src/assets/calendar.svg";
 
 const id = computed(() => getCookie("id"))
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
