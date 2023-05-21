@@ -29,10 +29,20 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY")
         <span>📆  </span>
         <span>{{date}}</span>
       </div>
-      <div class="text-xl">
-        <span>💶  </span>
-        <span>{{ticket.price}} €</span>
+      <div class="flex justify-between items-center">
+        <div class="text-xl">
+          <span>💶  </span>
+          <span>{{ticket.price}} €</span>
+        </div>
+        <div v-if="ticket.state === 'PAID'">
+          <button
+              @click="$emit('cancel-ticket', ticket.id)"
+              class="bg-red-700 text-white p-2 rounded-xl hover:bg-red-800">
+            Annuler
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
