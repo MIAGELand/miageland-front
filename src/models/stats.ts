@@ -12,6 +12,7 @@ export interface EmployeeStats {
 
 export interface NumberStatsTicket {
     nbTotal: number
+    nbReserved: number
     nbPaid: number
     nbUsed: number
     nbCancelled: number

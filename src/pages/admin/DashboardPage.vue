@@ -249,6 +249,11 @@ const ticketDateLabels = computed<string[]>(() => {
 
 
 const ticketNumberByMonthAndYear = computed(() => {
+  const ticketListReservedByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
+    const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+    return ticketInfo ? ticketInfo.numberStatsTicket.nbReserved : 0;
+  });
+
     const ticketListPaidByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
       const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
       return ticketInfo ? ticketInfo.numberStatsTicket.nbPaid : 0;
@@ -265,6 +270,10 @@ const ticketNumberByMonthAndYear = computed(() => {
     });
 
     return [
+        {
+          label: 'Réservés',
+          data: ticketListReservedByMonthAndYear,
+        },
         {
             label: 'Payés',
             data: ticketListPaidByMonthAndYear,
