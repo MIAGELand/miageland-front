@@ -9,11 +9,17 @@ export async function getVisitor(name: Ref<string>, surname: Ref<string>): Promi
     document.cookie = "id=" + response.data.id + ";";
     return response.data;
 }
+
+export async function getTicketListByVisitor(id: number): Promise<Ticket[]> {
+    const response = await api.get(`/visitors/${id}/tickets`)
+    return response.data;
+}
 export async function deleteVisitor(id: number): Promise<Visitor> {
     const response = await api.delete(`/visitors/${id}`)
     return response.data;
 }
 export const visitorService = {
     getVisitor,
+    getTicketListByVisitor,
     deleteVisitor
 };

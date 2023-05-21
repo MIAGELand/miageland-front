@@ -64,7 +64,7 @@ const getInputType = (type) => {
   if (type === "string" || type === "email") {
     return type;
   } else if (type === "Date") {
-    return "datetime-local";
+    return "date";
   } else if (type === "boolean") {
     return "checkbox";
   } else if (type.includes("|")) {
