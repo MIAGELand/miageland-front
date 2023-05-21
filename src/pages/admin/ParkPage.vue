@@ -35,7 +35,7 @@
                         </div>
                         <div class="text-center flex flex-col">
                             <span>Nb tickets max : {{gauge}}</span>
-                            <input type="range" v-model="gauge" :min=minTicketGauge :max="minTicketGauge * 10">
+                            <input type="range" v-model="gauge" :min="minTicketGauge" :max="minTicketGauge * 10">
                         </div>
 
                         <button class="bg-blue-700 enabled:hover:bg-blue-900 text-white font-bold py-2 px-4 rounded mt-2 disabled:opacity-50" @click="setNewGauge(gauge)">Valider</button>
@@ -88,7 +88,7 @@ const lastModifiedGauge = computed(() => {
 const gauge = ref(0)
 
 const minTicketGauge = computed(() => {
-    return parkInfo.value?.minTicketGauge;
+    return parkInfo.value?.minTicketGauge === 0 ? 100 : parkInfo.value?.minTicketGauge;
 });
 
 const setNewGauge = (gauge: number) => {
