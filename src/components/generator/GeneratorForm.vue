@@ -145,8 +145,7 @@ const generateRandomData = (nbData: number) => {
       } else if (value === "email") {
         acc[key] = faker.internet.email();
       } else if (value === "Date") {
-        // Get only yyyy-MM-dd format
-        acc[key] = faker.date.past().toISOString().split("T")[0];
+        acc[key] = faker.date.future().toISOString().split("T")[0];
       } else if (value.includes("|")) {
         const options = value.split("|").map((opt) => opt.trim());
         acc[key] = options[Math.floor(Math.random() * options.length)];
