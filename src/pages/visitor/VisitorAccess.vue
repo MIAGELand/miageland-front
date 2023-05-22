@@ -19,7 +19,7 @@
           Prix : {{ price }}€
         </div>
         <button
-            @click="buy"
+            @click="reserve"
             :disabled="date === null"
             class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
             Réserver
@@ -50,7 +50,7 @@ const generateRandomPrice = () => {
     price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
 }
 
-const buy = () => {
+const reserve = () => {
   const data = {
       date: date.value,
       price: price.value,
@@ -61,7 +61,7 @@ const buy = () => {
   api.post("/tickets", {
     "0": data
   }).then(() => {
-    toast.success("Billet acheté")
+    toast.success("Billet réservé")
   }).catch(() => {
     toast.error("Erreur lors de l'achat du billet")
   })
