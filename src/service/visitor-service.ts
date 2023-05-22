@@ -1,13 +1,18 @@
 import {Ticket, Visitor} from '../models/models';
 import {api} from "../main";
 import {Ref} from "vue";
+import {deleteCookie} from "../util/cookie";
 
 export async function getVisitor(name: Ref<string>, surname: Ref<string>): Promise<Visitor> {
-    const response = await api.get(`/visitors?name=${name.value}&surname=${surname.value}`)
-    document.cookie = "name=" + response.data.name + ";";
-    document.cookie = "surname=" + response.data.surname + ";";
-    document.cookie = "id=" + response.data.id + ";";
-    return response.data;
+    return api.get(`/visitors?name=${name.value}&surname=${surname.value}`).then(
+        (response) => {
+            document.cookie = "name=" + response.data.name + ";";
+            document.cookie = "surname=" + response.data.surname + ";";
+            document.cookie = "id=" + response.data.id + ";";
+            deleteCookie('email')
+            return response.data;
+        }
+    );
 }
 
 export async function getTicketListByVisitor(id: number): Promise<Ticket[]> {

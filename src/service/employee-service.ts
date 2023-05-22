@@ -1,10 +1,18 @@
 import { Employee } from '../models/models';
-import {getCookie} from "../util/cookie";
+import {deleteCookie, getCookie} from "../util/cookie";
 import {EmployeeStats} from "../models/stats";
 import {api} from "../main";
 
 export async function getEmployee(email: String): Promise<Employee> {
-    const response = await api.get(`/employees/${email}`);    return response.data;
+    return api.get(`/employees/${email}`).then(
+        (response) => {
+            document.cookie = "email=" + response.data.email + ";";
+            deleteCookie('id')
+            deleteCookie('name')
+            deleteCookie('surname')
+            return response.data;
+        }
+    )
 }
 
 export async function getAllEmployees(): Promise<Employee[]> {

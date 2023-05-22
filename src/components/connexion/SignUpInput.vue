@@ -31,8 +31,10 @@ const signUp = async () => {
     email: email.value,
     name: name.value,
     surname: surname.value,
-  }).then(() => {
-    document.cookie = "email=" + email.value + ";";
+  }).then((response) => {
+    document.cookie = "name=" + response.data.name + ";";
+    document.cookie = "surname=" + response.data.surname + ";";
+    document.cookie = "id=" + response.data.id + ";";
     router.push({name: 'ParkAccess'});
   }).catch(() => {
     alert('Champ non valide');

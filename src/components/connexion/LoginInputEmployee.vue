@@ -1,5 +1,6 @@
 <template>
   <!-- Create a Login input with a button to connect and check email part -->
+  <Toaster position="top-right" richColors />
   <div class="mt-2">
       <div class="flex justify-center ">
           <div class="flex justify-center">
@@ -20,17 +21,14 @@
 import { ref } from 'vue';
 import { getEmployee} from "../../service/employee-service";
 import { useRouter} from "vue-router";
-import {deleteCookie} from "../../util/cookie";
+import {toast, Toaster} from "vue-sonner";
 const router = useRouter();
 const email = ref('');
-deleteCookie("email");
 const connect = async () => {
-    const employee = await getEmployee(email.value);
-    if (employee) {
-        document.cookie = "email=" + employee.email + ";";
-        await router.push({name: 'Employees'});
-    } else {
-        alert('Email non valide');
-    }
+    getEmployee(email.value).then(() => {
+        router.push({name: 'Employees'})
+    }).catch(() => {
+        toast.error('Erreur lors de la connexion')
+    })
 }
 </script>
