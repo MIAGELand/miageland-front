@@ -1,29 +1,31 @@
 <script setup lang="ts">
-
-import {PropType} from "vue";
+import { PropType } from "vue";
 
 defineProps({
-    rows: {
-        type: Object as PropType<{ [key: string]: string }>,
-        required: true
-    }
-})
-
+  rows: {
+    type: Object as PropType<{ [key: string]: string }>,
+    required: true,
+  },
+});
 </script>
 
 <template>
-    <thead class="bg-gray-100">
+  <thead class="bg-gray-100">
     <tr>
-        <th v-for="row in rows" scope="col" class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer">
-            {{ row }}
-        </th>
-        <th class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer">
-            Actions
-        </th>
+      <th
+        v-for="row in rows"
+        scope="col"
+        class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer"
+      >
+        {{ row }}
+      </th>
+      <th
+        class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer"
+      >
+        Actions
+      </th>
     </tr>
-    </thead>
+  </thead>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

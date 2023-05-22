@@ -12,13 +12,16 @@
       <!-- VISITOR ACCESS -->
       <div class="m-8 flex flex-col gap-4">
         <div class="flex gap-8 text-xl">
-          <DatePicker v-model="date" v-if="!isLoading" :min-date="new Date()" :disabled-dates="disabledDates" />
+          <DatePicker
+            v-model="date"
+            v-if="!isLoading"
+            :min-date="new Date()"
+            :disabled-dates="disabledDates"
+          />
           <div class="flex flex-col gap-4 bg-teal-700 p-4 rounded-lg h-full">
             <div>
               Prix :
-              <span v-if="price !== 0 && date !== null">
-               {{ price }}€
-              </span>
+              <span v-if="price !== 0 && date !== null"> {{ price }}€ </span>
             </div>
             <div>
               Nb places :
@@ -29,10 +32,11 @@
           </div>
         </div>
         <button
-            @click="reserve"
-            :disabled="date === null || nbTicketAvailable === 0"
-            class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
-            Réserver
+          @click="reserve"
+          :disabled="date === null || nbTicketAvailable === 0"
+          class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+        >
+          Réserver
         </button>
       </div>
     </div>
@@ -40,18 +44,17 @@
 </template>
 
 <script setup lang="ts">
-
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
-import {computed, ref, watch} from "vue";
-import {api} from "../../main";
-import {toast, Toaster} from "vue-sonner";
-import {getCookie} from "../../util/cookie";
-import { DatePicker } from 'v-calendar';
-import 'v-calendar/style.css';
+import { computed, ref, watch } from "vue";
+import { api } from "../../main";
+import { toast, Toaster } from "vue-sonner";
+import { getCookie } from "../../util/cookie";
+import { DatePicker } from "v-calendar";
+import "v-calendar/style.css";
 import moment from "moment";
-import {parkKeys, useParkInfo} from "../../queries/park.query";
-import {ticketKeys, useTicketStats} from "../../queries/ticket.query";
-import {useQueryClient} from "@tanstack/vue-query";
+import { parkKeys, useParkInfo } from "../../queries/park.query";
+import { ticketKeys, useTicketStats } from "../../queries/ticket.query";
+import { useQueryClient } from "@tanstack/vue-query";
 
 const title = "Acheter billets";
 const logoUrl = "src/assets/tickets.svg";
@@ -59,64 +62,70 @@ const logoUrl = "src/assets/tickets.svg";
 const date = ref(null);
 const price = ref(0);
 
-const name = getCookie("name")
-const surname = getCookie("surname")
-const email = getCookie("email")
+const name = getCookie("name");
+const surname = getCookie("surname");
+const email = getCookie("email");
 
-const {data: parkInfo} = useParkInfo()
-const {data: tickets, isLoading} = useTicketStats()
+const { data: parkInfo } = useParkInfo();
+const { data: tickets, isLoading } = useTicketStats();
 
 const disabledDates = computed(() => {
-  const disabledDates = []
+  const disabledDates = [];
   tickets.value.dailyTicketInfos.forEach((ticket) => {
     if (ticket.numberStatsTicket.nbTotal >= parkInfo?.value.gauge) {
-      disabledDates.push(new Date(ticket.dayMonthYear))
+      disabledDates.push(new Date(ticket.dayMonthYear));
     }
-  })
-  return disabledDates
-})
+  });
+  return disabledDates;
+});
 
 const gauge = computed(() => {
-  return parkInfo?.value.gauge
-})
+  return parkInfo?.value.gauge;
+});
 
 const nbTicketsByDate = computed(() => {
   const ticket = tickets?.value.dailyTicketInfos.find((ticket) => {
-    return moment(ticket.dayMonthYear).format("YYYY-MM-DD") === moment(date.value).format("YYYY-MM-DD") ?? 0;
+    return (
+      moment(ticket.dayMonthYear).format("YYYY-MM-DD") ===
+        moment(date.value).format("YYYY-MM-DD") ?? 0
+    );
   });
-    return ticket?.numberStatsTicket.nbTotal ?? 0;
-})
+  return ticket?.numberStatsTicket.nbTotal ?? 0;
+});
 
 const nbTicketAvailable = computed(() => {
-  return gauge.value - nbTicketsByDate.value
-})
+  return gauge.value - nbTicketsByDate.value;
+});
 
 watch(date, () => {
-  generateRandomPrice()
-})
+  generateRandomPrice();
+});
 const generateRandomPrice = () => {
-  console.log("generateRandomPrice")
-    price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
-}
+  console.log("generateRandomPrice");
+  price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
+};
 
 const reserve = () => {
-  const convertedDate = moment(date.value).format("YYYY-MM-DD")
+  const convertedDate = moment(date.value).format("YYYY-MM-DD");
   const data = {
-      date: convertedDate,
-      price: price.value,
-      name: name,
-      surname: surname,
-      email: email
-  }
-  api.post("/tickets", {
-    "0": data
-  }).then(() => {
-    toast.success("Billet réservé")
-    refresh()
-  }).catch(() => {
-    toast.error("Erreur lors de l'achat du billet")
-  })
-}
+    date: convertedDate,
+    price: price.value,
+    name: name,
+    surname: surname,
+    email: email,
+  };
+  api
+    .post("/tickets", {
+      "0": data,
+    })
+    .then(() => {
+      toast.success("Billet réservé");
+      refresh();
+    })
+    .catch(() => {
+      toast.error("Erreur lors de l'achat du billet");
+    });
+};
 const queryClient = useQueryClient();
 const refresh = async () => {
   await queryClient.refetchQueries(ticketKeys.ticketStats);
@@ -124,5 +133,4 @@ const refresh = async () => {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

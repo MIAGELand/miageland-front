@@ -1,5 +1,5 @@
 <template>
-  <Toaster position="top-right" richColors/>
+  <Toaster position="top-right" richColors />
   <div class="flex">
     <VerticalVisitor />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
@@ -11,13 +11,16 @@
 
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
-        <div v-if="!isLoading" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">
+        <div
+          v-if="!isLoading"
+          class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+        >
           <visitor-reservation-card
-              v-for="ticket in sortedTickets"
-              :ticket="ticket"
-              :key="ticket.id"
-              @cancelTicket="cancel"
-              @payTicket="pay"
+            v-for="ticket in sortedTickets"
+            :ticket="ticket"
+            :key="ticket.id"
+            @cancelTicket="cancel"
+            @payTicket="pay"
           />
         </div>
       </div>
@@ -27,19 +30,22 @@
 
 <script setup lang="ts">
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
-import {useTicketListByVisitor, visitorKeys} from "../../queries/visitor.query";
-import {computed} from "vue";
-import {getCookie} from "../../util/cookie";
+import {
+  useTicketListByVisitor,
+  visitorKeys,
+} from "../../queries/visitor.query";
+import { computed } from "vue";
+import { getCookie } from "../../util/cookie";
 import VisitorReservationCard from "../../components/visitor/VisitorReservationCard.vue";
-import {toast, Toaster} from "vue-sonner";
-import {cancelTicket, payTicket} from "../../service/ticket-service";
-import {useQueryClient} from "@tanstack/vue-query";
+import { toast, Toaster } from "vue-sonner";
+import { cancelTicket, payTicket } from "../../service/ticket-service";
+import { useQueryClient } from "@tanstack/vue-query";
 let queryClient = useQueryClient();
 
 const title = "Réservations";
 const logoUrl = "src/assets/calendar.svg";
 
-const id = computed(() => getCookie("id"))
+const id = computed(() => getCookie("id"));
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
 
 const sortedTickets = computed(() => {
@@ -52,29 +58,37 @@ const sortedTickets = computed(() => {
 });
 
 const cancel = (ticketId: number) => {
-  cancelTicket(ticketId).then((data) => {
-    toast.success('Ticket annulé avec succès. ' +
-        'Remboursement de ' + data['price'] + '€.');
-    refresh();
-  }).catch(() => {
-    toast.error('Erreur lors de l\'annulation du ticket.');
-  });
-}
+  cancelTicket(ticketId)
+    .then((data) => {
+      toast.success(
+        "Ticket annulé avec succès. " +
+          "Remboursement de " +
+          data["price"] +
+          "€."
+      );
+      refresh();
+    })
+    .catch(() => {
+      toast.error("Erreur lors de l'annulation du ticket.");
+    });
+};
 
 const pay = (ticketId: number) => {
-  payTicket(ticketId).then(() => {
-    toast.success('Ticket payé avec succès.');
-    refresh();
-  }).catch(() => {
-    toast.error('Erreur lors du paiement du ticket.');
-  });
-}
+  payTicket(ticketId)
+    .then(() => {
+      toast.success("Ticket payé avec succès.");
+      refresh();
+    })
+    .catch(() => {
+      toast.error("Erreur lors du paiement du ticket.");
+    });
+};
 
 const refresh = async () => {
   await queryClient.refetchQueries({
     ...visitorKeys.getTicketListByVisitor(Number(id.value)),
-  });};
+  });
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
