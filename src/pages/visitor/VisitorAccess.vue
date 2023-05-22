@@ -21,8 +21,8 @@
         <button
             @click="buy"
             :disabled="date === null"
-            class="bg-blue-700 w-fit enabled:hover:bg-blue-900 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
-            Acheter
+            class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
+            Réserver
         </button>
       </div>
     </div>

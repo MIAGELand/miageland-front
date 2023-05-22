@@ -11,12 +11,13 @@
 
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
-        <div v-if="!isLoading" class="flex flex-col gap-4">
+        <div v-if="!isLoading" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">
           <visitor-reservation-card
               v-for="ticket in sortedTickets"
               :ticket="ticket"
               :key="ticket.id"
               @cancelTicket="cancel"
+              @payTicket="pay"
           />
         </div>
       </div>
@@ -31,7 +32,7 @@ import {computed} from "vue";
 import {getCookie} from "../../util/cookie";
 import VisitorReservationCard from "../../components/visitor/VisitorReservationCard.vue";
 import {toast, Toaster} from "vue-sonner";
-import {cancelTicket} from "../../service/ticket-service";
+import {cancelTicket, payTicket} from "../../service/ticket-service";
 import {useQueryClient} from "@tanstack/vue-query";
 let queryClient = useQueryClient();
 
@@ -57,6 +58,15 @@ const cancel = (ticketId: number) => {
     refresh();
   }).catch(() => {
     toast.error('Erreur lors de l\'annulation du ticket.');
+  });
+}
+
+const pay = (ticketId: number) => {
+  payTicket(ticketId).then(() => {
+    toast.success('Ticket payé avec succès.');
+    refresh();
+  }).catch(() => {
+    toast.error('Erreur lors du paiement du ticket.');
   });
 }
 

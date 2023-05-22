@@ -11,7 +11,7 @@ const surname = computed(() => props.visitor.surname)
 </script>
 
 <template>
-  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 h-fit w-fit hover:bg-gray-700 transition ease-in-out">
+  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 h-fit w-fit">
     <div class="flex flex-col gap-2 px-4">
       <div class="flex text-xl gap-4 justify-between">
         <span>Nom : </span>
