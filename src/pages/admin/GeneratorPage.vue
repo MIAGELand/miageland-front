@@ -56,6 +56,7 @@ let elements = [
         "data": {
             "name": "string",
             "surname": "string",
+            "email": "email",
             "date": "Date",
             "price": "number"
         }

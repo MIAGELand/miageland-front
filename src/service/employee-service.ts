@@ -7,6 +7,7 @@ export async function getEmployee(email: String): Promise<Employee> {
     return api.get(`/employees/${email}`).then(
         (response) => {
             document.cookie = "email=" + response.data.email + ";";
+            document.cookie = "role=" + response.data.role + ";";
             deleteCookie('id')
             deleteCookie('name')
             deleteCookie('surname')

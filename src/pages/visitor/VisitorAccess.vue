@@ -44,7 +44,7 @@ const date = ref(null);
 const price = ref(0);
 const name = getCookie("name")
 const surname = getCookie("surname")
-
+const email = getCookie("email")
 const generateRandomPrice = () => {
   // Price must be between 50 and 1000
     price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
@@ -55,7 +55,8 @@ const buy = () => {
       date: date.value,
       price: price.value,
       name: name,
-      surname: surname
+      surname: surname,
+      email: email
   }
   api.post("/tickets", {
     "0": data

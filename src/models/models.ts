@@ -32,6 +32,7 @@ export interface Visitor {
     id: number;
     name: string;
     surname: string;
+    email: string;
     ticketList: Ticket[];
 }
 

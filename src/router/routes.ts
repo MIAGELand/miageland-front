@@ -84,10 +84,21 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const hasCookie = getCookie('email')
-        || getCookie('id')
-        || getCookie('name') && getCookie('surname');
-    if (to.name !== 'Home' && !hasCookie) {
+    const visitor = getCookie('email')
+        && getCookie('id')
+        && getCookie('name')
+        && getCookie('surname')
+    const admin = getCookie('role');
+    if (!visitor &&
+        (to.name === 'ParkAccess' || to.name === 'VisitorAttraction'
+        || to.name === 'Reservations' || to.name === 'Profile')
+    ) {
+        next({ name: 'Home' });
+    } else if (!admin &&
+        (to.name === 'Employees' || to.name === 'Park'
+        || to.name === 'Attractions' || to.name === 'Dashboard'
+        || to.name === 'Generator' || to.name === 'Tickets')
+    ) {
         next({ name: 'Home' });
     } else {
         next();
