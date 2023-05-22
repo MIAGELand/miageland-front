@@ -19,7 +19,14 @@ export interface NumberStatsTicket {
 }
 
 export interface MonthlyTicketInfos {
-    monthYear: string,
+    monthYear: Date,
+    numberStatsTicket: NumberStatsTicket,
+    totalAmount: number,
+    benefits: number
+}
+
+export interface DailyTicketInfos {
+    dayMonthYear: Date,
     numberStatsTicket: NumberStatsTicket,
     totalAmount: number,
     benefits: number
@@ -28,4 +35,5 @@ export interface MonthlyTicketInfos {
 export interface TicketStats {
     numberStatsTicket: NumberStatsTicket
     monthlyTicketInfos: MonthlyTicketInfos[]
+    dailyTicketInfos: DailyTicketInfos[]
 }

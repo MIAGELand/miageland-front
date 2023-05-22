@@ -64,7 +64,7 @@ import CurrentPageButton from "./pagination/CurrentPageButton.vue";
 import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
 import NavigationButton from "./pagination/NavigationButton.vue";
 import LastButton from "./pagination/LastButton.vue";
-import moment from "moment";
+import moment from 'moment';
 
 const props = defineProps ({
     data: {

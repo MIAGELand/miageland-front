@@ -11,16 +11,26 @@
 
       <!-- VISITOR ACCESS -->
       <div class="m-8 flex flex-col gap-4">
-        <div class="w-fit text-gray-800">
-          <input type="date" v-model="date" class="bg-white rounded-lg p-2 shadow-xl"
-          :onchange="generateRandomPrice"/>
-        </div>
-        <div v-if="price !== 0">
-          Prix : {{ price }}€
+        <div class="flex gap-8 text-xl">
+          <DatePicker v-model="date" v-if="!isLoading" :min-date="new Date()" :disabled-dates="disabledDates" />
+          <div class="flex flex-col gap-4 bg-teal-700 p-4 rounded-lg h-full">
+            <div>
+              Prix :
+              <span v-if="price !== 0 && date !== null">
+               {{ price }}€
+              </span>
+            </div>
+            <div>
+              Nb places :
+              <span v-if="date !== null">
+                {{ nbTicketAvailable }}
+              </span>
+            </div>
+          </div>
         </div>
         <button
             @click="reserve"
-            :disabled="date === null"
+            :disabled="date === null || nbTicketAvailable === 0"
             class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
             Réserver
         </button>
@@ -32,27 +42,67 @@
 <script setup lang="ts">
 
 import VerticalVisitor from "../../layouts/VerticalVisitor.vue";
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {api} from "../../main";
 import {toast, Toaster} from "vue-sonner";
 import {getCookie} from "../../util/cookie";
+import { DatePicker } from 'v-calendar';
+import 'v-calendar/style.css';
+import moment from "moment";
+import {parkKeys, useParkInfo} from "../../queries/park.query";
+import {ticketKeys, useTicketStats} from "../../queries/ticket.query";
+import {useQueryClient} from "@tanstack/vue-query";
 
 const title = "Acheter billets";
 const logoUrl = "src/assets/tickets.svg";
 
 const date = ref(null);
 const price = ref(0);
+
 const name = getCookie("name")
 const surname = getCookie("surname")
 const email = getCookie("email")
+
+const {data: parkInfo} = useParkInfo()
+const {data: tickets, isLoading} = useTicketStats()
+
+const disabledDates = computed(() => {
+  const disabledDates = []
+  tickets.value.dailyTicketInfos.forEach((ticket) => {
+    if (ticket.numberStatsTicket.nbTotal >= parkInfo?.value.gauge) {
+      disabledDates.push(new Date(ticket.dayMonthYear))
+    }
+  })
+  return disabledDates
+})
+
+const gauge = computed(() => {
+  return parkInfo?.value.gauge
+})
+
+const nbTicketsByDate = computed(() => {
+  const ticket = tickets?.value.dailyTicketInfos.find((ticket) => {
+    return moment(ticket.dayMonthYear).format("YYYY-MM-DD") === moment(date.value).format("YYYY-MM-DD") ?? 0;
+  });
+    return ticket?.numberStatsTicket.nbTotal ?? 0;
+})
+
+const nbTicketAvailable = computed(() => {
+  return gauge.value - nbTicketsByDate.value
+})
+
+watch(date, () => {
+  generateRandomPrice()
+})
 const generateRandomPrice = () => {
-  // Price must be between 50 and 1000
+  console.log("generateRandomPrice")
     price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
 }
 
 const reserve = () => {
+  const convertedDate = moment(date.value).format("YYYY-MM-DD")
   const data = {
-      date: date.value,
+      date: convertedDate,
       price: price.value,
       name: name,
       surname: surname,
@@ -62,10 +112,16 @@ const reserve = () => {
     "0": data
   }).then(() => {
     toast.success("Billet réservé")
+    refresh()
   }).catch(() => {
     toast.error("Erreur lors de l'achat du billet")
   })
 }
+const queryClient = useQueryClient();
+const refresh = async () => {
+  await queryClient.refetchQueries(ticketKeys.ticketStats);
+  await queryClient.refetchQueries(parkKeys.getParkInfo);
+};
 </script>
 
 <style scoped>
