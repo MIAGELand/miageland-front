@@ -5,6 +5,8 @@ import { createPinia } from "pinia";
 import router from "../src/router/routes";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import axios from "axios";
+import { setupCalendar } from 'v-calendar';
+import 'v-calendar/style.css';
 
 const pinia = createPinia();
 
@@ -35,4 +37,5 @@ createApp(App)
     .use(router)
     .use(pinia)
     .use(VueQueryPlugin)
+    .use(setupCalendar, {})
     .mount("#app");
