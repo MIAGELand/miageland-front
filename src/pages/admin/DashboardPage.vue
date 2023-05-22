@@ -45,6 +45,7 @@
                                 </div>
                                 <hr>
                                 <div class="flex gap-2 items-end justify-between">
+                                    <NumberElement :data="nbTicketReserved" title="Réservés" size="md"/>
                                     <NumberElement :data="nbTicketPaid" title="Payés" size="md"/>
                                     <NumberElement :data="nbTicketUsed" title="Utilisés" size="md"/>
                                     <NumberElement :data="nbTicketCancelled" title="Annulés" size="md"/>
@@ -165,6 +166,10 @@ const nbTicketTotal = computed(() => {
   return numberStatsTicket.value.nbTotal;
 });
 
+const nbTicketReserved = computed(() => {
+  return numberStatsTicket.value.nbReserved;
+});
+
 const nbTicketPaid = computed(() => {
   return numberStatsTicket.value.nbPaid;
 });
@@ -194,11 +199,11 @@ const attractionNameList = computed(() => {
 });
 
 const ticketNumberList = computed(() => {
-    return [nbTicketPaid, nbTicketUsed, nbTicketCancelled];
+    return [nbTicketReserved, nbTicketPaid, nbTicketUsed, nbTicketCancelled];
 });
 
 const ticketNameList = computed(() => {
-    return ['Payés', 'Utilisés', 'Annulés'];
+    return ['Réservés', 'Payés', 'Utilisés', 'Annulés'];
 });
 
 const firstTicketDate = computed(() => {
@@ -249,10 +254,10 @@ const ticketDateLabels = computed<string[]>(() => {
 
 
 const ticketNumberByMonthAndYear = computed(() => {
-  const ticketListReservedByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
-    const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
-    return ticketInfo ? ticketInfo.numberStatsTicket.nbReserved : 0;
-  });
+    const ticketListReservedByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
+      const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
+      return ticketInfo ? ticketInfo.numberStatsTicket.nbReserved : 0;
+    });
 
     const ticketListPaidByMonthAndYear = ticketDateLabels.value.map((monthYear) => {
       const ticketInfo = monthlyTicketInfos.value.find((ticketInfo) => ticketInfo.monthYear === monthYear);
