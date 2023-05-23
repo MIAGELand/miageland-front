@@ -11,8 +11,9 @@
       <!-- EMPLOYEES -->
       <div class="m-8 flex" v-if="isManager">
         <span v-if="isLoading"> Loading... </span>
-        <div v-else class="flex flex-col gap-12 w-full">
-          <div class="flex flex-col gap-4">
+        <div v-else class="flex flex-col gap-8 w-full">
+          <DashboardNavigation @nav="updatePage" :active="page"/>
+          <div v-if="page === 'global'" class="flex flex-col gap-4">
             <div class="text-2xl">🧮 Global</div>
             <div class="flex flex-wrap gap-4">
               <card-container
@@ -102,7 +103,7 @@
             </div>
           </div>
 
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4" v-if="page === 'graph'">
             <div class="text-2xl">📊 Graphiques</div>
             <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               <card-container
@@ -135,8 +136,19 @@
             </div>
           </div>
 
-          <div class="flex flex-col gap-4">
-            <div class="text-2xl">🕙 Timeline</div>
+          <div class="flex flex-col gap-4" v-if="page === 'timeline'">
+            <div class="flex justify-between">
+              <div class="text-2xl">🕙 Timeline</div>
+              <div class="flex flex-col gap-1">
+                <DateFilter @updateRange="filterDays"/>
+                <span class="flex gap-2 justify-between">
+                  <span>From :</span>  <span>{{ startDate }}</span>
+                </span>
+                <span class="flex gap-2 justify-between">
+                  <span>To :</span>  <span>{{ endDate }}</span>
+                </span>
+              </div>
+            </div>
 
             <div class="w-full">
               <card-container
@@ -145,6 +157,7 @@
                 class="flex flex-col gap-2 w-full"
               >
                 <BarChart
+                  v-if="!ticketsStatsRangeLoading"
                   :data="dataListNumberByMonthAndYear"
                   :labels="ticketMonthDateLabels"
                   lineLabel="Nb tickets / mois"
@@ -157,10 +170,18 @@
                   emoji="📊"
                   title="Nb tickets / jours"
                   class="flex flex-col gap-2 w-full"
+                  @filterRange="filterDays"
               >
                 <BarChart
+                    v-if="!ticketsStatsRangeLoading"
                     :data="dataListNumberByDay"
                     :labels="ticketDayDateLabels"
+                    lineLabel="Nb tickets / jours"
+                />
+                <BarChart
+                    v-else
+                    :data="[]"
+                    :labels="[]"
                     lineLabel="Nb tickets / jours"
                 />
               </card-container>
@@ -173,6 +194,7 @@
                 class="flex flex-col gap-2 w-full"
               >
                 <LineChart
+                  v-if="!ticketsStatsRangeLoading"
                   :data="dataListBenefitsByMonthAndYear"
                   :labels="ticketMonthDateLabels"
                   lineLabel="Bénéfices / mois"
@@ -195,25 +217,41 @@ import {
 } from "../../queries/employee.query";
 import CardContainer from "../../components/dashboard/CardContainer.vue";
 import { useAttractionStats } from "../../queries/attraction.query";
-import { computed } from "vue";
-import { useTicketStats } from "../../queries/ticket.query";
+import {computed, ref} from "vue";
+import {useTicketStats, useTicketStatsByDateRange} from "../../queries/ticket.query";
 import NumberElement from "../../components/dashboard/NumberElement.vue";
 import PieChart from "../../components/dashboard/PieChart.vue";
 import LineChart from "../../components/dashboard/LineChart.vue";
-import {createDateFromYYYYMM, getTicketNumberByDay, getTicketNumberByMonthAndYear} from "../../util/date";
+import {
+  createDateFromYYYYMM,
+  createDateFromYYYYMMDD,
+  getTicketNumberByDay,
+  getTicketNumberByMonthAndYear
+} from "../../util/date";
 import BarChart from "../../components/dashboard/BarChart.vue";
 import { getCookie } from "../../util/cookie";
 import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
+import moment from "moment"
+import DashboardNavigation from "../../components/dashboard/DashboardNavigation.vue";
+import DateFilter from "../../components/dashboard/DateFilter.vue";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
 
+// init start date at the beginning of the month and end date at the end of year
+const startDate = ref(moment().startOf('month').format("YYYY-MM-DD"));
+const endDate = ref(moment().endOf('year').format("YYYY-MM-DD"));
 const { data: attractionStats, isLoading: attractionStatsLoading } =
   useAttractionStats();
 const { data: employeeStats, isLoading: employeeStatsLoading } =
   useEmployeeStats();
 const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
 const { data: employeeList } = useEmployeeList();
+const { data: ticketsStatsByRange, isLoading: ticketsStatsRangeLoading} = useTicketStatsByDateRange(startDate, endDate);
+const page = ref("global")
+const updatePage = (nav) => {
+    page.value = nav
+}
 
 // Check if employee is manager
 const isManager = computed(() => {
@@ -262,11 +300,11 @@ const numberStatsTicket = computed(() => {
 });
 
 const monthlyTicketInfos = computed(() => {
-  return ticketStats.value?.monthlyTicketInfos;
+  return ticketsStatsByRange.value?.monthlyTicketInfos;
 });
 
 const dailyTicketInfos = computed(() => {
-  return ticketStats.value?.dailyTicketInfos;
+  return ticketsStatsByRange.value?.dailyTicketInfos;
 });
 
 const nbTicketTotal = computed(() => {
@@ -313,7 +351,7 @@ const ticketNameList = computed(() => {
   return ["Réservés", "Payés", "Utilisés", "Annulés"];
 });
 
-const firstTicketDate = computed(() => {
+const firstTicketMonthDate = computed(() => {
   if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
     return monthlyTicketInfos.value.reduce((min, p) => {
       const currentDate = createDateFromYYYYMM(p.monthYear);
@@ -323,7 +361,7 @@ const firstTicketDate = computed(() => {
   return null;
 });
 
-const lastTicketDate = computed(() => {
+const lastTicketMonthDate = computed(() => {
   if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
     return monthlyTicketInfos.value.reduce((max, p) => {
       const currentDate = createDateFromYYYYMM(p.monthYear);
@@ -337,9 +375,9 @@ const lastTicketDate = computed(() => {
 // Format : MM-YYYY
 const ticketMonthDateLabels = computed<string[]>(() => {
   const dateLabels: string[] = [];
-  if (firstTicketDate.value && lastTicketDate.value) {
-    let currentDate = new Date(firstTicketDate.value);
-    while (currentDate <= lastTicketDate.value) {
+  if (firstTicketMonthDate.value && lastTicketMonthDate.value) {
+    let currentDate = new Date(firstTicketMonthDate.value);
+    while (currentDate <= lastTicketMonthDate.value) {
       // MM-YYYY
       const formattedDate = currentDate.toLocaleString("fr-FR", {
         month: "2-digit",
@@ -389,23 +427,47 @@ const dataListNumberByMonthAndYear = computed(() => {
   ];
 });
 
-const ticketDayDateLabels = computed<string[]>(() => {
+const firstTicketDayDate = computed(() => {
+  if (dailyTicketInfos && dailyTicketInfos.value.length > 0) {
+    const ticketInfosList = [...dailyTicketInfos.value]
+    return ticketInfosList.reduce((min, p) => {
+      const currentDate = createDateFromYYYYMMDD(p.dayMonthYear);
+      return currentDate < min ? currentDate : min;
+    }, moment().toDate());
+  }
+  return null;
+});
+
+const lastTicketDayDate = computed(() => {
+  if (dailyTicketInfos && dailyTicketInfos.value.length > 0) {
+    return dailyTicketInfos.value.reduce((max, p) => {
+      const currentDate = createDateFromYYYYMMDD(p.dayMonthYear);
+      return currentDate > max ? currentDate : max;
+    }, moment().toDate());
+  }
+  return null;
+});
+
+const ticketDayDateLabels = computed(() => {
   const dateLabels: string[] = [];
-  if (firstTicketDate.value && lastTicketDate.value) {
-    let currentDate = new Date(firstTicketDate.value);
-    while (currentDate <= lastTicketDate.value) {
-      // DD-MM-YYYY
-      const formattedDate = currentDate.toLocaleString("fr-FR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-      dateLabels.push(formattedDate);
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
+  let currentDate = new Date(firstTicketDayDate.value);
+  while (currentDate <= lastTicketDayDate.value) {
+    const formattedDate = currentDate.toLocaleString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    dateLabels.push(formattedDate);
+    currentDate.setDate(currentDate.getDate() + 1);
   }
   return dateLabels;
 });
+
+const filterDays = (range) => {
+  startDate.value = moment(range.start).format("YYYY-MM-DD");
+  endDate.value = moment(range.end).format("YYYY-MM-DD");
+};
 
 const dataListBenefitsByMonthAndYear = computed(() => {
   return ticketMonthDateLabels.value.map((monthYear) =>
@@ -414,7 +476,6 @@ const dataListBenefitsByMonthAndYear = computed(() => {
 });
 
 const dataListNumberByDay = computed(() => {
-  // get only 25 days
   const ticketListNbReservedByDay = ticketDayDateLabels.value.map((day) =>
       getTicketNumberByDay(day, dailyTicketInfos.value, 'nbReserved')
   );
@@ -430,6 +491,7 @@ const dataListNumberByDay = computed(() => {
   const ticketListNbCancelledByDay = ticketDayDateLabels.value.map((day) =>
       getTicketNumberByDay(day, dailyTicketInfos.value, 'nbCancelled')
   );
+
   return [
     {
       label: "Réservés",
