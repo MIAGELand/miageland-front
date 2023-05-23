@@ -5,6 +5,11 @@ export function createDateFromYYYYMM(date) {
     return new Date(dateArray[0], dateArray[1]);
 }
 
+export function createDateFromYYYYMMDD(date) {
+    const dateArray = date.split("-");
+    return new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+}
+
 export function getTicketNumberByMonthAndYear(monthYear: string, ticketInfos: MonthlyTicketInfos[], filter: string): number {
     const monthYearToCompare = monthYear.split("/").reverse().join("-");
     const ticketInfo = ticketInfos.find((info) => monthYearToCompare === info.monthYear.toString());
