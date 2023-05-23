@@ -101,7 +101,6 @@ watch(date, () => {
   generateRandomPrice();
 });
 const generateRandomPrice = () => {
-  console.log("generateRandomPrice");
   price.value = Math.floor(Math.random() * (1000 - 50 + 1)) + 50;
 };
 
