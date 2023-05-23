@@ -145,9 +145,23 @@
                 class="flex flex-col gap-2 w-full"
               >
                 <BarChart
-                  :data="ticketNumberByMonthAndYear"
-                  :labels="ticketDateLabels"
+                  :data="dataListNumberByMonthAndYear"
+                  :labels="ticketMonthDateLabels"
                   lineLabel="Nb tickets / mois"
+                />
+              </card-container>
+            </div>
+
+            <div class="w-full">
+              <card-container
+                  emoji="📊"
+                  title="Nb tickets / jours"
+                  class="flex flex-col gap-2 w-full"
+              >
+                <BarChart
+                    :data="dataListNumberByDay"
+                    :labels="ticketDayDateLabels"
+                    lineLabel="Nb tickets / jours"
                 />
               </card-container>
             </div>
@@ -159,8 +173,8 @@
                 class="flex flex-col gap-2 w-full"
               >
                 <LineChart
-                  :data="benefitsByMonthAndYear"
-                  :labels="ticketDateLabels"
+                  :data="dataListBenefitsByMonthAndYear"
+                  :labels="ticketMonthDateLabels"
                   lineLabel="Bénéfices / mois"
                 />
               </card-container>
@@ -186,7 +200,7 @@ import { useTicketStats } from "../../queries/ticket.query";
 import NumberElement from "../../components/dashboard/NumberElement.vue";
 import PieChart from "../../components/dashboard/PieChart.vue";
 import LineChart from "../../components/dashboard/LineChart.vue";
-import { createDateFromMMYY } from "../../util/date";
+import {createDateFromYYYYMM, getTicketNumberByDay, getTicketNumberByMonthAndYear} from "../../util/date";
 import BarChart from "../../components/dashboard/BarChart.vue";
 import { getCookie } from "../../util/cookie";
 import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
@@ -251,6 +265,10 @@ const monthlyTicketInfos = computed(() => {
   return ticketStats.value?.monthlyTicketInfos;
 });
 
+const dailyTicketInfos = computed(() => {
+  return ticketStats.value?.dailyTicketInfos;
+});
+
 const nbTicketTotal = computed(() => {
   return numberStatsTicket.value.nbTotal;
 });
@@ -297,113 +315,139 @@ const ticketNameList = computed(() => {
 
 const firstTicketDate = computed(() => {
   if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
-    const minDate = monthlyTicketInfos.value.reduce((min, p) => {
-      const currentDate = createDateFromMMYY(p.monthYear);
+    return monthlyTicketInfos.value.reduce((min, p) => {
+      const currentDate = createDateFromYYYYMM(p.monthYear);
       return currentDate < min ? currentDate : min;
-    }, createDateFromMMYY(monthlyTicketInfos.value[0].monthYear));
-
-    // Format minDate as "MM/YY"
-    return new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+    }, new Date());
   }
-
   return null;
 });
 
 const lastTicketDate = computed(() => {
   if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
-    const maxDate = monthlyTicketInfos.value.reduce((max, p) => {
-      const currentDate = createDateFromMMYY(p.monthYear);
+    return monthlyTicketInfos.value.reduce((max, p) => {
+      const currentDate = createDateFromYYYYMM(p.monthYear);
       return currentDate > max ? currentDate : max;
-    }, createDateFromMMYY(monthlyTicketInfos.value[0].monthYear));
-
-    // Format maxDate as "MM/YY"
-    return new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+    }, new Date());
   }
-
   return null;
 });
 
-// This function iterates on monthly tickets infos and for each value it inserts the date with MM/YY format
-// return an array of labels with the monthYear format "MM/YY"
-const ticketDateLabels = computed<string[]>(() => {
-  if (monthlyTicketInfos && monthlyTicketInfos.value.length > 0) {
-    const sortedTickets = [...monthlyTicketInfos.value].sort((a, b) => {
-      // Assuming monthYear is in the format "MM/YY"
-      const [aMonth, aYear] = a.monthYear.split("/");
-      const [bMonth, bYear] = b.monthYear.split("/");
-      const aDate = new Date(Number(`20${aYear}`), parseInt(aMonth) - 1);
-      const bDate = new Date(Number(`20${bYear}`), parseInt(bMonth) - 1);
-      return aDate.getTime() - bDate.getTime();
-    });
-    return sortedTickets.map((ticketInfo) => ticketInfo.monthYear);
+// Return a sorted list of all the months between the first and last ticket date
+// Format : MM-YYYY
+const ticketMonthDateLabels = computed<string[]>(() => {
+  const dateLabels: string[] = [];
+  if (firstTicketDate.value && lastTicketDate.value) {
+    let currentDate = new Date(firstTicketDate.value);
+    while (currentDate <= lastTicketDate.value) {
+      // MM-YYYY
+      const formattedDate = currentDate.toLocaleString("fr-FR", {
+        month: "2-digit",
+        year: "numeric",
+      });
+      dateLabels.push(formattedDate);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
   }
-  return [];
+  return dateLabels;
 });
 
-const ticketNumberByMonthAndYear = computed(() => {
-  const ticketListReservedByMonthAndYear = ticketDateLabels.value.map(
-    (monthYear) => {
-      const ticketInfo = monthlyTicketInfos.value.find(
-        (ticketInfo) => ticketInfo.monthYear === monthYear
-      );
-      return ticketInfo ? ticketInfo.numberStatsTicket.nbReserved : 0;
-    }
+const dataListNumberByMonthAndYear = computed(() => {
+
+  const ticketListNbReservedByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
+      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbReserved')
   );
 
-  const ticketListPaidByMonthAndYear = ticketDateLabels.value.map(
-    (monthYear) => {
-      const ticketInfo = monthlyTicketInfos.value.find(
-        (ticketInfo) => ticketInfo.monthYear === monthYear
-      );
-      return ticketInfo ? ticketInfo.numberStatsTicket.nbPaid : 0;
-    }
+  const ticketListNbPaidByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
+      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbPaid')
   );
 
-  const ticketListUsedByMonthAndYear = ticketDateLabels.value.map(
-    (monthYear) => {
-      const ticketInfo = monthlyTicketInfos.value.find(
-        (ticketInfo) => ticketInfo.monthYear === monthYear
-      );
-      return ticketInfo ? ticketInfo.numberStatsTicket.nbUsed : 0;
-    }
+  const ticketListNbUsedByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
+      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbUsed')
   );
 
-  const ticketListCancelledByMonthAndYear = ticketDateLabels.value.map(
-    (monthYear) => {
-      const ticketInfo = monthlyTicketInfos.value.find(
-        (ticketInfo) => ticketInfo.monthYear === monthYear
-      );
-      return ticketInfo ? ticketInfo.numberStatsTicket.nbCancelled : 0;
-    }
+  const ticketListNbCancelledByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
+      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbCancelled')
   );
-
   return [
     {
       label: "Réservés",
-      data: ticketListReservedByMonthAndYear,
+      data: ticketListNbReservedByMonthAndYear,
     },
     {
       label: "Payés",
-      data: ticketListPaidByMonthAndYear,
+      data: ticketListNbPaidByMonthAndYear,
     },
     {
       label: "Utilisés",
-      data: ticketListUsedByMonthAndYear,
+      data: ticketListNbUsedByMonthAndYear,
     },
     {
       label: "Annulés",
-      data: ticketListCancelledByMonthAndYear,
+      data: ticketListNbCancelledByMonthAndYear,
     },
   ];
 });
 
-const benefitsByMonthAndYear = computed(() => {
-  return ticketDateLabels.value.map((monthYear) => {
-    const ticketInfo = monthlyTicketInfos.value.find(
-      (ticketInfo) => ticketInfo.monthYear === monthYear
-    );
-    return ticketInfo ? ticketInfo.benefits : 0;
-  });
+const ticketDayDateLabels = computed<string[]>(() => {
+  const dateLabels: string[] = [];
+  if (firstTicketDate.value && lastTicketDate.value) {
+    let currentDate = new Date(firstTicketDate.value);
+    while (currentDate <= lastTicketDate.value) {
+      // DD-MM-YYYY
+      const formattedDate = currentDate.toLocaleString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      dateLabels.push(formattedDate);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+  return dateLabels;
+});
+
+const dataListBenefitsByMonthAndYear = computed(() => {
+  return ticketMonthDateLabels.value.map((monthYear) =>
+      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'benefits')
+  );
+});
+
+const dataListNumberByDay = computed(() => {
+  // get only 25 days
+  const ticketListNbReservedByDay = ticketDayDateLabels.value.map((day) =>
+      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbReserved')
+  );
+
+  const ticketListNbPaidByDay = ticketDayDateLabels.value.map((day) =>
+      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbPaid')
+  );
+
+  const ticketListNbUsedByDay = ticketDayDateLabels.value.map((day) =>
+      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbUsed')
+  );
+
+  const ticketListNbCancelledByDay = ticketDayDateLabels.value.map((day) =>
+      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbCancelled')
+  );
+  return [
+    {
+      label: "Réservés",
+      data: ticketListNbReservedByDay,
+    },
+    {
+      label: "Payés",
+      data: ticketListNbPaidByDay,
+    },
+    {
+      label: "Utilisés",
+      data: ticketListNbUsedByDay,
+    },
+    {
+      label: "Annulés",
+      data: ticketListNbCancelledByDay,
+    },
+  ];
 });
 </script>
 

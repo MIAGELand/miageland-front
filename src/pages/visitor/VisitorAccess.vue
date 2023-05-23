@@ -18,7 +18,7 @@
             :min-date="new Date()"
             :disabled-dates="disabledDates"
           />
-          <div class="flex flex-col gap-4 bg-teal-700 p-4 rounded-lg h-full">
+          <div class="flex flex-col gap-4 bg-teal-700 p-4 rounded-lg h-fit">
             <div>
               Prix :
               <span v-if="price !== 0 && date !== null"> {{ price }}€ </span>

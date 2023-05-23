@@ -17,8 +17,6 @@ import {
 import { ref } from "vue";
 import {
   generatePastelRGB,
-  getDifferentColors,
-  getRandomColor,
 } from "../../util/colors";
 
 const props = defineProps({
