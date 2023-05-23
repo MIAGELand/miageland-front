@@ -34,6 +34,11 @@ export async function getTicketStats(): Promise<TicketStats> {
   return response.data;
 }
 
+export async function getTicketStatsByRange(start: Ref<string>, end: Ref<string>): Promise<TicketStats> {
+  const response = await api.get(`/tickets/stats?start=${start.value}&end=${end.value}`);
+  return response.data;
+}
+
 export async function deleteAllTickets(): Promise<void> {
   const email = getCookie("email");
   await api.delete(`/tickets`, {

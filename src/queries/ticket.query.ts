@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/vue-query";
 import {
   getAllTickets,
   getTicketsByPage,
-  getTicketStats,
+  getTicketStats, getTicketStatsByRange,
 } from "../service/ticket-service";
 import { Ref } from "vue";
 export const ticketKeys = createQueryKeys("Ticket", {
@@ -19,6 +19,10 @@ export const ticketKeys = createQueryKeys("Ticket", {
     queryKey: null,
     queryFn: () => getTicketStats(),
   },
+  ticketStatsByDateRange: (startDate: Ref<string>, endDate: Ref<string>) => ({
+    queryKey: ["startDate", startDate, "endDate", endDate],
+    queryFn: () => getTicketStatsByRange(startDate, endDate),
+  }),
 });
 
 export function useTicketList() {
@@ -32,5 +36,11 @@ export function useTicketStats() {
 export function useTicketListByPage(page: Ref<number>) {
   return useQuery({
     ...ticketKeys.ticketListByPage(page),
+  });
+}
+
+export function useTicketStatsByDateRange(startDate: Ref<string>, endDate: Ref<string>) {
+  return useQuery({
+    ...ticketKeys.ticketStatsByDateRange(startDate, endDate),
   });
 }
