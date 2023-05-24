@@ -70,6 +70,9 @@ const { data: parkInfo } = useParkInfo();
 const { data: tickets, isLoading } = useTicketStats();
 
 const disabledDates = computed(() => {
+  if (tickets.value.dailyTicketInfos===null){
+    return [];
+  }
   const disabledDates = [];
   tickets.value.dailyTicketInfos.forEach((ticket) => {
     if (ticket.numberStatsTicket.nbTotal >= parkInfo?.value.gauge) {
@@ -84,6 +87,9 @@ const gauge = computed(() => {
 });
 
 const nbTicketsByDate = computed(() => {
+  if (tickets.value.dailyTicketInfos===null){
+    return 0;
+  }
   const ticket = tickets?.value.dailyTicketInfos.find((ticket) => {
     return (
       moment(ticket.dayMonthYear).format("YYYY-MM-DD") ===
