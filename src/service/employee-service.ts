@@ -15,7 +15,12 @@ export async function getEmployee(email: String): Promise<Employee> {
 }
 
 export async function getAllEmployees(): Promise<Employee[]> {
-  const response = await api.get(`/employees`);
+  const email = getCookie("email");
+  const response = await api.get(`/employees`, {
+    headers: {
+        Authorization: `email=${email}`,
+    }
+  });
   return response.data;
 }
 
@@ -58,7 +63,12 @@ export async function downgradeEmployee(id: number): Promise<void> {
 }
 
 export async function getEmployeeStats(): Promise<EmployeeStats> {
-  const response = await api.get(`/employees/stats`);
+  const email = getCookie("email");
+  const response = await api.get(`/employees/stats`, {
+    headers: {
+        Authorization: `email=${email}`,
+    }
+  });
   return response.data;
 }
 export const employeeService = {
