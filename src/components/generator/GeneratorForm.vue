@@ -1,50 +1,52 @@
 <template>
   <Toaster position="top-right" richColors closeButton :expand="false" />
-  <form>
-    <h1 class="text-2xl font-bold mb-4">{{ formData.name }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      <div
-        v-for="(type, field) in props.formData.data"
-        :key="field"
-        class="flex"
-      >
-        <div>
-          <label class="block font-medium mb-2 uppercase text-lg">{{
-            field
-          }}</label>
-          <div v-if="getInputType(type) !== 'select'">
-            <input
-              :type="getInputType(type)"
-              v-model="formData.data[field]"
-              :class="{ 'border-red-500 border-2': errors[field] }"
-              class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-          <div v-else>
-            <select
-              v-model="formData.data[field]"
-              :class="{ 'border-red-500 border-2': errors[field] }"
-              class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            >
-              <option
-                v-for="option in getOptions(type)"
-                :key="option"
-                :value="option"
+  <div class="bg-slate-600 p-4 rounded-lg shadow-xl">
+    <form>
+      <h1 class="text-2xl font-bold mb-4">{{ formData.name }}</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div
+            v-for="(type, field) in props.formData.data"
+            :key="field"
+            class="flex"
+        >
+          <div>
+            <label class="block font-medium mb-2 uppercase text-lg">{{
+                field
+              }}</label>
+            <div v-if="getInputType(type) !== 'select'">
+              <input
+                  :type="getInputType(type)"
+                  v-model="formData.data[field]"
+                  :class="{ 'border-red-500 border-2': errors[field] }"
+                  class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+            <div v-else>
+              <select
+                  v-model="formData.data[field]"
+                  :class="{ 'border-red-500 border-2': errors[field] }"
+                  class="border border-gray-400 text-gray-800 rounded py-2 px-3 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
-                {{ option }}
-              </option>
-            </select>
+                <option
+                    v-for="option in getOptions(type)"
+                    :key="option"
+                    :value="option"
+                >
+                  {{ option }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <generator-buttons
-        @generate-data="generateData"
-        @generate-random-data="generateRandomData"
-      />
-    </div>
-  </form>
+      <div>
+        <generator-buttons
+            @generate-data="generateData"
+            @generate-random-data="generateRandomData"
+        />
+      </div>
+    </form>
+  </div>
 </template>
 <script setup lang="ts">
 import { PropType, reactive, ref } from "vue";

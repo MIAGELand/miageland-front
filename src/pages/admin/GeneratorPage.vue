@@ -9,12 +9,13 @@
       </div>
 
       <!-- GENERATORS -->
-      <div class="m-8 flex flex-col gap-4">
+      <div class="m-8 flex flex-col">
+        <generator-navigation @nav="updatePage" :active="page" class="mb-4"/>
         <div
           v-for="element in elements"
-          class="bg-slate-600 p-4 rounded-lg shadow-xl"
         >
           <generator-form
+            v-if="page === element.route"
             :formData="element"
             @generateData="generateData"
           ></generator-form>
@@ -32,9 +33,16 @@ import { FormData } from "../../models/models";
 import { toast } from "vue-sonner";
 import { api } from "../../main";
 import { getCookie } from "../../util/cookie";
+import GeneratorNavigation from "../../components/generator/GeneratorNavigation.vue";
+import {ref} from "vue";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";
+
+const page = ref("employees")
+const updatePage = (nav) => {
+  page.value = nav
+}
 
 let elements = [
   {
@@ -64,6 +72,15 @@ let elements = [
       email: "email",
       date: "Date",
       price: "number",
+    },
+  },
+  {
+    name: "👨‍👩‍👧 Visitors",
+    route: "visitors",
+    data: {
+      name: "string",
+      surname: "string",
+      email: "email",
     },
   },
 ];
