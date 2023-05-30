@@ -11,6 +11,18 @@
 
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
+        <div>
+          <select
+              v-model="selected"
+              class="w-32 h-10 rounded-md px-2 text-black"
+          >
+            <option value="ALL">Tous</option>
+            <option value="RESERVED">Réservé</option>
+            <option value="PAID">Payé</option>
+            <option value="CANCELLED">Annulé</option>
+          </select>
+        </div>
+
         <div
           v-if="!isLoading"
           class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
@@ -21,6 +33,7 @@
             :key="ticket.id"
             @cancelTicket="cancel"
             @payTicket="pay"
+            :class="selected === 'ALL' ? '' : ticket.state === selected ? '' : 'hidden'"
           />
         </div>
       </div>
@@ -34,7 +47,7 @@ import {
   useTicketListByVisitor,
   visitorKeys,
 } from "../../queries/visitor.query";
-import { computed } from "vue";
+import {computed, ref} from "vue";
 import { getCookie } from "../../util/cookie";
 import VisitorReservationCard from "../../components/visitor/VisitorReservationCard.vue";
 import { toast, Toaster } from "vue-sonner";
@@ -47,6 +60,8 @@ const logoUrl = "src/assets/calendar.svg";
 
 const id = computed(() => getCookie("id"));
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
+
+const selected = ref("RESERVED");
 
 const sortedTickets = computed(() => {
   if (tickets) {

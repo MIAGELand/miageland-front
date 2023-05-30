@@ -11,8 +11,8 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY");
 </script>
 
 <template>
-  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 h-fit">
-    <div class="flex flex-col gap-2 px-4">
+  <div class="shadow-2xl bg-slate-600 rounded-lg py-2">
+    <div class="flex flex-col gap-2 px-4 h-full justify-between">
       <div class="flex justify-between">
         <div class="text-xl">
           <span>🆔 </span>
@@ -30,7 +30,7 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY");
         <span>📆 </span>
         <span>{{ date }}</span>
       </div>
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-end">
         <div class="text-xl">
           <span>💶 </span>
           <span>{{ ticket.price }} €</span>
@@ -39,7 +39,7 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY");
           <div v-if="ticket.state === 'PAID' || ticket.state === 'RESERVED'">
             <button
               @click="$emit('cancel-ticket', ticket.id)"
-              class="bg-red-700 text-white p-2 rounded-xl hover:bg-red-800"
+              class="bg-red-700 text-white px-2 py-1 rounded-md hover:bg-red-800"
             >
               Annuler
             </button>
@@ -47,7 +47,7 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY");
           <div v-if="ticket.state === 'RESERVED'">
             <button
               @click="$emit('pay-ticket', ticket.id)"
-              class="bg-blue-900 text-white p-2 rounded-xl hover:bg-blue-950"
+              class="bg-blue-900 text-white px-2 py-1 rounded-md hover:bg-blue-950"
             >
               Payer
             </button>

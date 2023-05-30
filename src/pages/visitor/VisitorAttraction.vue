@@ -11,7 +11,7 @@
       <!-- ATTRACTIONS -->
       <div class="m-8 flex flex-col gap-4">
         <div v-if="!isLoading" class="flex flex-col gap-2">
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col gap-2 justify-between items-start lg:flex-row lg:items-center">
             <div class="text-xl flex items-center gap-2">
               <span class="text-3xl">{{ nbAttractionOpened }}</span>
               <span>attractions ouvertes sur</span>

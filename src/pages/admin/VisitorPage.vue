@@ -59,7 +59,9 @@ const { isLoading, data: visitorList } = useVisitorListByPage(page);
 const { data: visitorStats } = useVisitorStats();
 
 const totalVisitors = computed(() => {
-    return visitorStats.value.nbTotal
+    if (visitorStats) {
+        return visitorStats.value.nbTotal;
+    }
 });
 
 let rows = {
