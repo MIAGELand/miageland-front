@@ -57,7 +57,7 @@
               alt="visitors"
               class="h-8 w-8 mr-4"
           />
-          <button class="font-bold">Visitors</button>
+          <button class="font-bold">Visiteurs</button>
         </div>
 
         <div
