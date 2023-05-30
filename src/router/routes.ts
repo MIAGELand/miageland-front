@@ -13,6 +13,7 @@ import VisitorAccess from "../pages/visitor/VisitorAccess.vue";
 import VisitorReservation from "../pages/visitor/VisitorReservation.vue";
 import VisitorProfile from "../pages/visitor/VisitorProfile.vue";
 import VisitorAttraction from "../pages/visitor/VisitorAttraction.vue";
+import VisitorPage from "../pages/admin/VisitorPage.vue";
 const routerCheck = useRouter();
 
 const routes = [
@@ -35,6 +36,11 @@ const routes = [
     path: "/tickets",
     name: "Tickets",
     component: TicketPage,
+  },
+  {
+    path: "/visitors",
+    name: "Visitors",
+    component: VisitorPage,
   },
   {
     path: "/dashboard",
@@ -105,6 +111,7 @@ router.beforeEach((to, from, next) => {
       to.name === "Attractions" ||
       to.name === "Dashboard" ||
       to.name === "Generator" ||
+      to.name === "Visitors" ||
       to.name === "Tickets")
   ) {
     next({ name: "Home" });

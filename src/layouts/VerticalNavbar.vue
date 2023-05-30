@@ -49,6 +49,18 @@
         </div>
 
         <div
+            class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+            @click="$router.push({ name: 'Visitors' })"
+        >
+          <img
+              src="../assets/visitors.svg"
+              alt="visitors"
+              class="h-8 w-8 mr-4"
+          />
+          <button class="font-bold">Visitors</button>
+        </div>
+
+        <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
           @click="$router.push({ name: 'Park' })"
         >

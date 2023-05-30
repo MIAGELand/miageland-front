@@ -10,6 +10,10 @@ export interface EmployeeStats {
   nbClassic: number;
 }
 
+export interface VisitorStats {
+    nbTotal: number;
+}
+
 export interface NumberStatsTicket {
   nbTotal: number;
   nbReserved: number;
