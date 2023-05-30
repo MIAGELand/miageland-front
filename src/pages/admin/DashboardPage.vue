@@ -217,14 +217,13 @@ import {
 } from "../../queries/employee.query";
 import CardContainer from "../../components/dashboard/CardContainer.vue";
 import { useAttractionStats } from "../../queries/attraction.query";
-import {computed, ref, watch} from "vue";
+import {computed, ref} from "vue";
 import {useTicketStats, useTicketStatsByDateRange} from "../../queries/ticket.query";
 import NumberElement from "../../components/dashboard/NumberElement.vue";
 import PieChart from "../../components/dashboard/PieChart.vue";
 import LineChart from "../../components/dashboard/LineChart.vue";
 import {
   createDateFromYYYYMM,
-  createDateFromYYYYMMDD,
   getTicketNumberByDay,
   getTicketNumberByMonthAndYear
 } from "../../util/date";
@@ -241,10 +240,7 @@ const logoUrl = "src/assets/dashboard.svg";
 // init start date at the beginning of the month and end date at the end of year
 const startDate = ref(moment().startOf('month').format("YYYY-MM-DD"));
 const endDate = ref(moment().endOf('year').format("YYYY-MM-DD"));
-// Min date is beginning of the year
-const minDate = ref(moment().startOf('year').toDate());
-// Max date is today by default
-const maxDate = ref(moment().toDate());
+
 const { data: attractionStats, isLoading: attractionStatsLoading } =
   useAttractionStats();
 const { data: employeeStats, isLoading: employeeStatsLoading } =

@@ -245,14 +245,19 @@ const check = (action: string, data: any) => {
         });
       break;
     case "cancel":
+      const prevState = data["state"];
       cancelTicket(data["id"])
         .then((data) => {
-          toast.success(
-            "Ticket annulé avec succès. " +
-              "Remboursement de " +
-              data["price"] +
-              "€."
-          );
+          if (prevState === "PAID") {
+            toast.success(
+                "Ticket annulé avec succès. " +
+                "Remboursement de " +
+                data["price"] +
+                "€."
+            );
+          } else if (prevState === "RESERVED") {
+            toast.success("Ticket annulé avec succès. Pas de remboursement.");
+          }
           emit("refresh");
         })
         .catch(() => {

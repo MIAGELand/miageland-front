@@ -58,14 +58,19 @@ const sortedTickets = computed(() => {
 });
 
 const cancel = (ticketId: number) => {
+  const prevState = tickets.value?.find((ticket) => ticket.id === ticketId)?.state;
   cancelTicket(ticketId)
     .then((data) => {
-      toast.success(
-        "Ticket annulé avec succès. " +
-          "Remboursement de " +
-          data["price"] +
-          "€."
-      );
+      if (prevState === "PAID") {
+        toast.success(
+            "Ticket annulé avec succès. " +
+            "Remboursement de " +
+            data["price"] +
+            "€."
+        );
+      } else if (prevState === "RESERVED") {
+        toast.success("Ticket annulé avec succès. Pas de remboursement.");
+      }
       refresh();
     })
     .catch(() => {
