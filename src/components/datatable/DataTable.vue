@@ -101,6 +101,7 @@ import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
 import NavigationButton from "./pagination/NavigationButton.vue";
 import LastButton from "./pagination/LastButton.vue";
 import moment from "moment";
+import {deleteVisitor} from "../../service/visitor-service";
 
 const props = defineProps({
   data: {
@@ -293,6 +294,16 @@ const check = (action: string, data: any) => {
         .catch(() => {
           toast.error("Erreur lors de l'ouverture de l'attraction.");
         });
+      break;
+    case "removeVisitor":
+      deleteVisitor(data["id"])
+          .then(() => {
+            toast.success("Visiteur supprimé avec succès.");
+            emit("refresh");
+          })
+          .catch(() => {
+            toast.error("Erreur lors de la suppression de l'utilisateur.");
+          });
       break;
     default:
       console.log("default");

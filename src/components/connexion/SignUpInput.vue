@@ -52,15 +52,17 @@ const surname = ref("");
 const signUp = async () => {
   api
     .post("/visitors", {
-      email: email.value,
-      name: name.value,
-      surname: surname.value,
+      "0": {
+        email: email.value,
+        name: name.value,
+        surname: surname.value,
+      }
     })
     .then((response) => {
-      document.cookie = "name=" + response.data.name + ";";
-      document.cookie = "surname=" + response.data.surname + ";";
-      document.cookie = "id=" + response.data.id + ";";
-      document.cookie = "email=" + response.data.email + ";";
+      document.cookie = "name=" + response.data[0].name + ";";
+      document.cookie = "surname=" + response.data[0].surname + ";";
+      document.cookie = "id=" + response.data[0].id + ";";
+      document.cookie = "email=" + response.data[0].email + ";";
       router.push({ name: "ParkAccess" });
     })
     .catch(() => {
