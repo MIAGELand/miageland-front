@@ -69,6 +69,19 @@
                 </div>
               </card-container>
               <card-container
+                  emoji="👨‍👩‍👧‍👦"
+                  title="Visiteurs"
+                  class="flex flex-col gap-2 grow"
+              >
+                <div class="flex items-baseline gap-2 justify-center">
+                  <NumberElement
+                      :data="nbVisitorTotal"
+                      title="Total"
+                      size="lg"
+                  />
+                </div>
+              </card-container>
+              <card-container
                 emoji="🎟️"
                 title="Billets"
                 class="flex flex-col gap-2 grow"
@@ -249,6 +262,7 @@ import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 import moment from "moment"
 import DashboardNavigation from "../../components/dashboard/DashboardNavigation.vue";
 import DateFilter from "../../components/dashboard/DateFilter.vue";
+import {useVisitorStats} from "../../queries/visitor.query";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
@@ -264,6 +278,7 @@ const { data: employeeStats, isLoading: employeeStatsLoading } =
 const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
 const { data: employeeList } = useEmployeeList();
 const { data: ticketsStatsByRange, isLoading: ticketsStatsRangeLoading} = useTicketStatsByDateRange(startDate, endDate);
+const { data: visitorStats, isLoading: visitorStatsLoading } = useVisitorStats();
 const page = ref("global")
 const updatePage = (nav) => {
     page.value = nav
@@ -282,8 +297,13 @@ const isLoading = computed(() => {
   return (
     attractionStatsLoading.value ||
     employeeStatsLoading.value ||
-    ticketStatsLoading.value
+    ticketStatsLoading.value ||
+    visitorStatsLoading.value
   );
+});
+
+const nbVisitorTotal = computed(() => {
+  return visitorStats.value?.nbTotal;
 });
 
 // when loaded, filter the data to get the number of employees, attractions and tickets
