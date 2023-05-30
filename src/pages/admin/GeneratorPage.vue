@@ -12,7 +12,7 @@
       <div class="m-8 flex flex-col gap-4">
         <div
           v-for="element in elements"
-          class="bg-slate-600 p-4 rounded-lg shadow-xl hover:bg-gray-700 transition"
+          class="bg-slate-600 p-4 rounded-lg shadow-xl"
         >
           <generator-form
             :formData="element"

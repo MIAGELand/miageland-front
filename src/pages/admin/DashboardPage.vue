@@ -139,7 +139,7 @@
           <div class="flex flex-col gap-4" v-if="page === 'timeline'">
             <div class="flex justify-between">
               <div class="text-2xl">🕙 Timeline</div>
-              <div class="flex flex-col gap-1">
+              <div class="flex flex-col gap-1 bg-gray-100 text-gray-900 p-3 rounded-lg">
                 <DateFilter @updateRange="filterDays"/>
                 <span class="flex gap-2 justify-between">
                   <span>From :</span>  <span>{{ startDate }}</span>
@@ -197,7 +197,23 @@
                   v-if="!ticketsStatsRangeLoading"
                   :data="dataListBenefitsByMonthAndYear"
                   :labels="ticketMonthDateLabels"
-                  lineLabel="Bénéfices / mois"
+                  lineLabel="Bénéfices"
+                />
+              </card-container>
+            </div>
+
+            <div class="w-full">
+              <card-container
+                  emoji="📊"
+                  title="Bénéfices / jours"
+                  class="flex flex-col gap-2 w-full"
+                  @filterRange="filterDays"
+              >
+                <LineChart
+                    v-if="!ticketsStatsRangeLoading"
+                    :data="dataListBenefitsByDay"
+                    :labels="ticketDayDateLabels"
+                    lineLabel="Bénéfices"
                 />
               </card-container>
             </div>
@@ -490,6 +506,12 @@ const dataListNumberByDay = computed(() => {
       data: ticketListNbCancelledByDay,
     },
   ];
+});
+
+const dataListBenefitsByDay = computed(() => {
+  return ticketDayDateLabels.value.map((day) =>
+      getTicketNumberByDay(day, dailyTicketInfos.value, 'benefits')
+  );
 });
 </script>
 

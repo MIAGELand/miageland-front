@@ -19,7 +19,7 @@ watch(range, () => {
   <DatePicker v-model.range="range" >
     <template #default="{ togglePopover }" class="flex flex-col gap-2">
       <button
-          class="px-3 py-2 bg-white text-sm text-black rounded-md hover:bg-teal-800 hover:text-white transition-all"
+          class="px-2 py-2 text-sm text-white rounded-md bg-gray-700 hover:bg-gray-800 hover:text-white transition-all"
           @click="togglePopover"
       >
         Select date
