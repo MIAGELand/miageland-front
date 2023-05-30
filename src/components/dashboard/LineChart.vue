@@ -15,9 +15,7 @@ import {
   Legend,
 } from "chart.js";
 import { ref } from "vue";
-import {
-  generatePastelRGB,
-} from "../../util/colors";
+import { generatePastelRGB } from "../../util/colors";
 
 const props = defineProps({
   data: Array,

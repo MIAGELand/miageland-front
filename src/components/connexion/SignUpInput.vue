@@ -56,7 +56,7 @@ const signUp = async () => {
         email: email.value,
         name: name.value,
         surname: surname.value,
-      }
+      },
     })
     .then((response) => {
       document.cookie = "name=" + response.data[0].name + ";";

@@ -1,8 +1,8 @@
 import { Ticket, Visitor } from "../models/models";
 import { api } from "../main";
 import { Ref } from "vue";
-import {deleteCookie, getCookie} from "../util/cookie";
-import {TicketStats, VisitorStats} from "../models/stats";
+import { deleteCookie, getCookie } from "../util/cookie";
+import { TicketStats, VisitorStats } from "../models/stats";
 
 export async function getVisitor(email: Ref<string>): Promise<Visitor> {
   return api.get(`/visitors/${email.value}`).then((response) => {
@@ -29,7 +29,7 @@ export async function getVisitorStats(): Promise<VisitorStats> {
   const response = await api.get(`/visitors/stats`, {
     headers: {
       Authorization: `email=${email}`,
-    }
+    },
   });
   return response.data;
 }
@@ -39,7 +39,7 @@ export async function getVisitorsByPage(page: Ref<number>): Promise<Visitor[]> {
   const response = await api.get(`/visitors?page=${page.value}`, {
     headers: {
       Authorization: `email=${email}`,
-    }
+    },
   });
   return response.data;
 }
@@ -47,5 +47,5 @@ export const visitorService = {
   getVisitor,
   getTicketListByVisitor,
   deleteVisitor,
-  getVisitorsByPage
+  getVisitorsByPage,
 };

@@ -8,8 +8,8 @@ export async function getAllTickets(): Promise<Ticket[]> {
   const email = getCookie("email");
   const response = await api.get(`/tickets/all`, {
     headers: {
-        Authorization: `email=${email}`,
-    }
+      Authorization: `email=${email}`,
+    },
   });
   return response.data;
 }
@@ -18,8 +18,8 @@ export async function getTicketsByPage(page: Ref<number>): Promise<Ticket[]> {
   const email = getCookie("email");
   const response = await api.get(`/tickets?page=${page.value}`, {
     headers: {
-        Authorization: `email=${email}`,
-    }
+      Authorization: `email=${email}`,
+    },
   });
   return response.data;
 }
@@ -31,11 +31,15 @@ export async function payTicket(id: number): Promise<Ticket> {
 
 export async function validateTicket(id: number): Promise<Ticket> {
   const email = getCookie("email");
-  const response = await api.patch(`/tickets/${id}`, { state: "USED" }, {
-    headers: {
+  const response = await api.patch(
+    `/tickets/${id}`,
+    { state: "USED" },
+    {
+      headers: {
         Authorization: `email=${email}`,
+      },
     }
-  });
+  );
   return response.data;
 }
 
@@ -48,19 +52,25 @@ export async function getTicketStats(): Promise<TicketStats> {
   const email = getCookie("email");
   const response = await api.get(`/tickets/stats`, {
     headers: {
-        Authorization: `email=${email}`,
-    }
+      Authorization: `email=${email}`,
+    },
   });
   return response.data;
 }
 
-export async function getTicketStatsByRange(start: Ref<string>, end: Ref<string>): Promise<TicketStats> {
+export async function getTicketStatsByRange(
+  start: Ref<string>,
+  end: Ref<string>
+): Promise<TicketStats> {
   const email = getCookie("email");
-  const response = await api.get(`/tickets/stats?start=${start.value}&end=${end.value}`, {
-    headers: {
+  const response = await api.get(
+    `/tickets/stats?start=${start.value}&end=${end.value}`,
+    {
+      headers: {
         Authorization: `email=${email}`,
+      },
     }
-  });
+  );
   return response.data;
 }
 

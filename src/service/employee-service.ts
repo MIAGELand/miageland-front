@@ -18,8 +18,8 @@ export async function getAllEmployees(): Promise<Employee[]> {
   const email = getCookie("email");
   const response = await api.get(`/employees`, {
     headers: {
-        Authorization: `email=${email}`,
-    }
+      Authorization: `email=${email}`,
+    },
   });
   return response.data;
 }
@@ -66,8 +66,8 @@ export async function getEmployeeStats(): Promise<EmployeeStats> {
   const email = getCookie("email");
   const response = await api.get(`/employees/stats`, {
     headers: {
-        Authorization: `email=${email}`,
-    }
+      Authorization: `email=${email}`,
+    },
   });
   return response.data;
 }

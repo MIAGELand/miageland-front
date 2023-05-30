@@ -1,8 +1,13 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { useQuery } from "@tanstack/vue-query";
-import {getTicketListByVisitor, getVisitor, getVisitorsByPage, getVisitorStats} from "../service/visitor-service";
+import {
+  getTicketListByVisitor,
+  getVisitor,
+  getVisitorsByPage,
+  getVisitorStats,
+} from "../service/visitor-service";
 import { Ref } from "vue";
-import {getTicketsByPage} from "../service/ticket-service";
+import { getTicketsByPage } from "../service/ticket-service";
 
 export const visitorKeys = createQueryKeys("Visitor", {
   getVisitor: (email: Ref<string>) => ({

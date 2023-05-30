@@ -12,7 +12,7 @@
       <div class="m-8 flex" v-if="isManager">
         <span v-if="isLoading"> Loading... </span>
         <div v-else class="flex flex-col gap-8 w-full">
-          <DashboardNavigation @nav="updatePage" :active="page"/>
+          <DashboardNavigation @nav="updatePage" :active="page" />
           <div v-if="page === 'global'" class="flex flex-col gap-4">
             <div class="text-2xl">🧮 Global</div>
             <div class="flex flex-wrap gap-4">
@@ -69,15 +69,15 @@
                 </div>
               </card-container>
               <card-container
-                  emoji="👨‍👩‍👧‍👦"
-                  title="Visiteurs"
-                  class="flex flex-col gap-2 grow"
+                emoji="👨‍👩‍👧‍👦"
+                title="Visiteurs"
+                class="flex flex-col gap-2 grow"
               >
                 <div class="flex items-baseline gap-2 justify-center">
                   <NumberElement
-                      :data="nbVisitorTotal"
-                      title="Total"
-                      size="lg"
+                    :data="nbVisitorTotal"
+                    title="Total"
+                    size="lg"
                   />
                 </div>
               </card-container>
@@ -152,13 +152,15 @@
           <div class="flex flex-col gap-4" v-if="page === 'timeline'">
             <div class="flex justify-between">
               <div class="text-2xl">🕙 Timeline</div>
-              <div class="flex flex-col gap-1 bg-gray-100 text-gray-900 p-3 rounded-lg">
-                <DateFilter @updateRange="filterDays"/>
+              <div
+                class="flex flex-col gap-1 bg-gray-100 text-gray-900 p-3 rounded-lg"
+              >
+                <DateFilter @updateRange="filterDays" />
                 <span class="flex gap-2 justify-between">
-                  <span>From :</span>  <span>{{ startDate }}</span>
+                  <span>From :</span> <span>{{ startDate }}</span>
                 </span>
                 <span class="flex gap-2 justify-between">
-                  <span>To :</span>  <span>{{ endDate }}</span>
+                  <span>To :</span> <span>{{ endDate }}</span>
                 </span>
               </div>
             </div>
@@ -180,22 +182,22 @@
 
             <div class="w-full">
               <card-container
-                  emoji="📊"
-                  title="Nb tickets / jours"
-                  class="flex flex-col gap-2 w-full"
-                  @filterRange="filterDays"
+                emoji="📊"
+                title="Nb tickets / jours"
+                class="flex flex-col gap-2 w-full"
+                @filterRange="filterDays"
               >
                 <BarChart
-                    v-if="!ticketsStatsRangeLoading"
-                    :data="dataListNumberByDay"
-                    :labels="ticketDayDateLabels"
-                    lineLabel="Nb tickets / jours"
+                  v-if="!ticketsStatsRangeLoading"
+                  :data="dataListNumberByDay"
+                  :labels="ticketDayDateLabels"
+                  lineLabel="Nb tickets / jours"
                 />
                 <BarChart
-                    v-else
-                    :data="[]"
-                    :labels="[]"
-                    lineLabel="Nb tickets / jours"
+                  v-else
+                  :data="[]"
+                  :labels="[]"
+                  lineLabel="Nb tickets / jours"
                 />
               </card-container>
             </div>
@@ -217,16 +219,16 @@
 
             <div class="w-full">
               <card-container
-                  emoji="📊"
-                  title="Bénéfices / jours"
-                  class="flex flex-col gap-2 w-full"
-                  @filterRange="filterDays"
+                emoji="📊"
+                title="Bénéfices / jours"
+                class="flex flex-col gap-2 w-full"
+                @filterRange="filterDays"
               >
                 <LineChart
-                    v-if="!ticketsStatsRangeLoading"
-                    :data="dataListBenefitsByDay"
-                    :labels="ticketDayDateLabels"
-                    lineLabel="Bénéfices"
+                  v-if="!ticketsStatsRangeLoading"
+                  :data="dataListBenefitsByDay"
+                  :labels="ticketDayDateLabels"
+                  lineLabel="Bénéfices"
                 />
               </card-container>
             </div>
@@ -246,30 +248,33 @@ import {
 } from "../../queries/employee.query";
 import CardContainer from "../../components/dashboard/CardContainer.vue";
 import { useAttractionStats } from "../../queries/attraction.query";
-import {computed, ref} from "vue";
-import {useTicketStats, useTicketStatsByDateRange} from "../../queries/ticket.query";
+import { computed, ref } from "vue";
+import {
+  useTicketStats,
+  useTicketStatsByDateRange,
+} from "../../queries/ticket.query";
 import NumberElement from "../../components/dashboard/NumberElement.vue";
 import PieChart from "../../components/dashboard/PieChart.vue";
 import LineChart from "../../components/dashboard/LineChart.vue";
 import {
   createDateFromYYYYMM,
   getTicketNumberByDay,
-  getTicketNumberByMonthAndYear
+  getTicketNumberByMonthAndYear,
 } from "../../util/date";
 import BarChart from "../../components/dashboard/BarChart.vue";
 import { getCookie } from "../../util/cookie";
 import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
-import moment from "moment"
+import moment from "moment";
 import DashboardNavigation from "../../components/dashboard/DashboardNavigation.vue";
 import DateFilter from "../../components/dashboard/DateFilter.vue";
-import {useVisitorStats} from "../../queries/visitor.query";
+import { useVisitorStats } from "../../queries/visitor.query";
 
 const title = "Dashboard";
 const logoUrl = "src/assets/dashboard.svg";
 
 // init start date at the beginning of the month and end date at the end of year
-const startDate = ref(moment().startOf('month').format("YYYY-MM-DD"));
-const endDate = ref(moment().endOf('year').format("YYYY-MM-DD"));
+const startDate = ref(moment().startOf("month").format("YYYY-MM-DD"));
+const endDate = ref(moment().endOf("year").format("YYYY-MM-DD"));
 
 const { data: attractionStats, isLoading: attractionStatsLoading } =
   useAttractionStats();
@@ -277,12 +282,14 @@ const { data: employeeStats, isLoading: employeeStatsLoading } =
   useEmployeeStats();
 const { data: ticketStats, isLoading: ticketStatsLoading } = useTicketStats();
 const { data: employeeList } = useEmployeeList();
-const { data: ticketsStatsByRange, isLoading: ticketsStatsRangeLoading} = useTicketStatsByDateRange(startDate, endDate);
-const { data: visitorStats, isLoading: visitorStatsLoading } = useVisitorStats();
-const page = ref("global")
+const { data: ticketsStatsByRange, isLoading: ticketsStatsRangeLoading } =
+  useTicketStatsByDateRange(startDate, endDate);
+const { data: visitorStats, isLoading: visitorStatsLoading } =
+  useVisitorStats();
+const page = ref("global");
 const updatePage = (nav) => {
-    page.value = nav
-}
+  page.value = nav;
+};
 
 // Check if employee is manager
 const isManager = computed(() => {
@@ -427,21 +434,40 @@ const ticketMonthDateLabels = computed<string[]>(() => {
 });
 
 const dataListNumberByMonthAndYear = computed(() => {
-
-  const ticketListNbReservedByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
-      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbReserved')
+  const ticketListNbReservedByMonthAndYear = ticketMonthDateLabels.value.map(
+    (monthYear) =>
+      getTicketNumberByMonthAndYear(
+        monthYear,
+        monthlyTicketInfos.value,
+        "nbReserved"
+      )
   );
 
-  const ticketListNbPaidByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
-      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbPaid')
+  const ticketListNbPaidByMonthAndYear = ticketMonthDateLabels.value.map(
+    (monthYear) =>
+      getTicketNumberByMonthAndYear(
+        monthYear,
+        monthlyTicketInfos.value,
+        "nbPaid"
+      )
   );
 
-  const ticketListNbUsedByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
-      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbUsed')
+  const ticketListNbUsedByMonthAndYear = ticketMonthDateLabels.value.map(
+    (monthYear) =>
+      getTicketNumberByMonthAndYear(
+        monthYear,
+        monthlyTicketInfos.value,
+        "nbUsed"
+      )
   );
 
-  const ticketListNbCancelledByMonthAndYear = ticketMonthDateLabels.value.map((monthYear) =>
-      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'nbCancelled')
+  const ticketListNbCancelledByMonthAndYear = ticketMonthDateLabels.value.map(
+    (monthYear) =>
+      getTicketNumberByMonthAndYear(
+        monthYear,
+        monthlyTicketInfos.value,
+        "nbCancelled"
+      )
   );
   return [
     {
@@ -487,25 +513,29 @@ const filterDays = (range) => {
 
 const dataListBenefitsByMonthAndYear = computed(() => {
   return ticketMonthDateLabels.value.map((monthYear) =>
-      getTicketNumberByMonthAndYear(monthYear, monthlyTicketInfos.value, 'benefits')
+    getTicketNumberByMonthAndYear(
+      monthYear,
+      monthlyTicketInfos.value,
+      "benefits"
+    )
   );
 });
 
 const dataListNumberByDay = computed(() => {
   const ticketListNbReservedByDay = ticketDayDateLabels.value.map((day) =>
-      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbReserved')
+    getTicketNumberByDay(day, dailyTicketInfos.value, "nbReserved")
   );
 
   const ticketListNbPaidByDay = ticketDayDateLabels.value.map((day) =>
-      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbPaid')
+    getTicketNumberByDay(day, dailyTicketInfos.value, "nbPaid")
   );
 
   const ticketListNbUsedByDay = ticketDayDateLabels.value.map((day) =>
-      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbUsed')
+    getTicketNumberByDay(day, dailyTicketInfos.value, "nbUsed")
   );
 
   const ticketListNbCancelledByDay = ticketDayDateLabels.value.map((day) =>
-      getTicketNumberByDay(day, dailyTicketInfos.value, 'nbCancelled')
+    getTicketNumberByDay(day, dailyTicketInfos.value, "nbCancelled")
   );
 
   return [
@@ -530,7 +560,7 @@ const dataListNumberByDay = computed(() => {
 
 const dataListBenefitsByDay = computed(() => {
   return ticketDayDateLabels.value.map((day) =>
-      getTicketNumberByDay(day, dailyTicketInfos.value, 'benefits')
+    getTicketNumberByDay(day, dailyTicketInfos.value, "benefits")
   );
 });
 </script>

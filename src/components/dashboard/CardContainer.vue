@@ -6,9 +6,7 @@ defineProps({
 </script>
 
 <template>
-  <div
-    class="shadow-2xl bg-slate-600 rounded-lg py-2 h-fit"
-  >
+  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 h-fit">
     <div class="flex items-center justify-between px-4">
       <div class="flex gap-4 items-center">
         <span class="text-3xl">{{ emoji }}</span>

@@ -11,7 +11,7 @@ export interface EmployeeStats {
 }
 
 export interface VisitorStats {
-    nbTotal: number;
+  nbTotal: number;
 }
 
 export interface NumberStatsTicket {

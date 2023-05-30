@@ -13,8 +13,8 @@
       <div class="m-8 flex flex-col gap-4">
         <div>
           <select
-              v-model="selected"
-              class="w-32 h-10 rounded-md px-2 text-black"
+            v-model="selected"
+            class="w-32 h-10 rounded-md px-2 text-black"
           >
             <option value="ALL">Tous</option>
             <option value="RESERVED">Réservé</option>
@@ -33,7 +33,13 @@
             :key="ticket.id"
             @cancelTicket="cancel"
             @payTicket="pay"
-            :class="selected === 'ALL' ? '' : ticket.state === selected ? '' : 'hidden'"
+            :class="
+              selected === 'ALL'
+                ? ''
+                : ticket.state === selected
+                ? ''
+                : 'hidden'
+            "
           />
         </div>
       </div>
@@ -47,7 +53,7 @@ import {
   useTicketListByVisitor,
   visitorKeys,
 } from "../../queries/visitor.query";
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import { getCookie } from "../../util/cookie";
 import VisitorReservationCard from "../../components/visitor/VisitorReservationCard.vue";
 import { toast, Toaster } from "vue-sonner";
@@ -73,12 +79,14 @@ const sortedTickets = computed(() => {
 });
 
 const cancel = (ticketId: number) => {
-  const prevState = tickets.value?.find((ticket) => ticket.id === ticketId)?.state;
+  const prevState = tickets.value?.find(
+    (ticket) => ticket.id === ticketId
+  )?.state;
   cancelTicket(ticketId)
     .then((data) => {
       if (prevState === "PAID") {
         toast.success(
-            "Ticket annulé avec succès. " +
+          "Ticket annulé avec succès. " +
             "Remboursement de " +
             data["price"] +
             "€."

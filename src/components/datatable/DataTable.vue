@@ -101,7 +101,7 @@ import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
 import NavigationButton from "./pagination/NavigationButton.vue";
 import LastButton from "./pagination/LastButton.vue";
 import moment from "moment";
-import {deleteVisitor} from "../../service/visitor-service";
+import { deleteVisitor } from "../../service/visitor-service";
 
 const props = defineProps({
   data: {
@@ -251,7 +251,7 @@ const check = (action: string, data: any) => {
         .then((data) => {
           if (prevState === "PAID") {
             toast.success(
-                "Ticket annulé avec succès. " +
+              "Ticket annulé avec succès. " +
                 "Remboursement de " +
                 data["price"] +
                 "€."
@@ -297,13 +297,13 @@ const check = (action: string, data: any) => {
       break;
     case "removeVisitor":
       deleteVisitor(data["id"])
-          .then(() => {
-            toast.success("Visiteur supprimé avec succès.");
-            emit("refresh");
-          })
-          .catch(() => {
-            toast.error("Erreur lors de la suppression de l'utilisateur.");
-          });
+        .then(() => {
+          toast.success("Visiteur supprimé avec succès.");
+          emit("refresh");
+        })
+        .catch(() => {
+          toast.error("Erreur lors de la suppression de l'utilisateur.");
+        });
       break;
     default:
       console.log("default");

@@ -14,27 +14,27 @@
         <div v-else class="rounded-lg">
           <!-- LOADING W/ EMPTY DATATABLE -->
           <data-table
-              v-if="isLoading"
-              :data="[]"
-              :rows="rows"
-              :action-list="actionList"
-              :entity="route"
-              :current-page="page + 1"
-              :total-data="totalVisitors"
-              @refresh="refresh"
-              @update="updateCurrentPage"
+            v-if="isLoading"
+            :data="[]"
+            :rows="rows"
+            :action-list="actionList"
+            :entity="route"
+            :current-page="page + 1"
+            :total-data="totalVisitors"
+            @refresh="refresh"
+            @update="updateCurrentPage"
           />
           <!-- DATATABLE WITH REAL DATA LOADED -->
           <data-table
-              v-else
-              :data="visitorList"
-              :rows="rows"
-              :action-list="actionList"
-              :entity="route"
-              :total-data="totalVisitors"
-              :current-page="page + 1"
-              @refresh="refresh"
-              @update="updateCurrentPage"
+            v-else
+            :data="visitorList"
+            :rows="rows"
+            :action-list="actionList"
+            :entity="route"
+            :total-data="totalVisitors"
+            :current-page="page + 1"
+            @refresh="refresh"
+            @update="updateCurrentPage"
           />
         </div>
       </div>
@@ -46,8 +46,12 @@
 import VerticalNavbar from "../../layouts/VerticalNavbar.vue";
 import DataTable from "../../components/datatable/DataTable.vue";
 import { useQueryClient } from "@tanstack/vue-query";
-import {computed, ref} from "vue";
-import { useVisitorListByPage, useVisitorStats, visitorKeys} from "../../queries/visitor.query";
+import { computed, ref } from "vue";
+import {
+  useVisitorListByPage,
+  useVisitorStats,
+  visitorKeys,
+} from "../../queries/visitor.query";
 
 const title = "Visiteurs";
 const logoUrl = "src/assets/visitors.svg";
@@ -59,9 +63,9 @@ const { isLoading, data: visitorList } = useVisitorListByPage(page);
 const { data: visitorStats } = useVisitorStats();
 
 const totalVisitors = computed(() => {
-    if (visitorStats) {
-        return visitorStats.value.nbTotal;
-    }
+  if (visitorStats) {
+    return visitorStats.value.nbTotal;
+  }
 });
 
 let rows = {

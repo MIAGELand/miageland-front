@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { Attraction } from "../../models/models";
-import {emojis} from "../../util/emoji";
+import { emojis } from "../../util/emoji";
 
 const props = defineProps({
   attraction: Object as PropType<Attraction>,

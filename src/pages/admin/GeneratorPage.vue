@@ -10,10 +10,8 @@
 
       <!-- GENERATORS -->
       <div class="m-8 flex flex-col">
-        <generator-navigation @nav="updatePage" :active="page" class="mb-4"/>
-        <div
-          v-for="element in elements"
-        >
+        <generator-navigation @nav="updatePage" :active="page" class="mb-4" />
+        <div v-for="element in elements">
           <generator-form
             v-if="page === element.route"
             :formData="element"
@@ -34,15 +32,15 @@ import { toast } from "vue-sonner";
 import { api } from "../../main";
 import { getCookie } from "../../util/cookie";
 import GeneratorNavigation from "../../components/generator/GeneratorNavigation.vue";
-import {ref} from "vue";
+import { ref } from "vue";
 
 const title = "Générateur";
 const logoUrl = "src/assets/generator.svg";
 
-const page = ref("employees")
+const page = ref("employees");
 const updatePage = (nav) => {
-  page.value = nav
-}
+  page.value = nav;
+};
 
 let elements = [
   {

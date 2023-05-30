@@ -70,7 +70,7 @@ const { data: parkInfo } = useParkInfo();
 const { data: tickets, isLoading } = useTicketStats();
 
 const disabledDates = computed(() => {
-  if (tickets.value.dailyTicketInfos===null){
+  if (tickets.value.dailyTicketInfos === null) {
     return [];
   }
   const disabledDates = [];
@@ -87,7 +87,7 @@ const gauge = computed(() => {
 });
 
 const nbTicketsByDate = computed(() => {
-  if (tickets.value.dailyTicketInfos===null){
+  if (tickets.value.dailyTicketInfos === null) {
     return 0;
   }
   const ticket = tickets?.value.dailyTicketInfos.find((ticket) => {
