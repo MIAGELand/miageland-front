@@ -67,7 +67,7 @@ const logoUrl = "src/assets/calendar.svg";
 const id = computed(() => getCookie("id"));
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
 
-const selected = ref("RESERVED");
+const selected = ref("ALL");
 
 const sortedTickets = computed(() => {
   if (tickets) {
