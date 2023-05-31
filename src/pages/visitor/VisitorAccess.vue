@@ -75,7 +75,7 @@ const disabledDates = computed(() => {
   }
   const disabledDates = [];
   tickets.value.dailyTicketInfos.forEach((ticket) => {
-    if (ticket.numberStatsTicket.nbTotal >= parkInfo?.value.gauge) {
+    if (ticket.numberStatsTicket.nbTotal >= gauge.value) {
       disabledDates.push(new Date(ticket.dayMonthYear));
     }
   });
