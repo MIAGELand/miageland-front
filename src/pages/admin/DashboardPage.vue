@@ -157,10 +157,10 @@
               >
                 <DateFilter @updateRange="filterDays" />
                 <span class="flex gap-2 justify-between">
-                  <span>From :</span> <span>{{ startDate }}</span>
+                  <span>Du :</span> <span>{{ startDate }}</span>
                 </span>
                 <span class="flex gap-2 justify-between">
-                  <span>To :</span> <span>{{ endDate }}</span>
+                  <span>Au :</span> <span>{{ endDate }}</span>
                 </span>
               </div>
             </div>
