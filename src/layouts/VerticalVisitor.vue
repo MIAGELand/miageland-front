@@ -13,9 +13,10 @@
       </div>
 
       <!-- NAV BAR-->
-      <div class="flex flex-col items-start mt-8">
+      <div class="flex flex-col items-start mt-8 gap-2">
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+          :class="{ 'bg-gray-700': $route.name === 'ParkAccess'}"
           @click="$router.push({ name: 'ParkAccess' })"
         >
           <img
@@ -27,6 +28,7 @@
         </div>
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+          :class="{ 'bg-gray-700': $route.name === 'VisitorAttraction'}"
           @click="$router.push({ name: 'VisitorAttraction' })"
         >
           <img
@@ -38,6 +40,7 @@
         </div>
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+          :class="{ 'bg-gray-700': $route.name === 'Reservations'}"
           @click="$router.push({ name: 'Reservations' })"
         >
           <img
@@ -49,6 +52,7 @@
         </div>
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
+          :class="{ 'bg-gray-700': $route.name === 'Profile'}"
           @click="$router.push({ name: 'Profile' })"
         >
           <img
