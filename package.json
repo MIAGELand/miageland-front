@@ -7,8 +7,8 @@
     "dev": "vite",
     "host": "vite --host",
     "build": "vite build",
-    "preview": "vite preview",
-    "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "serve": "vite preview --port 3000"
   },
   "dependencies": {
     "@lukemorales/query-key-factory": "^1.1.0",
