@@ -66,8 +66,12 @@ const name = getCookie("name");
 const surname = getCookie("surname");
 const email = getCookie("email");
 
-const { data: parkInfo } = useParkInfo();
-const { data: tickets, isLoading } = useTicketStats();
+const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
+const { data: tickets, isLoading: ticketStatsLoading } = useTicketStats();
+
+const isLoading = computed(() => {
+  return parkInfoLoading.value || ticketStatsLoading.value;
+});
 
 const disabledDates = computed(() => {
   if (tickets.value.dailyTicketInfos === null) {
@@ -83,7 +87,11 @@ const disabledDates = computed(() => {
 });
 
 const gauge = computed(() => {
-  return parkInfo?.value.gauge;
+  if (parkInfo.value === null) {
+    return 0;
+  } else {
+    return parkInfo.value.gauge;
+  }
 });
 
 const nbTicketsByDate = computed(() => {
