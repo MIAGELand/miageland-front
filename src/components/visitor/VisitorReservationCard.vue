@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType } from "vue";
+import {computed, PropType, ref} from "vue";
 import { Ticket } from "../../models/models";
 import moment from "moment";
 
@@ -8,10 +8,26 @@ const props = defineProps({
 });
 
 const date = moment(props.ticket.date).format("DD/MM/YYYY");
+const state = ref(props.ticket.state);
+const formattedState = computed(() => {
+  if (state.value === "PAID") {
+    return "Payé";
+  } else if (state.value === "CANCELLED") {
+    return "Annulé";
+  } else if (state.value === "USED") {
+    return "Utilisé";
+  } else if (state.value === "RESERVED") {
+    return "Réservé";
+  }
+});
 </script>
 
 <template>
-  <div class="shadow-2xl bg-slate-600 rounded-lg py-2">
+  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 border-4"
+       :class="{'border-green-500 ' : ticket.state === 'PAID',
+                'border-red-700' : ticket.state === 'CANCELLED',
+                'border-grey-200' : ticket.state === 'USED',
+                'border-orange-600' : ticket.state === 'RESERVED'}">
     <div class="flex flex-col gap-2 px-4 h-full justify-between">
       <div class="flex justify-between">
         <div class="text-xl">
@@ -23,7 +39,7 @@ const date = moment(props.ticket.date).format("DD/MM/YYYY");
           <span v-if="ticket.state === 'PAID'">🟢</span>
           <span v-if="ticket.state === 'USED'">⚪️</span>
           <span v-if="ticket.state === 'RESERVED'">🔒</span>
-          {{ ticket.state }}
+          {{ formattedState }}
         </div>
       </div>
       <div class="text-xl">

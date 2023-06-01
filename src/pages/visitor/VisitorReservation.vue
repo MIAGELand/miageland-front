@@ -11,36 +11,68 @@
 
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
-        <div>
-          <select
-            v-model="selected"
-            class="w-32 h-10 rounded-md px-2 text-black"
-          >
-            <option value="ALL">Tous</option>
-            <option value="RESERVED">Réservé</option>
-            <option value="PAID">Payé</option>
-            <option value="CANCELLED">Annulé</option>
-          </select>
-        </div>
 
+        <div class="flex flex-col bg-white rounded-lg p-2 gap-4 md:flex-row justify-between items-center">
+
+          <div class="flex gap-4 h-full">
+            <!-- STATES FILTER -->
+            <div class="flex flex-col text-gray-900 h-full justify-evenly">
+              État(s) :
+              <div class="grid grid-cols-2 gap-2">
+                <div
+                    v-for="(state, index) in states"
+                    :key="index"
+                    class="flex gap-2 items-center"
+                >
+                  <input
+                      type="checkbox"
+                      :id="state"
+                      :value="state"
+                      v-model="selectedStates"
+                      class="form-checkbox h-5 w-5 text-gray-700"
+                  />
+                  <label :for="state" class="text-gray-700">{{ formattedState(state) }}</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SEPARATOR -->
+            <div class="h-full w-1 bg-gray-700 rounded"></div>
+
+            <div
+                class="flex flex-col gap-1 text-gray-700"
+            >
+              <DateFilter @updateRange="filterDays" />
+              <span class="flex gap-2 justify-between">
+                  <span>Du :</span> <span>{{ startDate }}</span>
+                </span>
+              <span class="flex gap-2 justify-between">
+                  <span>Au :</span> <span>{{ endDate }}</span>
+                </span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4 h-full md:flex-row">
+            <button class="px-2 py-2 text-white rounded-lg bg-red-800 h-full hover:bg-red-900 transition-all"
+            @click="reset">Reset</button>
+          </div>
+        </div>
         <div
           v-if="!isLoading"
-          class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
         >
-          <visitor-reservation-card
-            v-for="ticket in sortedTickets"
-            :ticket="ticket"
-            :key="ticket.id"
-            @cancelTicket="cancel"
-            @payTicket="pay"
-            :class="
-              selected === 'ALL'
-                ? ''
-                : ticket.state === selected
-                ? ''
-                : 'hidden'
-            "
-          />
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <visitor-reservation-card
+                v-for="ticket in formattedTickets"
+                :ticket="ticket"
+                :key="ticket.id"
+                @cancelTicket="cancel"
+                @payTicket="pay"
+                :class="selectedStates.includes(ticket.state) ? '' : 'hidden'"
+            />
+          </div>
+          <div v-if="getNbTickets() === 0" class="text-3xl text-center mt-4">
+            <span>😢 Pas de réservations...</span>
+          </div>
         </div>
       </div>
     </div>
@@ -59,6 +91,8 @@ import VisitorReservationCard from "../../components/visitor/VisitorReservationC
 import { toast, Toaster } from "vue-sonner";
 import { cancelTicket, payTicket } from "../../service/ticket-service";
 import { useQueryClient } from "@tanstack/vue-query";
+import DateFilter from "../../components/dashboard/DateFilter.vue";
+import moment from "moment/moment";
 let queryClient = useQueryClient();
 
 const title = "Réservations";
@@ -67,14 +101,38 @@ const logoUrl = "src/assets/calendar.svg";
 const id = computed(() => getCookie("id"));
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));
 
-const selected = ref("ALL");
+// init start date at the beginning of the month and end date at the end of year
+const startDate = ref(moment().startOf("month").format("YYYY-MM-DD"));
+const endDate = ref(moment().endOf("year").format("YYYY-MM-DD"));
 
-const sortedTickets = computed(() => {
+const states = ["RESERVED", "PAID", "CANCELLED", "USED"];
+
+const selectedStates = ref(["RESERVED", "PAID", "CANCELLED", "USED"]);
+
+const reset = () => {
+  startDate.value = moment().startOf("month").format("YYYY-MM-DD");
+  endDate.value = moment().endOf("year").format("YYYY-MM-DD");
+  selectedStates.value = ["RESERVED", "PAID", "CANCELLED", "USED"];
+};
+
+const formattedTickets = computed(() => {
   if (tickets) {
     const ticketList = [...tickets.value];
-    return ticketList.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
+    return ticketList
+      .sort((a, b) => {
+        return (
+          moment(b.date).toDate().getTime() -
+          moment(a.date).toDate().getTime()
+        );
+      })
+      .filter((ticket) => {
+        return (
+          moment(ticket.date).format("YYYY-MM-DD") >=
+            startDate.value &&
+          moment(ticket.date).format("YYYY-MM-DD") <=
+            endDate.value
+        );
+      });
   }
 });
 
@@ -110,6 +168,43 @@ const pay = (ticketId: number) => {
     .catch(() => {
       toast.error("Erreur lors du paiement du ticket.");
     });
+};
+
+const filterDays = (range) => {
+  startDate.value = moment(range.start).format("YYYY-MM-DD");
+  endDate.value = moment(range.end).format("YYYY-MM-DD");
+};
+
+const formattedState = (state) => {
+  switch (state) {
+    case "RESERVED":
+      return "Réservé";
+    case "PAID":
+      return "Payé";
+    case "CANCELLED":
+      return "Annulé";
+    case "USED":
+      return "Utilisé";
+    default:
+      return "Inconnu";
+  }
+};
+
+const getNbTickets = () => {
+  if (tickets) {
+    return tickets.value
+      .filter((ticket) => {
+        return (
+          moment(ticket.date).format("YYYY-MM-DD") >=
+            startDate.value &&
+          moment(ticket.date).format("YYYY-MM-DD") <=
+            endDate.value
+        );
+      })
+      .filter((ticket) => {
+        return selectedStates.value.includes(ticket.state);
+      }).length;
+  }
 };
 
 const refresh = async () => {
