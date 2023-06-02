@@ -4,7 +4,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="locker" class="h-8 w-8 mr-4" />
+        <img src="../../assets/generator.svg" alt="locker" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -35,7 +35,7 @@ import GeneratorNavigation from "../../components/generator/GeneratorNavigation.
 import { ref } from "vue";
 
 const title = "Générateur";
-const logoUrl = "src/assets/generator.svg";
+const logoUrl = "../../assets/generator.svg";
 
 const page = ref("employees");
 const updatePage = (nav) => {

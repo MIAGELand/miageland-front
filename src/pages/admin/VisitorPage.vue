@@ -4,7 +4,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="visitor" class="h-8 w-8 mr-4" />
+        <img src="../../assets/visitors.svg" alt="visitor" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -54,7 +54,7 @@ import {
 } from "../../queries/visitor.query";
 
 const title = "Visiteurs";
-const logoUrl = "src/assets/visitors.svg";
+const logoUrl = "../../assets/visitors.svg";
 const route = "visitors";
 const queryClient = useQueryClient();
 const page = ref(0);

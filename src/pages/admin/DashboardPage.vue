@@ -1,10 +1,10 @@
 <template>
   <div class="flex">
-    <vertical-navbar :title="title" :logoUrl="logoUrl" />
+    <vertical-navbar :title="title" logoUrl="logoUrl" />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="locker" class="h-8 w-8 mr-4" />
+        <img src="../../assets/dashboard.svg" alt="locker" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -270,7 +270,6 @@ import DateFilter from "../../components/dashboard/DateFilter.vue";
 import { useVisitorStats } from "../../queries/visitor.query";
 
 const title = "Dashboard";
-const logoUrl = "src/assets/dashboard.svg";
 
 // init start date at the beginning of the month and end date at the end of year
 const startDate = ref(moment().startOf("month").format("YYYY-MM-DD"));

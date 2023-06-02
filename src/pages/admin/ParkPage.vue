@@ -5,7 +5,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="park" class="h-8 w-8 mr-4" />
+        <img src="../../assets/park.svg" alt="park" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -67,7 +67,7 @@ import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 const queryClient = useQueryClient();
 
 const title = "Parc";
-const logoUrl = "src/assets/park.svg";
+const logoUrl = "../../assets/park.svg";
 
 const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
 const { data: employeeList } = useEmployeeList();

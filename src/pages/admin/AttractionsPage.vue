@@ -4,7 +4,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="locker" class="h-8 w-8 mr-4" />
+        <img src="../../assets/dashboard.svg" alt="locker" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -40,7 +40,7 @@ import { getCookie } from "../../util/cookie";
 import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 
 const title = "Attractions";
-const logoUrl = "src/assets/attractions.svg";
+const logoUrl = "../../assets/attractions.svg";
 const route = "attractions";
 const queryClient = useQueryClient();
 const { data: attractionList, error, isLoading } = useAttractionList();

@@ -5,7 +5,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="visitor" class="h-8 w-8 mr-4" />
+        <img src="../../assets/calendar.svg" alt="visitor" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -104,7 +104,7 @@ import moment from "moment/moment";
 let queryClient = useQueryClient();
 
 const title = "Réservations";
-const logoUrl = "src/assets/calendar.svg";
+const logoUrl = "../../assets/calendar.svg";
 
 const id = computed(() => getCookie("id"));
 const { data: tickets, isLoading } = useTicketListByVisitor(Number(id.value));

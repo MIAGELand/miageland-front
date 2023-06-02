@@ -5,7 +5,7 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img :src="logoUrl" alt="visitor" class="h-8 w-8 mr-4" />
+        <img src="../../assets/visitors.svg" alt="visitor" class="h-8 w-8 mr-4" />
         {{ title }}
       </div>
 
@@ -36,7 +36,7 @@ import { useRouter } from "vue-router";
 import { toast, Toaster } from "vue-sonner";
 const router = useRouter();
 const title = "Profil";
-const logoUrl = "src/assets/visitors.svg";
+const logoUrl = "../../assets/visitors.svg";
 
 const name = computed(() => getCookie("name"));
 const surname = computed(() => getCookie("surname"));
