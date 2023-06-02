@@ -27,7 +27,7 @@ const formattedState = computed(() => {
        :class="{'border-green-500 ' : ticket.state === 'PAID',
                 'border-red-700' : ticket.state === 'CANCELLED',
                 'border-grey-200' : ticket.state === 'USED',
-                'border-orange-600' : ticket.state === 'RESERVED'}">
+                'border-yellow-400' : ticket.state === 'RESERVED'}">
     <div class="flex flex-col gap-2 px-4 h-full justify-between">
       <div class="flex justify-between">
         <div class="text-xl">

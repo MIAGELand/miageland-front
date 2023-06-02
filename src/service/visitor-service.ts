@@ -1,4 +1,4 @@
-import { Ticket, Visitor } from "../models/models";
+import {Ticket, Visitor, VisitorSummary} from "../models/models";
 import { api } from "../main";
 import { Ref } from "vue";
 import { deleteCookie, getCookie } from "../util/cookie";
@@ -34,7 +34,7 @@ export async function getVisitorStats(): Promise<VisitorStats> {
   return response.data;
 }
 
-export async function getVisitorsByPage(page: Ref<number>): Promise<Visitor[]> {
+export async function getVisitorsByPage(page: Ref<number>): Promise<VisitorSummary[]> {
   const email = getCookie("email");
   const response = await api.get(`/visitors?page=${page.value}`, {
     headers: {

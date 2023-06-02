@@ -12,12 +12,12 @@
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
 
-        <div class="flex flex-col bg-white rounded-lg p-2 gap-4 md:flex-row justify-between items-center">
+        <div class="flex flex-col bg-white rounded-lg p-2 px-4 w-fit gap-4 md:flex-row justify-between items-center">
 
-          <div class="flex gap-4 h-full">
+          <div class="flex flex-col gap-4 h-full items-end md:flex-row">
             <!-- STATES FILTER -->
             <div class="flex flex-col text-gray-900 h-full justify-evenly">
-              État(s) :
+              <span class="text-xl mb-2">État(s) :</span>
               <div class="grid grid-cols-2 gap-2">
                 <div
                     v-for="(state, index) in states"
@@ -39,18 +39,26 @@
             <!-- SEPARATOR -->
             <div class="h-full w-1 bg-gray-700 rounded"></div>
 
-            <div
-                class="flex flex-col gap-1 text-gray-700"
-            >
-              <DateFilter @updateRange="filterDays" />
-              <span class="flex gap-2 justify-between">
+            <div class="flex flex-col text-gray-900 h-full justify-between">
+              <span class="text-xl mb-2">Date :</span>
+              <div
+                  class="flex gap-2 text-gray-700"
+              >
+
+                <DateFilter @updateRange="filterDays" />
+                <div class="flex flex-col justify-center">
+                <span class="flex gap-2 justify-between">
                   <span>Du :</span> <span>{{ startDate }}</span>
-                </span>
-              <span class="flex gap-2 justify-between">
+              </span>
+                  <span class="flex gap-2 justify-between">
                   <span>Au :</span> <span>{{ endDate }}</span>
-                </span>
+              </span>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="h-full w-1 bg-gray-700 rounded"></div>
 
           <div class="flex flex-col gap-4 h-full md:flex-row">
             <button class="px-2 py-2 text-white rounded-lg bg-red-800 h-full hover:bg-red-900 transition-all"

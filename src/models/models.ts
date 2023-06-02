@@ -36,6 +36,14 @@ export interface Visitor {
   ticketList: Ticket[];
 }
 
+export interface VisitorSummary {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  nbTicket: number;
+}
+
 export interface FormData {
   name: string;
   route: string;

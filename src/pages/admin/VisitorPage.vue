@@ -73,6 +73,7 @@ let rows = {
   email: "Email",
   name: "Prénom",
   surname: "Nom",
+  nbTicket: "Nb tickets",
 };
 let actionList = {
   removeVisitor: {
