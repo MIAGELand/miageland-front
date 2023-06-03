@@ -8,15 +8,14 @@ const props = defineProps({
 });
 
 const date = moment(props.ticket.date).format("DD/MM/YYYY");
-const state = ref(props.ticket.state);
 const formattedState = computed(() => {
-  if (state.value === "PAID") {
+  if (props.ticket.state === "PAID") {
     return "Payé";
-  } else if (state.value === "CANCELLED") {
+  } else if (props.ticket.state === "CANCELLED") {
     return "Annulé";
-  } else if (state.value === "USED") {
+  } else if (props.ticket.state === "USED") {
     return "Utilisé";
-  } else if (state.value === "RESERVED") {
+  } else if (props.ticket.state === "RESERVED") {
     return "Réservé";
   }
 });
