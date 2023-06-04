@@ -3,7 +3,13 @@
   <div class="flex flex-col">
     <div class="flex justify-between items-end mb-4">
       <div class="flex">
-        <FilterToggle :rows="rows" :filters="filters" :loading="tableLoading" @filteredSearch="filteredSearch" @resetFilters="resetFilters"/>
+        <FilterToggle
+          :rows="rows"
+          :filters="filters"
+          :loading="tableLoading"
+          @filteredSearch="filteredSearch"
+          @resetFilters="resetFilters"
+        />
       </div>
       <div class="justify-end" v-if="!isFiltering && !tableLoading">
         <NavigationButton
@@ -47,15 +53,22 @@
         <table class="min-w-full divide-y divide-gray-400">
           <TableHeader :rows="rows" />
           <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="_ in 10" class="hover:bg-gray-100">
-              <td v-for="_ in rows" class="px-4 py-6 whitespace-nowrap text-gray-900 text-center">
-                  <div class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"></div>
+            <tr v-for="_ in 10" class="hover:bg-gray-100">
+              <td
+                v-for="_ in rows"
+                class="px-4 py-6 whitespace-nowrap text-gray-900 text-center"
+              >
+                <div
+                  class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"
+                ></div>
               </td>
               <!-- FOR ACTION COLUMN -->
               <td class="px-4 py-6 whitespace-nowrap text-gray-900 text-center">
-                <div class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"></div>
+                <div
+                  class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"
+                ></div>
               </td>
-          </tr>
+            </tr>
           </tbody>
         </table>
       </TableContainer>
@@ -95,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, watch, PropType, toRef} from "vue";
+import { ref, computed, watch, PropType, toRef } from "vue";
 import {
   cancelTicket,
   payTicket,
@@ -122,8 +135,8 @@ import LastButton from "./pagination/LastButton.vue";
 import moment from "moment";
 import { deleteVisitor } from "../../service/visitor-service";
 import FilterToggle from "./filter/FilterToggle.vue";
-import {api} from "../../main";
-import {getCookie} from "../../util/cookie";
+import { api } from "../../main";
+import { getCookie } from "../../util/cookie";
 
 const props = defineProps({
   data: {
@@ -157,7 +170,7 @@ const props = defineProps({
   initLoading: {
     type: Boolean,
     required: false,
-  }
+  },
 });
 
 const currentPage = ref(props.currentPage || 1);
@@ -334,11 +347,11 @@ const updateCurrentPage = (page: number) => {
 const filteredSearch = (data: any) => {
   tableLoading.value = true;
   const filtered = data.filter((row: any) => {
-    return row.value !== '' || row.options;
+    return row.value !== "" || row.options;
   });
   // Get last element from current url
   const lastElement = window.location.href.split("/").pop();
-  let url = lastElement + "/search?"
+  let url = lastElement + "/search?";
   // Build url with search params from filtered array
   filtered.forEach((element: any) => {
     if (element.value === undefined) {
@@ -355,11 +368,12 @@ const filteredSearch = (data: any) => {
   // Remove last character from url (last &)
   url = url.slice(0, -1);
   // Call to api with url
-  api.get(url, {
-    headers: {
-      Authorization: "email=" + getCookie("email")
-    },
-  })
+  api
+    .get(url, {
+      headers: {
+        Authorization: "email=" + getCookie("email"),
+      },
+    })
     .then((data) => {
       isFiltering.value = true;
       entityData.value = data.data;
@@ -384,8 +398,8 @@ const tableData = computed(() => {
   }
 });
 const resetFilters = () => {
-    isFiltering.value = false;
-    toast.success("Filtres réinitialisés avec succès.");
+  isFiltering.value = false;
+  toast.success("Filtres réinitialisés avec succès.");
 };
 
 // Watch for changes in current page

@@ -5,33 +5,39 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img src="../../assets/calendar.svg" alt="visitor" class="h-8 w-8 mr-4" />
+        <img
+          src="../../assets/calendar.svg"
+          alt="visitor"
+          class="h-8 w-8 mr-4"
+        />
         {{ title }}
       </div>
 
       <!-- RESERVATIONS -->
       <div class="m-8 flex flex-col gap-4">
-
-        <div class="flex flex-col bg-white rounded-lg p-2 px-4 w-fit gap-4 md:flex-row justify-between items-center">
-
+        <div
+          class="flex flex-col bg-white rounded-lg p-2 px-4 w-fit gap-4 md:flex-row justify-between items-center"
+        >
           <div class="flex flex-col gap-4 h-full items-end md:flex-row">
             <!-- STATES FILTER -->
             <div class="flex flex-col text-gray-900 h-full justify-evenly">
               <span class="text-xl mb-2">État(s) :</span>
               <div class="grid grid-cols-2 gap-2">
                 <div
-                    v-for="(state, index) in states"
-                    :key="index"
-                    class="flex gap-2 items-center"
+                  v-for="(state, index) in states"
+                  :key="index"
+                  class="flex gap-2 items-center"
                 >
                   <input
-                      type="checkbox"
-                      :id="state"
-                      :value="state"
-                      v-model="selectedStates"
-                      class="form-checkbox h-5 w-5 text-gray-700"
+                    type="checkbox"
+                    :id="state"
+                    :value="state"
+                    v-model="selectedStates"
+                    class="form-checkbox h-5 w-5 text-gray-700"
                   />
-                  <label :for="state" class="text-gray-700">{{ formattedState(state) }}</label>
+                  <label :for="state" class="text-gray-700">{{
+                    formattedState(state)
+                  }}</label>
                 </div>
               </div>
             </div>
@@ -41,18 +47,15 @@
 
             <div class="flex flex-col text-gray-900 h-full justify-between">
               <span class="text-xl mb-2">Date :</span>
-              <div
-                  class="flex gap-2 text-gray-700"
-              >
-
+              <div class="flex gap-2 text-gray-700">
                 <DateFilter @updateRange="filterDays" />
                 <div class="flex flex-col justify-center">
-                <span class="flex gap-2 justify-between">
-                  <span>Du :</span> <span>{{ startDate }}</span>
-              </span>
                   <span class="flex gap-2 justify-between">
-                  <span>Au :</span> <span>{{ endDate }}</span>
-              </span>
+                    <span>Du :</span> <span>{{ startDate }}</span>
+                  </span>
+                  <span class="flex gap-2 justify-between">
+                    <span>Au :</span> <span>{{ endDate }}</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -61,21 +64,23 @@
           <div class="h-full w-1 bg-gray-700 rounded"></div>
 
           <div class="flex flex-col gap-4 h-full md:flex-row">
-            <button class="px-2 py-2 text-white rounded-lg bg-red-800 h-full hover:bg-red-900 transition-all"
-            @click="reset">Reset</button>
+            <button
+              class="px-2 py-2 text-white rounded-lg bg-red-800 h-full hover:bg-red-900 transition-all"
+              @click="reset"
+            >
+              Reset
+            </button>
           </div>
         </div>
-        <div
-          v-if="!isLoading"
-        >
+        <div v-if="!isLoading">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <visitor-reservation-card
-                v-for="ticket in formattedTickets"
-                :ticket="ticket"
-                :key="ticket.id"
-                @cancelTicket="cancel"
-                @payTicket="pay"
-                :class="selectedStates.includes(ticket.state) ? '' : 'hidden'"
+              v-for="ticket in formattedTickets"
+              :ticket="ticket"
+              :key="ticket.id"
+              @cancelTicket="cancel"
+              @payTicket="pay"
+              :class="selectedStates.includes(ticket.state) ? '' : 'hidden'"
             />
           </div>
           <div v-if="getNbTickets() === 0" class="text-3xl text-center mt-4">
@@ -129,16 +134,13 @@ const formattedTickets = computed(() => {
     return ticketList
       .sort((a, b) => {
         return (
-          moment(b.date).toDate().getTime() -
-          moment(a.date).toDate().getTime()
+          moment(b.date).toDate().getTime() - moment(a.date).toDate().getTime()
         );
       })
       .filter((ticket) => {
         return (
-          moment(ticket.date).format("YYYY-MM-DD") >=
-            startDate.value &&
-          moment(ticket.date).format("YYYY-MM-DD") <=
-            endDate.value
+          moment(ticket.date).format("YYYY-MM-DD") >= startDate.value &&
+          moment(ticket.date).format("YYYY-MM-DD") <= endDate.value
         );
       });
   }
@@ -203,10 +205,8 @@ const getNbTickets = () => {
     return tickets.value
       .filter((ticket) => {
         return (
-          moment(ticket.date).format("YYYY-MM-DD") >=
-            startDate.value &&
-          moment(ticket.date).format("YYYY-MM-DD") <=
-            endDate.value
+          moment(ticket.date).format("YYYY-MM-DD") >= startDate.value &&
+          moment(ticket.date).format("YYYY-MM-DD") <= endDate.value
         );
       })
       .filter((ticket) => {

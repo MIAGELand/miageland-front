@@ -4,7 +4,11 @@
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
-        <img src="../../assets/employees.svg" alt="locker" class="h-8 w-8 mr-4" />
+        <img
+          src="../../assets/employees.svg"
+          alt="locker"
+          class="h-8 w-8 mr-4"
+        />
         {{ title }}
       </div>
 
@@ -90,7 +94,7 @@ let filters = {
   surname: {
     label: "Nom",
     type: "text",
-  }
+  },
 };
 
 let actionList = {

@@ -16,7 +16,7 @@
       <div class="flex flex-col items-start mt-8 gap-2">
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Employees'}"
+          :class="{ 'bg-gray-700': $route.name === 'Employees' }"
           @click="$router.push({ name: 'Employees' })"
         >
           <img
@@ -28,7 +28,7 @@
         </div>
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Attractions'}"
+          :class="{ 'bg-gray-700': $route.name === 'Attractions' }"
           @click="$router.push({ name: 'Attractions' })"
         >
           <img
@@ -40,7 +40,7 @@
         </div>
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Tickets'}"
+          :class="{ 'bg-gray-700': $route.name === 'Tickets' }"
           @click="$router.push({ name: 'Tickets' })"
         >
           <img
@@ -53,7 +53,7 @@
 
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Visitors'}"
+          :class="{ 'bg-gray-700': $route.name === 'Visitors' }"
           @click="$router.push({ name: 'Visitors' })"
         >
           <img
@@ -66,7 +66,7 @@
 
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Park'}"
+          :class="{ 'bg-gray-700': $route.name === 'Park' }"
           @click="$router.push({ name: 'Park' })"
         >
           <img src="../assets/park.svg" alt="park" class="h-8 w-8 mr-4" />
@@ -75,7 +75,7 @@
 
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Dashboard'}"
+          :class="{ 'bg-gray-700': $route.name === 'Dashboard' }"
           @click="$router.push({ name: 'Dashboard' })"
         >
           <img
@@ -92,7 +92,7 @@
 
         <div
           class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Generator'}"
+          :class="{ 'bg-gray-700': $route.name === 'Generator' }"
           @click="$router.push({ name: 'Generator' })"
         >
           <img

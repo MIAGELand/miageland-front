@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, PropType, ref} from "vue";
+import { computed, PropType, ref } from "vue";
 import { Ticket } from "../../models/models";
 import moment from "moment";
 
@@ -22,11 +22,15 @@ const formattedState = computed(() => {
 </script>
 
 <template>
-  <div class="shadow-2xl bg-slate-600 rounded-lg py-2 border-4"
-       :class="{'border-green-500 ' : ticket.state === 'PAID',
-                'border-red-700' : ticket.state === 'CANCELLED',
-                'border-grey-200' : ticket.state === 'USED',
-                'border-yellow-400' : ticket.state === 'RESERVED'}">
+  <div
+    class="shadow-2xl bg-slate-600 rounded-lg py-2 border-4"
+    :class="{
+      'border-green-500 ': ticket.state === 'PAID',
+      'border-red-700': ticket.state === 'CANCELLED',
+      'border-grey-200': ticket.state === 'USED',
+      'border-yellow-400': ticket.state === 'RESERVED',
+    }"
+  >
     <div class="flex flex-col gap-2 px-4 h-full justify-between">
       <div class="flex justify-between">
         <div class="text-xl">
