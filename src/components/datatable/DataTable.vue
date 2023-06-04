@@ -2,7 +2,9 @@
   <Toaster position="top-right" richColors />
   <div class="flex flex-col">
     <div class="flex justify-between items-end mb-4">
-      <FilterToggle :rows="rows" :filters="filters"/>
+      <div class="flex">
+        <FilterToggle :rows="rows" :filters="filters" @filteredSearch="filteredSearch"/>
+      </div>
       <div class="justify-end">
         <NavigationButton
           :currentPage="currentPage"
@@ -45,7 +47,7 @@
         <table class="min-w-full divide-y divide-gray-400">
           <TableHeader :rows="rows" />
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="data in props.data" class="hover:bg-gray-100">
+            <tr v-for="data in entityData" class="hover:bg-gray-100">
               <td
                 v-for="(key, col) in rows"
                 class="px-4 py-2 whitespace-nowrap text-gray-900 text-center"
@@ -102,6 +104,8 @@ import LastButton from "./pagination/LastButton.vue";
 import moment from "moment";
 import { deleteVisitor } from "../../service/visitor-service";
 import FilterToggle from "./filter/FilterToggle.vue";
+import {api} from "../../main";
+import {getCookie} from "../../util/cookie";
 
 const props = defineProps({
   data: {
@@ -175,22 +179,6 @@ const totalPages = computed(() => {
     return 1;
   }
 });
-
-// Compute filtered data based on search text and current page
-// TODO : modify with SEARCH button to avoid too many requests
-/*const filteredData = computed(() => {
-    dataFiltered.value = props.data;
-    if (searchText.value) {
-        dataFiltered.value = props.data.filter((item) => {
-            return Object.values(item).some((value) => {
-                return value.toString().toLowerCase().includes(searchText.value.toLowerCase());
-            });
-        });
-    }
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return dataFiltered.value.slice(startIndex, endIndex);
-});*/
 
 const emit = defineEmits(["refresh", "update"]);
 const check = (action: string, data: any) => {
@@ -317,6 +305,46 @@ const updateCurrentPage = (page: number) => {
   currentPage.value = page;
   emit("update", page);
 };
+
+const filteredSearch = (data: any) => {
+  const filtered = data.filter((row: any) => {
+    return row.value !== '' || row.options;
+  });
+  // Get last element from current url
+  const lastElement = window.location.href.split("/").pop();
+  let url = lastElement + "/search?"
+  // Build url with search params from filtered array
+  filtered.forEach((element: any) => {
+    if (element.value === undefined) {
+      // Loop on options and if checked = true, add to url
+      element.options.forEach((option: any) => {
+        if (option.checked) {
+          url += element.key + "=" + option.label.trim() + "&";
+        }
+      });
+    } else {
+      url += element.key + "=" + element.value + "&";
+    }
+  });
+  // Remove last character from url (last &)
+  url = url.slice(0, -1);
+  // Call to api with url
+  api.get(url, {
+    headers: {
+      Authorization: "email=" + getCookie("email")
+    },
+  })
+    .then((data) => {
+      entityData.value = data.data;
+      toast.success("Données récupérées avec succès.");
+      emit("refresh");
+    })
+    .catch(() => {
+      toast.error("Erreur lors de la récupération des données.");
+    });
+};
+
+const entityData = ref(props.data);
 
 // Watch for changes in current page
 watch(currentPage, (newPage) => {

@@ -1,36 +1,34 @@
 <script setup lang="ts">
-import {PropType, ref} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
   filters: {
     type: Object,
     required: true,
   },
-})
+});
 
-// Example of filter
-/*let filters = {
-  id: {
-    label: "ID",
-    type: "number",
-  },
-  email: {
-    label: "Email",
-    type: "text",
-  },
-  role: {
-    label: "Role",
-    type: "ADMIN | MANAGER | CLASSIC",
-  },
-  name: {
-    label: "Prénom",
-    type: "text",
-  },
-  surname: {
-    label: "Nom",
-    type: "text",
-  }
-};*/
+defineEmits(["filteredSearch"]);
+
+// Create a copy of the filters object and add a value property to each field
+const filtersData = computed(() => {
+  return Object.entries(props.filters).map(([key, value]) => {
+    if (value.type.includes('|')) {
+      const options = value.type.split('|');
+      return {
+        key: key,
+        ...value as { [key: string]: string },
+        options: options.map((option) => ({ label: option, checked: true })),
+      };
+    } else {
+      return {
+        key: key,
+        ...value as { [key: string]: string },
+        value: "",
+      };
+    }
+  });
+});
 
 const open = ref(false);
 const toggle = () => {
@@ -57,25 +55,31 @@ const toggle = () => {
     </div>
 
     <!-- FILTERS -->
-    <div v-if="open" class="bg-white text-gray-900 rounded-t-none rounded-xl p-4">
+    <div v-if="open" class="flex gap-2 bg-white text-gray-900 rounded-t-none rounded-xl p-4 pb-2">
       <div class="flex flex-col gap-2">
-        <div v-for="filter in props.filters" >
+        <div v-for="filter in filtersData">
           <div class="flex gap-2 text-gray-700 justify-between">
             <label :for="filter.label" class="text-gray-700 w-1/4">{{ filter.label }}</label>
             <input
                 v-if="!filter.type.includes('|')"
                 :id="filter.label"
                 :type="filter.type"
+                v-model="filter.value"
                 class="w-3/4 text-gray-700 px-2 border-gray-400 border bg-gray-100 rounded-md"
             />
             <div v-else class="flex flex-col">
-              <div v-for="option in filter.type.split('|')" class="flex justify-between gap-2">
-                <label :for="option" class="text-gray-700 text-sm">{{ option }}</label>
-                <input type="checkbox" :value="option" checked>
+              <div v-for="option in filter.options" class="flex justify-between gap-2">
+                <label :for="option.label" class="text-gray-700 text-sm">{{ option.label }}</label>
+                <input type="checkbox" :value="option.label" v-model="option.checked">
               </div>
             </div>
           </div>
         </div>
+        <button class="bg-zinc-700 rounded text-white h-full p-2 hover:bg-zinc-800"
+                @click="$emit('filteredSearch', filtersData)"
+        >
+          Lancer
+        </button>
       </div>
     </div>
   </div>
