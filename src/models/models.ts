@@ -18,8 +18,8 @@ export interface Ticket {
   date: Date;
   price: number;
   state: TicketState;
-  nameVisitor: string;
-  idVisitor: number;
+  visitorName: string;
+  visitorId: number;
 }
 
 export interface Attraction {
