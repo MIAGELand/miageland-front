@@ -10,14 +10,25 @@
 
       <!-- EMPLOYEES -->
       <div class="m-8" v-if="!isClassic">
-        <span v-if="isLoading">Loading...</span>
-        <div v-else class="rounded-lg">
+        <div class="rounded-lg">
           <data-table
+            v-if="isLoading"
+            :data="[]"
+            :rows="rows"
+            :action-list="actionList"
+            :entity="route"
+            :filters="filters"
+            :initLoading="isLoading"
+            @refresh="refresh"
+          ></data-table>
+          <data-table
+            v-else
             :data="attractionList"
             :rows="rows"
             :action-list="actionList"
             :entity="route"
             :filters="filters"
+            :initLoading="isLoading"
             @refresh="refresh"
           ></data-table>
         </div>

@@ -21,6 +21,7 @@
             :current-page="page + 1"
             :total-data="totalTickets"
             :filters="filters"
+            :initLoading="isLoading"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -34,6 +35,7 @@
             :total-data="totalTickets"
             :current-page="page + 1"
             :filters="filters"
+            :initLoading="isLoading"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -68,8 +70,8 @@ const totalTickets = computed(
 
 let rows = {
   id: "ID_t",
-  idVisitor: "ID_v",
-  nameVisitor: "Visiteur",
+  visitorId: "ID_v",
+  visitorName: "Visiteur",
   price: "Prix",
   state: "Etat",
   date: "Date",
@@ -79,21 +81,13 @@ let filters = {
     label: "ID",
     type: "number",
   },
-  idVisitor: {
-    label: "ID_v",
-    type: "number",
-  },
-  nameVisitor: {
-    label: "Visiteur",
-    type: "text",
-  },
   price: {
     label: "Prix",
     type: "number",
   },
   state: {
     label: "Etat",
-    type: "text",
+    type: "RESERVED | PAID | CANCELLED | USED",
   },
   date: {
     label: "Date",
@@ -117,10 +111,12 @@ let actionList = {
 };
 
 const updateCurrentPage = (newPage: number) => {
+  console.log("updateCurrentPage");
   page.value = newPage - 1;
 };
 
 const refresh = async () => {
+  console.log("refresh");
   await queryClient.refetchQueries({
     ...ticketKeys.ticketListByPage(page),
   });

@@ -10,8 +10,7 @@
 
       <!-- VISITORS -->
       <div class="m-8">
-        <span v-if="isLoading">Loading...</span>
-        <div v-else class="rounded-lg">
+        <div class="rounded-lg">
           <!-- LOADING W/ EMPTY DATATABLE -->
           <data-table
             v-if="isLoading"
@@ -22,6 +21,7 @@
             :current-page="page + 1"
             :total-data="totalVisitors"
             :filters="filters"
+            :initLoading="isLoading"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -35,6 +35,7 @@
             :total-data="totalVisitors"
             :current-page="page + 1"
             :filters="filters"
+            :initLoading="isLoading"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -94,11 +95,7 @@ let filters = {
   surname: {
     label: "Nom",
     type: "text",
-  },
-  nbTicket: {
-    label: "Nb tickets",
-    type: "number",
-  },
+  }
 };
 
 let actionList = {

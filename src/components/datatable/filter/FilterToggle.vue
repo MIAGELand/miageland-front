@@ -6,9 +6,13 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  loading: {
+    type: Boolean,
+    required: true,
+  },
 });
 
-defineEmits(["filteredSearch"]);
+defineEmits(["filteredSearch", "resetFilters"]);
 
 // Create a copy of the filters object and add a value property to each field
 const filtersData = computed(() => {
@@ -75,10 +79,17 @@ const toggle = () => {
             </div>
           </div>
         </div>
-        <button class="bg-zinc-700 rounded text-white h-full p-2 hover:bg-zinc-800"
+        <button class="bg-zinc-700 rounded text-white h-full p-2 enabled:hover:bg-zinc-800 disabled:opacity-50"
                 @click="$emit('filteredSearch', filtersData)"
+                :disabled="loading"
         >
           Lancer
+        </button>
+        <button class="bg-red-800 rounded text-white h-full p-2 enabled:hover:bg-red-900 disabled:opacity-50"
+                @click="$emit('resetFilters')"
+                :disabled="loading"
+        >
+          Reset
         </button>
       </div>
     </div>

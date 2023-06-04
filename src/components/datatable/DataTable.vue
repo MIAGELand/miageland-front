@@ -3,9 +3,9 @@
   <div class="flex flex-col">
     <div class="flex justify-between items-end mb-4">
       <div class="flex">
-        <FilterToggle :rows="rows" :filters="filters" @filteredSearch="filteredSearch"/>
+        <FilterToggle :rows="rows" :filters="filters" :loading="tableLoading" @filteredSearch="filteredSearch" @resetFilters="resetFilters"/>
       </div>
-      <div class="justify-end">
+      <div class="justify-end" v-if="!isFiltering && !tableLoading">
         <NavigationButton
           :currentPage="currentPage"
           :totalPages="totalPages"
@@ -42,12 +42,30 @@
         </NavigationButton>
       </div>
     </div>
-    <div class="-mt-2 overflow-x-auto">
+    <div v-if="tableLoading || initLoading">
       <TableContainer>
         <table class="min-w-full divide-y divide-gray-400">
           <TableHeader :rows="rows" />
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="data in entityData" class="hover:bg-gray-100">
+          <tr v-for="_ in 10" class="hover:bg-gray-100">
+              <td v-for="_ in rows" class="px-4 py-6 whitespace-nowrap text-gray-900 text-center">
+                  <div class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"></div>
+              </td>
+              <!-- FOR ACTION COLUMN -->
+              <td class="px-4 py-6 whitespace-nowrap text-gray-900 text-center">
+                <div class="animate-pulse bg-gray-300 h-4 rounded w-3/4 mx-auto"></div>
+              </td>
+          </tr>
+          </tbody>
+        </table>
+      </TableContainer>
+    </div>
+    <div class="-mt-2 overflow-x-auto" v-else>
+      <TableContainer>
+        <table class="min-w-full divide-y divide-gray-400">
+          <TableHeader :rows="rows" />
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="data in tableData" class="hover:bg-gray-100">
               <td
                 v-for="(key, col) in rows"
                 class="px-4 py-2 whitespace-nowrap text-gray-900 text-center"
@@ -77,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, PropType } from "vue";
+import {ref, computed, watch, PropType, toRef} from "vue";
 import {
   cancelTicket,
   payTicket,
@@ -135,6 +153,10 @@ const props = defineProps({
   filters: {
     type: Object,
     required: false,
+  },
+  initLoading: {
+    type: Boolean,
+    required: false,
   }
 });
 
@@ -171,6 +193,9 @@ const checkDisabledAttraction = (action: string, opened: boolean) => {
 
 // Compute total number of pages
 const totalPages = computed(() => {
+  if (isFiltering.value) {
+    return 1;
+  }
   if (props.totalData) {
     return Math.ceil(props.totalData / itemsPerPage);
   } else if (props.data.length > 0) {
@@ -307,6 +332,7 @@ const updateCurrentPage = (page: number) => {
 };
 
 const filteredSearch = (data: any) => {
+  tableLoading.value = true;
   const filtered = data.filter((row: any) => {
     return row.value !== '' || row.options;
   });
@@ -335,16 +361,32 @@ const filteredSearch = (data: any) => {
     },
   })
     .then((data) => {
+      isFiltering.value = true;
       entityData.value = data.data;
       toast.success("Données récupérées avec succès.");
-      emit("refresh");
+      tableLoading.value = false;
     })
     .catch(() => {
       toast.error("Erreur lors de la récupération des données.");
+      tableLoading.value = false;
     });
 };
 
-const entityData = ref(props.data);
+const entityData = ref([]);
+const isFiltering = ref(false);
+const tableLoading = ref(false);
+
+const tableData = computed(() => {
+  if (isFiltering.value) {
+    return entityData.value;
+  } else {
+    return props.data;
+  }
+});
+const resetFilters = () => {
+    isFiltering.value = false;
+    toast.success("Filtres réinitialisés avec succès.");
+};
 
 // Watch for changes in current page
 watch(currentPage, (newPage) => {
