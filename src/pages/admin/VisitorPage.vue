@@ -21,6 +21,7 @@
             :entity="route"
             :current-page="page + 1"
             :total-data="totalVisitors"
+            :filters="filters"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -33,6 +34,7 @@
             :entity="route"
             :total-data="totalVisitors"
             :current-page="page + 1"
+            :filters="filters"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -75,6 +77,30 @@ let rows = {
   surname: "Nom",
   nbTicket: "Nb tickets",
 };
+
+let filters = {
+  id: {
+    label: "ID",
+    type: "number",
+  },
+  email: {
+    label: "Email",
+    type: "email",
+  },
+  name: {
+    label: "Prénom",
+    type: "text",
+  },
+  surname: {
+    label: "Nom",
+    type: "text",
+  },
+  nbTicket: {
+    label: "Nb tickets",
+    type: "number",
+  },
+};
+
 let actionList = {
   removeVisitor: {
     icon: "❌",

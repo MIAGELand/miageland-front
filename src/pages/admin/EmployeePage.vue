@@ -17,6 +17,7 @@
             :rows="rows"
             :action-list="actionList"
             :entity="route"
+            :filters="filters"
             @refresh="refresh"
           ></data-table>
         </div>
@@ -57,6 +58,30 @@ let rows = {
   name: "Prénom",
   surname: "Nom",
 };
+
+let filters = {
+  id: {
+    label: "ID",
+    type: "number",
+  },
+  email: {
+    label: "Email",
+    type: "text",
+  },
+  role: {
+    label: "Role",
+    type: "ADMIN | MANAGER | CLASSIC",
+  },
+  name: {
+    label: "Prénom",
+    type: "text",
+  },
+  surname: {
+    label: "Nom",
+    type: "text",
+  }
+};
+
 let actionList = {
   upgrade: {
     icon: "🔼",

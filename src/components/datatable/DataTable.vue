@@ -1,8 +1,8 @@
 <template>
   <Toaster position="top-right" richColors />
   <div class="flex flex-col">
-    <div class="flex justify-between items-center mb-4">
-      <InputSearch @update="updateSearchText" :searchText="searchText" />
+    <div class="flex justify-between items-end mb-4">
+      <FilterToggle :rows="rows" :filters="filters"/>
       <div class="justify-end">
         <NavigationButton
           :currentPage="currentPage"
@@ -94,7 +94,6 @@ import {
 } from "../../service/attraction-service";
 import TableHeader from "./TableHeader.vue";
 import TableContainer from "./TableContainer.vue";
-import InputSearch from "./InputSearch.vue";
 import FirstButton from "./pagination/FirstButton.vue";
 import CurrentPageButton from "./pagination/CurrentPageButton.vue";
 import MiddleDotsButton from "./pagination/MiddleDotsButton.vue";
@@ -102,6 +101,7 @@ import NavigationButton from "./pagination/NavigationButton.vue";
 import LastButton from "./pagination/LastButton.vue";
 import moment from "moment";
 import { deleteVisitor } from "../../service/visitor-service";
+import FilterToggle from "./filter/FilterToggle.vue";
 
 const props = defineProps({
   data: {
@@ -128,11 +128,14 @@ const props = defineProps({
     type: Number,
     required: false,
   },
+  filters: {
+    type: Object,
+    required: false,
+  }
 });
 
 const currentPage = ref(props.currentPage || 1);
 const itemsPerPage = 100; // needs to be sync with backend pagination size
-const searchText = ref("");
 const rows = props.rows;
 
 const checkDisabledRole = (action: string, role: string) => {
@@ -310,10 +313,6 @@ const check = (action: string, data: any) => {
   }
 };
 
-const updateSearchText = (input: string) => {
-  searchText.value = input;
-};
-
 const updateCurrentPage = (page: number) => {
   currentPage.value = page;
   emit("update", page);
@@ -327,10 +326,5 @@ watch(currentPage, (newPage) => {
   if (newPage > totalPages.value) {
     currentPage.value = totalPages.value;
   }
-});
-
-// Watch for changes in search text
-watch(searchText, () => {
-  currentPage.value = 1;
 });
 </script>

@@ -20,6 +20,7 @@
             :entity="route"
             :current-page="page + 1"
             :total-data="totalTickets"
+            :filters="filters"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -32,6 +33,7 @@
             :entity="route"
             :total-data="totalTickets"
             :current-page="page + 1"
+            :filters="filters"
             @refresh="refresh"
             @update="updateCurrentPage"
           />
@@ -72,6 +74,33 @@ let rows = {
   state: "Etat",
   date: "Date",
 };
+let filters = {
+  id: {
+    label: "ID",
+    type: "number",
+  },
+  idVisitor: {
+    label: "ID_v",
+    type: "number",
+  },
+  nameVisitor: {
+    label: "Visiteur",
+    type: "text",
+  },
+  price: {
+    label: "Prix",
+    type: "number",
+  },
+  state: {
+    label: "Etat",
+    type: "text",
+  },
+  date: {
+    label: "Date",
+    type: "date",
+  },
+};
+
 let actionList = {
   pay: {
     icon: "💶",

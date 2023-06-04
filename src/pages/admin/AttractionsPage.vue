@@ -17,6 +17,7 @@
             :rows="rows"
             :action-list="actionList"
             :entity="route"
+            :filters="filters"
             @refresh="refresh"
           ></data-table>
         </div>
@@ -59,6 +60,21 @@ let rows = {
   id: "ID",
   name: "Nom",
   opened: "Ouverte",
+};
+
+let filters = {
+  id: {
+    label: "ID",
+    type: "number",
+  },
+  name: {
+    label: "Nom",
+    type: "text",
+  },
+  opened: {
+    label: "Ouverte",
+    type: "true | false",
+  }
 };
 let actionList = {
   open: {
