@@ -10,9 +10,7 @@
           class="flex"
         >
           <div>
-            <label class="block mb-2 uppercase text-lg">{{
-              field
-            }}</label>
+            <label class="block mb-2 uppercase text-lg">{{ field }}</label>
             <div v-if="getInputType(type) !== 'select'">
               <input
                 :type="getInputType(type)"

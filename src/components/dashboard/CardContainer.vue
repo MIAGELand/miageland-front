@@ -10,7 +10,7 @@ defineProps({
     <div class="flex items-center justify-between px-4">
       <div class="flex gap-4 items-center">
         <span class="text-3xl">{{ emoji }}</span>
-        <span class="text-xl  ">{{ title }}</span>
+        <span class="text-xl">{{ title }}</span>
       </div>
     </div>
     <div class="border border-white"></div>
