@@ -22,26 +22,28 @@
             :min-date="new Date()"
             :disabled-dates="disabledDates"
           />
-          <div class="flex flex-col gap-4 bg-teal-700 p-4 rounded-lg h-fit">
-            <div>
-              Prix :
-              <span v-if="price !== 0 && date !== null"> {{ price }}€ </span>
-            </div>
-            <div>
-              Nb places :
-              <span v-if="date !== null">
+          <div class="flex flex-col gap-4 w-full">
+            <div class="flex flex-col gap-4 bg-slate-600 p-4 rounded-lg h-fit">
+              <div>
+                <span class="font-semibold">Prix : </span>
+                <span v-if="price !== 0 && date !== null"> {{ price }}€ </span>
+              </div>
+              <div>
+                <span class="font-semibold">Nb places restantes : </span>
+                <span v-if="date !== null">
                 {{ nbTicketAvailable }}
               </span>
+              </div>
             </div>
+            <button
+                @click="reserve"
+                :disabled="date === null || nbTicketAvailable === 0"
+                class="bg-teal-700 enabled:hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+            >
+              Réserver
+            </button>
           </div>
         </div>
-        <button
-          @click="reserve"
-          :disabled="date === null || nbTicketAvailable === 0"
-          class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
-        >
-          Réserver
-        </button>
       </div>
     </div>
   </div>

@@ -40,7 +40,6 @@ import { useRouter } from "vue-router";
 import { toast, Toaster } from "vue-sonner";
 const router = useRouter();
 const title = "Profil";
-const logoUrl = "../../assets/visitors.svg";
 
 const name = computed(() => getCookie("name"));
 const surname = computed(() => getCookie("surname"));
