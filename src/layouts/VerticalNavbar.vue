@@ -86,7 +86,6 @@
 import { useEmployeeList } from "../queries/employee.query";
 import { computed } from "vue";
 import { getCookie } from "../util/cookie";
-import { defineProps } from "vue";
 import VerticalNavbarItem from "../components/navigation/VerticalNavbarItem.vue";
 
 const { data: employeeList } = useEmployeeList();
