@@ -6,7 +6,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="border-gray-400 bg-white w-64 rounded-xl p-0.5">
+  <div class="border-gray-400 bg-white w-64 rounded-xl p-0.5 font-medium">
     <button
       class="bg-white w-1/2 text-gray-800 p-2 rounded-xl transition-colors ease-in"
       :class="{ 'bg-dark text-white': active === 'visiteur' }"

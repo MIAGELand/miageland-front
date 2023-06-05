@@ -4,7 +4,7 @@
     <VerticalVisitor />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
-      <div class="flex ml-8 mt-8 text-3xl font-bold">
+      <div class="flex ml-8 mt-8 text-3xl font-semibold">
         <img
           src="../../assets/tickets.svg"
           alt="visitor"
@@ -38,7 +38,7 @@
         <button
           @click="reserve"
           :disabled="date === null || nbTicketAvailable === 0"
-          class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+          class="bg-teal-700 w-fit enabled:hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
         >
           Réserver
         </button>

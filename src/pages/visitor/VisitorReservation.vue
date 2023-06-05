@@ -4,7 +4,7 @@
     <VerticalVisitor />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
-      <div class="flex ml-8 mt-8 text-3xl font-bold">
+      <div class="flex ml-8 mt-8 text-3xl font-semibold">
         <img
           src="../../assets/calendar.svg"
           alt="visitor"
