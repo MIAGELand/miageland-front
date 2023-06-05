@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <vertical-navbar :title="title" :logoUrl="logoUrl" />
+    <vertical-navbar />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
@@ -52,7 +52,6 @@ import { getCookie } from "../../util/cookie";
 import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 
 const title = "Employés";
-const logoUrl = "../../assets/employees.svg";
 const route = "employees";
 const queryClient = useQueryClient();
 const { data: employeeList, error, isLoading } = useEmployeeList();

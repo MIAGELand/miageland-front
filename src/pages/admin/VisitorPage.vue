@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <vertical-navbar :title="title" :logoUrl="logoUrl" />
+    <vertical-navbar />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
@@ -61,7 +61,6 @@ import {
 } from "../../queries/visitor.query";
 
 const title = "Visiteurs";
-const logoUrl = "../../assets/visitors.svg";
 const route = "visitors";
 const queryClient = useQueryClient();
 const page = ref(0);

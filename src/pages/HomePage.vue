@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <h1 class="text-center text-4xl mb-8 md:text-left">🎢 MIAGELand</h1>
-    <div class="text-center font-bold flex flex-col items-center gap-8">
+    <div class="text-center flex flex-col items-center gap-8">
       <navigation-bar :active="active" @nav="updateNav" />
       <div v-show="showAdmin">
         <p class="text-xl">Connexion</p>

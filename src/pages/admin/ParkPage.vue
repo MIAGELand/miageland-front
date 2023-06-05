@@ -1,7 +1,7 @@
 <template>
   <Toaster position="top-right" richColors closeButton :expand="false" />
   <div class="flex">
-    <vertical-navbar :title="title" :logoUrl="logoUrl" />
+    <vertical-navbar />
     <div class="flex flex-col h-screen w-screen md:overflow-auto">
       <!-- TITLE -->
       <div class="flex ml-8 mt-8 text-3xl font-bold">
@@ -67,7 +67,6 @@ import UnauthorizedInfo from "../../components/UnauthorizedInfo.vue";
 const queryClient = useQueryClient();
 
 const title = "Parc";
-const logoUrl = "../../assets/park.svg";
 
 const { data: parkInfo, isLoading: parkInfoLoading } = useParkInfo();
 const { data: employeeList } = useEmployeeList();

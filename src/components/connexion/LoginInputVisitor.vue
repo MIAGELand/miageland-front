@@ -13,7 +13,7 @@
     </div>
     <div>
       <button
-        class="bg-teal-600 text-xl text-white font-bold py-2 px-4 rounded-xl mt-4 hover:bg-teal-700 disabled:bg-gray-400"
+        class="bg-teal-600 text-xl text-white py-2 px-4 rounded-xl mt-4 hover:bg-teal-700 disabled:bg-gray-400"
         @click="connect"
         :disabled="email === ''"
       >

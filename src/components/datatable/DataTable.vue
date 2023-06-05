@@ -89,7 +89,7 @@
                 <button
                   :title="action"
                   v-for="(val, action) in actionList"
-                  class="font-bold py-2 px-4 rounded mx-0.5 disabled:opacity-30 transition"
+                  class="py-2 px-4 rounded mx-0.5 disabled:opacity-30 transition"
                   :class="val.color"
                   :disabled="checkDisabledRole(<string> action, data['role'])
                                     || checkDisabledTicket(<string>  action, data['state'], data['date'])

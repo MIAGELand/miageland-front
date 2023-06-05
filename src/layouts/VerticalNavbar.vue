@@ -1,133 +1,88 @@
 <template>
   <div id="container" class="hidden md:block">
-    <nav
-      class="h-screen flex flex-col bg-zinc-900 px-4 pt-8 text-white"
-      id="navbar"
-    >
-      <div
-        class="flex cursor-pointer pl-2 items-center"
-        @click="$router.push('/')"
-      >
-        <img src="../assets/ppl.svg" alt="miageland" class="h-8 w-8" />
-        <span class="ml-4 text-xl font-bold">MIAGELand</span>
+    <nav class="h-screen flex flex-col bg-zinc-900 px-4 pt-8 text-white" id="navbar">
+      <div class="flex cursor-pointer pl-2 items-center" @click="$router.push('/')">
+        <img src="src/assets/ppl.svg" alt="miageland" class="h-8 w-8" />
+        <span class="ml-4 text-xl">MIAGELand</span>
       </div>
 
       <!-- NAV BAR-->
       <div class="flex flex-col items-start mt-8 gap-2">
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Employees' }"
-          @click="$router.push({ name: 'Employees' })"
-        >
-          <img
-            src="../assets/employees.svg"
-            alt="locker"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Employés</button>
-        </div>
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Attractions' }"
-          @click="$router.push({ name: 'Attractions' })"
-        >
-          <img
-            src="../assets/attractions.svg"
-            alt="attractions"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Attractions</button>
-        </div>
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Tickets' }"
-          @click="$router.push({ name: 'Tickets' })"
-        >
-          <img
-            src="../assets/tickets.svg"
-            alt="visitors"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Tickets</button>
-        </div>
-
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Visitors' }"
-          @click="$router.push({ name: 'Visitors' })"
-        >
-          <img
-            src="../assets/visitors.svg"
-            alt="visitors"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Visiteurs</button>
-        </div>
-
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Park' }"
-          @click="$router.push({ name: 'Park' })"
-        >
-          <img src="../assets/park.svg" alt="park" class="h-8 w-8 mr-4" />
-          <button class="font-bold">Parc</button>
-        </div>
-
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Dashboard' }"
-          @click="$router.push({ name: 'Dashboard' })"
-        >
-          <img
-            src="../assets/dashboard.svg"
-            alt="dashboard"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Dashboard</button>
-        </div>
+        <VerticalNavbarItem
+            label="Employés"
+            iconUrl="src/assets/employees.svg"
+            routeName="Employees"
+            :isActive="$route.name === 'Employees'"
+        />
+        <VerticalNavbarItem
+            label="Attractions"
+            iconUrl="src/assets/attractions.svg"
+            routeName="Attractions"
+            :isActive="$route.name === 'Attractions'"
+        />
+        <VerticalNavbarItem
+            label="Tickets"
+            iconUrl="src/assets/tickets.svg"
+            routeName="Tickets"
+            :isActive="$route.name === 'Tickets'"
+        />
+        <VerticalNavbarItem
+            label="Visiteurs"
+            iconUrl="src/assets/visitors.svg"
+            routeName="Visitors"
+            :isActive="$route.name === 'Visitors'"
+        />
+        <VerticalNavbarItem
+            label="Parc"
+            iconUrl="src/assets/park.svg"
+            routeName="Park"
+            :isActive="$route.name === 'Park'"
+        />
+        <VerticalNavbarItem
+            label="Dashboard"
+            iconUrl="src/assets/dashboard.svg"
+            routeName="Dashboard"
+            :isActive="$route.name === 'Dashboard'"
+        />
 
         <div class="w-full my-2">
           <hr class="border-white" />
         </div>
 
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          :class="{ 'bg-gray-700': $route.name === 'Generator' }"
-          @click="$router.push({ name: 'Generator' })"
-        >
-          <img
-            src="../assets/generator.svg"
-            alt="generator"
-            class="h-8 w-8 mr-4"
-          />
-          <button class="font-bold">Générateur</button>
-        </div>
+        <VerticalNavbarItem
+            label="Générateur"
+            iconUrl="src/assets/generator.svg"
+            routeName="Generator"
+            :isActive="$route.name === 'Generator'"
+        />
       </div>
+
       <!-- STICKY ELEMENT BOTTOM NAVBAR -->
       <div class="flex flex-col items-start mt-auto mb-4">
         <div class="flex py-2 items-center gap-4">
-          <img src="../assets/vue.svg" alt="profile" class="h-8 w-8" />
+          <img src="src/assets/vue.svg" alt="profile" class="h-8 w-8" />
           <div class="flex flex-col gap-0.5">
             <div>{{ employeeName }}</div>
             <div class="text-gray-400">{{ employeeRole }}</div>
           </div>
         </div>
-        <div
-          class="flex py-2 pl-2 w-full rounded hover:bg-gray-700 cursor-pointer"
-          @click="$router.push({ name: 'Home' })"
-        >
-          <img src="../assets/logout.svg" alt="logout" class="h-8 w-8 mr-2" />
-          <button class="font-bold">Se déconnecter</button>
-        </div>
+        <VerticalNavbarItem
+            label="Se déconnecter"
+            iconUrl="src/assets/logout.svg"
+            routeName="Home"
+        />
       </div>
     </nav>
   </div>
 </template>
 
 <script setup lang="ts">
+
 import { useEmployeeList } from "../queries/employee.query";
 import { computed } from "vue";
 import { getCookie } from "../util/cookie";
+import { defineProps } from 'vue';
+import VerticalNavbarItem from "../components/navigation/VerticalNavbarItem.vue";
 
 const { data: employeeList } = useEmployeeList();
 const emailFromCookie = computed(() => {
@@ -137,7 +92,7 @@ const emailFromCookie = computed(() => {
 const employeeName = computed(() => {
   if (employeeList.value) {
     const employee = employeeList.value?.find(
-      (employee) => employee.email === emailFromCookie.value
+        (employee) => employee.email === emailFromCookie.value
     );
     if (employee) {
       return employee.name;
@@ -149,7 +104,7 @@ const employeeName = computed(() => {
 const employeeRole = computed(() => {
   if (employeeList.value) {
     const employee = employeeList.value?.find(
-      (employee) => employee.email === emailFromCookie.value
+        (employee) => employee.email === emailFromCookie.value
     );
     if (employee) {
       return employee.role;
@@ -157,6 +112,7 @@ const employeeRole = computed(() => {
   }
   return "";
 });
+
 defineProps({
   title: String,
   logoUrl: String,
