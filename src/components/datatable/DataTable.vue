@@ -226,7 +226,7 @@ const check = (action: string, data: any) => {
       upgradeEmployee(data["id"])
         .then(() => {
           toast.success("Employé upgrade en ADMIN à jour avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la mise à jour de l'employé.");
@@ -236,7 +236,7 @@ const check = (action: string, data: any) => {
       downgradeEmployee(data["id"])
         .then(() => {
           toast.success("Employé downgrade en CLASSIC à jour avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la mise à jour de l'employé.");
@@ -246,7 +246,7 @@ const check = (action: string, data: any) => {
       removeEmployee(data["id"])
         .then(() => {
           toast.success("Employé supprimé avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la suppression de l'employé.");
@@ -258,7 +258,7 @@ const check = (action: string, data: any) => {
           toast.success(
             "Ticket payé avec succès. " + "Paiement de " + data["price"] + "€."
           );
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de l'achat du ticket.");
@@ -268,7 +268,7 @@ const check = (action: string, data: any) => {
       validateTicket(data["id"])
         .then(() => {
           toast.success("Ticket validé avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la validation du ticket.");
@@ -288,7 +288,7 @@ const check = (action: string, data: any) => {
           } else if (prevState === "RESERVED") {
             toast.success("Ticket annulé avec succès. Pas de remboursement.");
           }
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de l'annulation du ticket.");
@@ -298,7 +298,7 @@ const check = (action: string, data: any) => {
       removeAttraction(data["id"])
         .then(() => {
           toast.success("Attraction supprimée avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la suppression de l'attraction.");
@@ -308,7 +308,7 @@ const check = (action: string, data: any) => {
       closeAttraction(data["id"])
         .then(() => {
           toast.success("Attraction fermée avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la fermeture de l'attraction.");
@@ -318,7 +318,7 @@ const check = (action: string, data: any) => {
       openAttraction(data["id"])
         .then(() => {
           toast.success("Attraction ouverte avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de l'ouverture de l'attraction.");
@@ -328,7 +328,7 @@ const check = (action: string, data: any) => {
       deleteVisitor(data["id"])
         .then(() => {
           toast.success("Visiteur supprimé avec succès.");
-          emit("refresh");
+          refresh();
         })
         .catch(() => {
           toast.error("Erreur lors de la suppression de l'utilisateur.");
@@ -367,25 +367,31 @@ const filteredSearch = (data: any) => {
   });
   // Remove last character from url (last &)
   url = url.slice(0, -1);
+  filteredUrl.value = url;
   // Call to api with url
-  api
-    .get(url, {
-      headers: {
-        Authorization: "email=" + getCookie("email"),
-      },
-    })
-    .then((data) => {
-      isFiltering.value = true;
-      entityData.value = data.data;
-      toast.success("Données récupérées avec succès.");
-      tableLoading.value = false;
-    })
-    .catch(() => {
-      toast.error("Erreur lors de la récupération des données.");
-      tableLoading.value = false;
-    });
+  callFilteredApi(filteredUrl.value);
 };
 
+const callFilteredApi = (url) => {
+  api
+      .get(url, {
+        headers: {
+          Authorization: "email=" + getCookie("email"),
+        },
+      })
+      .then((data) => {
+        isFiltering.value = true;
+        entityData.value = data.data;
+        toast.success("Données récupérées avec succès.");
+        tableLoading.value = false;
+      })
+      .catch(() => {
+        toast.error("Erreur lors de la récupération des données.");
+        tableLoading.value = false;
+      });
+}
+
+const filteredUrl = ref("")
 const entityData = ref([]);
 const isFiltering = ref(false);
 const tableLoading = ref(false);
@@ -397,6 +403,14 @@ const tableData = computed(() => {
     return props.data;
   }
 });
+
+const refresh = () => {
+  emit("refresh");
+  if (isFiltering.value) {
+    callFilteredApi(filteredUrl.value);
+  }
+};
+
 const resetFilters = () => {
   isFiltering.value = false;
   toast.success("Filtres réinitialisés avec succès.");
