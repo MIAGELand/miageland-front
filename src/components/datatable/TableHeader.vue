@@ -15,12 +15,12 @@ defineProps({
       <th
         v-for="row in rows"
         scope="col"
-        class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer"
+        class="px-6 py-3 text-gray-700 uppercase"
       >
         {{ row }}
       </th>
       <th
-        class="px-6 py-3 text-gray-700 uppercase tracking-wider cursor-pointer"
+        class="px-6 py-3 text-gray-700 uppercase"
       >
         Actions
       </th>

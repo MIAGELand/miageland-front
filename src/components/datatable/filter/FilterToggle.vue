@@ -93,7 +93,7 @@ const toggle = () => {
     >
       <div class="flex flex-col gap-2">
         <div v-for="filter in filtersData">
-          <div class="flex gap-2 text-gray-700 justify-between">
+          <div class="flex gap-2 text-gray-700 justify-between font-semibold">
             <label :for="filter.label" class="text-gray-700 w-1/4">{{
               filter.label
             }}</label>
@@ -102,18 +102,20 @@ const toggle = () => {
               :id="filter.label"
               :type="filter.type"
               v-model="filter.value"
-              class="w-3/4 text-gray-700 px-2 border-gray-400 border bg-gray-100 rounded-md"
+              :placeholder="filter.label"
+              class="w-3/4 text-gray-700 px-2 border-gray-400 border bg-gray-100 rounded-md font-regular"
             />
-            <div v-else class="flex flex-col">
+            <div v-else class="flex flex-col gap-2">
               <div
                 v-for="option in filter.options"
                 class="flex justify-between gap-2"
               >
-                <label :for="option.label" class="text-gray-700 text-sm">{{
+                <label :for="option.label" class="text-gray-700 font-regular">{{
                   option.label
                 }}</label>
                 <input
                   type="checkbox"
+                  class="w-5 h-5"
                   :value="option.label"
                   v-model="option.checked"
                 />
