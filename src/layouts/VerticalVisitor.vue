@@ -43,15 +43,19 @@
       <!-- STICKY ELEMENT BOTTOM NAVBAR -->
       <div class="flex flex-col items-start mt-auto mb-4">
         <div class="flex py-2 items-center gap-4">
-          <img src="src/assets/vue.svg" alt="profile" class="h-8 w-8 pl-2 mr-2" />
+          <img
+            src="src/assets/vue.svg"
+            alt="profile"
+            class="h-8 w-8 pl-2 mr-2"
+          />
           <div class="flex flex-col gap-0.5">
             <div>{{ visitorName }}</div>
           </div>
         </div>
         <VerticalNavbarItem
-            label="Se déconnecter"
-            iconUrl="src/assets/logout.svg"
-            routeName="Home"
+          label="Se déconnecter"
+          iconUrl="src/assets/logout.svg"
+          routeName="Home"
         />
       </div>
     </nav>
@@ -60,8 +64,8 @@
 
 <script setup lang="ts">
 import VerticalNavbarItem from "../components/navigation/VerticalNavbarItem.vue";
-import {computed} from "vue";
-import {getCookie} from "../util/cookie";
+import { computed } from "vue";
+import { getCookie } from "../util/cookie";
 
 defineProps({
   title: String,
@@ -69,7 +73,6 @@ defineProps({
 });
 
 const visitorName = computed(() => getCookie("name"));
-
 </script>
 
 <style scoped>

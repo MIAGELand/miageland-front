@@ -31,14 +31,14 @@
               <div>
                 <span class="font-semibold">Nb places restantes : </span>
                 <span v-if="date !== null">
-                {{ nbTicketAvailable }}
-              </span>
+                  {{ nbTicketAvailable }}
+                </span>
               </div>
             </div>
             <button
-                @click="reserve"
-                :disabled="date === null || nbTicketAvailable === 0"
-                class="bg-teal-700 enabled:hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+              @click="reserve"
+              :disabled="date === null || nbTicketAvailable === 0"
+              class="bg-teal-700 enabled:hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
             >
               Réserver
             </button>

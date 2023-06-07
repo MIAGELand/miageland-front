@@ -374,24 +374,24 @@ const filteredSearch = (data: any) => {
 
 const callFilteredApi = (url) => {
   api
-      .get(url, {
-        headers: {
-          Authorization: "email=" + getCookie("email"),
-        },
-      })
-      .then((data) => {
-        isFiltering.value = true;
-        entityData.value = data.data;
-        toast.success("Données récupérées avec succès.");
-        tableLoading.value = false;
-      })
-      .catch(() => {
-        toast.error("Erreur lors de la récupération des données.");
-        tableLoading.value = false;
-      });
-}
+    .get(url, {
+      headers: {
+        Authorization: "email=" + getCookie("email"),
+      },
+    })
+    .then((data) => {
+      isFiltering.value = true;
+      entityData.value = data.data;
+      toast.success("Données récupérées avec succès.");
+      tableLoading.value = false;
+    })
+    .catch(() => {
+      toast.error("Erreur lors de la récupération des données.");
+      tableLoading.value = false;
+    });
+};
 
-const filteredUrl = ref("")
+const filteredUrl = ref("");
 const entityData = ref([]);
 const isFiltering = ref(false);
 const tableLoading = ref(false);

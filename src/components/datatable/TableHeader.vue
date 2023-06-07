@@ -19,11 +19,7 @@ defineProps({
       >
         {{ row }}
       </th>
-      <th
-        class="px-6 py-3 text-gray-700 uppercase"
-      >
-        Actions
-      </th>
+      <th class="px-6 py-3 text-gray-700 uppercase">Actions</th>
     </tr>
   </thead>
 </template>

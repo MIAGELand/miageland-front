@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-
 defineProps({
   label: String,
   iconUrl: String,
