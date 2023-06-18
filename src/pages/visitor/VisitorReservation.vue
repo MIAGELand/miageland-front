@@ -134,7 +134,7 @@ const formattedTickets = computed(() => {
     return ticketList
       .sort((a, b) => {
         return (
-          moment(b.date).toDate().getTime() - moment(a.date).toDate().getTime()
+          moment(a.date).toDate().getTime() - moment(b.date).toDate().getTime()
         );
       })
       .filter((ticket) => {
