@@ -8,7 +8,7 @@
         class="flex cursor-pointer pl-2 items-center"
         @click="$router.push('/')"
       >
-        <img src="src/assets/ppl.svg" alt="miageland" class="h-8 w-8" />
+        <img src="/src/assets/ppl.svg" alt="miageland" class="h-8 w-8" />
         <span class="ml-4 text-xl">MIAGELand</span>
       </div>
 
@@ -16,35 +16,41 @@
       <div class="flex flex-col items-start mt-8 gap-2">
         <VerticalNavbarItem
           label="Acheter billets"
-          iconUrl="src/assets/tickets.svg"
           routeName="ParkAccess"
           :isActive="$route.name === 'ParkAccess'"
-        />
+        >
+          <img src="/src/assets/tickets.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Attractions"
-          iconUrl="src/assets/attractions.svg"
           routeName="VisitorAttraction"
           :isActive="$route.name === 'VisitorAttraction'"
-        />
+        >
+          <img src="/src/assets/attractions.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Réservations"
-          iconUrl="src/assets/calendar.svg"
           routeName="Reservations"
           :isActive="$route.name === 'Reservations'"
-        />
+        >
+          <img src="/src/assets/calendar.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
+
         <VerticalNavbarItem
           label="Profil"
-          iconUrl="src/assets/visitors.svg"
           routeName="Profile"
           :isActive="$route.name === 'Profile'"
-        />
+        >
+          <img src="/src/assets/visitors.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
+
       </div>
 
       <!-- STICKY ELEMENT BOTTOM NAVBAR -->
       <div class="flex flex-col items-start mt-auto mb-4">
         <div class="flex py-2 items-center gap-4">
           <img
-            src="src/assets/vue.svg"
+            src="/src/assets/vue.svg"
             alt="profile"
             class="h-8 w-8 pl-2 mr-2"
           />
@@ -54,9 +60,11 @@
         </div>
         <VerticalNavbarItem
           label="Se déconnecter"
-          iconUrl="src/assets/logout.svg"
           routeName="Home"
-        />
+        >
+          <img src="/src/assets/logout.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
+
       </div>
     </nav>
   </div>

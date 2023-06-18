@@ -8,7 +8,7 @@
         class="flex cursor-pointer pl-2 items-center"
         @click="$router.push('/')"
       >
-        <img src="src/assets/ppl.svg" alt="miageland" class="h-8 w-8" />
+        <img src="/src/assets/ppl.svg" alt="miageland" class="h-8 w-8" />
         <span class="ml-4 text-xl">MIAGELand</span>
       </div>
 
@@ -16,40 +16,47 @@
       <div class="flex flex-col items-start mt-8 gap-2">
         <VerticalNavbarItem
           label="Employés"
-          iconUrl="src/assets/employees.svg"
           routeName="Employees"
           :isActive="$route.name === 'Employees'"
-        />
+        >
+          <img src="/src/assets/employees.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Attractions"
-          iconUrl="src/assets/attractions.svg"
           routeName="Attractions"
           :isActive="$route.name === 'Attractions'"
-        />
+        >
+          <img src="/src/assets/attractions.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Tickets"
-          iconUrl="src/assets/tickets.svg"
           routeName="Tickets"
           :isActive="$route.name === 'Tickets'"
-        />
+        >
+          <img src="/src/assets/tickets.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Visiteurs"
-          iconUrl="src/assets/visitors.svg"
+          iconUrl="../../assets/visitors.svg"
           routeName="Visitors"
           :isActive="$route.name === 'Visitors'"
-        />
+        >
+          <img src="/src/assets/visitors.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Parc"
-          iconUrl="src/assets/park.svg"
           routeName="Park"
           :isActive="$route.name === 'Park'"
-        />
+        >
+          <img src="/src/assets/park.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
         <VerticalNavbarItem
           label="Dashboard"
-          iconUrl="src/assets/dashboard.svg"
           routeName="Dashboard"
           :isActive="$route.name === 'Dashboard'"
-        />
+        >
+          <img src="/src/assets/dashboard.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
 
         <div class="w-full my-2">
           <hr class="border-white" />
@@ -57,17 +64,19 @@
 
         <VerticalNavbarItem
           label="Générateur"
-          iconUrl="src/assets/generator.svg"
+          iconUrl="../../assets/generator.svg"
           routeName="Generator"
           :isActive="$route.name === 'Generator'"
-        />
+        >
+          <img src="/src/assets/generator.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
       </div>
 
       <!-- STICKY ELEMENT BOTTOM NAVBAR -->
       <div class="flex flex-col items-start mt-auto mb-4">
         <div class="flex py-2 items-center gap-4">
           <img
-            src="src/assets/vue.svg"
+            src="/src/assets/vue.svg"
             alt="profile"
             class="h-8 w-8 pl-2 mr-2"
           />
@@ -78,9 +87,10 @@
         </div>
         <VerticalNavbarItem
           label="Se déconnecter"
-          iconUrl="src/assets/logout.svg"
           routeName="Home"
-        />
+        >
+          <img src="/src/assets/logout.svg" :alt="label" class="h-8 w-8 mr-4"/>
+        </VerticalNavbarItem>
       </div>
     </nav>
   </div>
